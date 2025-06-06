@@ -1,0 +1,46 @@
+{
+  "name": "simplinkx-fe",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^3.19.2",
+    "@emotion/react": "^11.14.0",
+    "@tailwindcss/vite": "^4.1.8",
+    "@tanstack/react-query": "^5.80.6",
+    "axios": "^1.9.0",
+    "js-cookie": "^3.0.5",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
+    "react-router": "^7.6.2",
+    "tailwindcss": "^4.1.8",
+    "zod": "^3.25.51"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
+    "@tanstack/eslint-plugin-query": "^5.78.0",
+    "@tanstack/react-query-devtools": "^5.80.6",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react-swc": "^3.9.0",
+    "eslint": "^9.25.0",
+    "eslint-plugin-no-relative-import-paths": "^1.6.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}

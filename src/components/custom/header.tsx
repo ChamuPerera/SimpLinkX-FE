@@ -1,6 +1,7 @@
 import type { FC } from "react";
 
 import { Brand } from "@/components/custom/brand";
+import { useAuth } from "@/hooks/use-auth";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -80,6 +81,19 @@ const NavButtons: FC = () => {
 };
 
 const AuthButtons: FC = () => {
+  const { user } = useAuth();
+
+  if (user) {
+    return (
+      <Link
+        to={"/dashboard"}
+        className="text-white h-10 w-10 text-2xl flex justify-center items-center rounded-full hover:bg-blue-700 font-medium transition-colors bg-blue-600"
+      >
+        {user.name.charAt(0).toUpperCase()}
+      </Link>
+    );
+  }
+
   return (
     <>
       <Link

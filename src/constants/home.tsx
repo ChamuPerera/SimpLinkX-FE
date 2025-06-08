@@ -1,0 +1,87 @@
+import {
+  Activity,
+  Building2,
+  Calendar,
+  Clock,
+  MapPin,
+  Search,
+  Shield,
+  Users,
+} from "lucide-react";
+
+export const services = [
+  {
+    icon: Calendar,
+    title: "Online Appointments",
+    description:
+      "Book appointments with your preferred doctors across Sri Lanka's hospital network",
+    features: [
+      "Real-time availability",
+      "Instant confirmation",
+      "Reminder notifications",
+    ],
+  },
+  {
+    icon: Search,
+    title: "Medicine Finder",
+    description:
+      "Search medicine availability across hospitals and find nearest alternatives",
+    features: [
+      "Real-time inventory",
+      "Location-based search",
+      "Alternative suggestions",
+    ],
+  },
+  {
+    icon: Building2,
+    title: "Hospital Directory",
+    description:
+      "Comprehensive database of hospitals, specialties, and medical services",
+    features: ["Detailed profiles", "Service listings", "Contact information"],
+  },
+  {
+    icon: Users,
+    title: "Doctor Profiles",
+    description:
+      "Find qualified doctors by specialty, location, and availability",
+    features: [
+      "Verified credentials",
+      "Patient reviews",
+      "Scheduling integration",
+    ],
+  },
+];
+
+export const stats = [
+  { number: "500+", label: "Hospitals Connected" },
+  { number: "15,000+", label: "Registered Doctors" },
+  { number: "1M+", label: "Patients Served" },
+  { number: "24/7", label: "System Availability" },
+];
+
+export const features = [
+  {
+    icon: Shield,
+    title: "NIC Integration",
+    description:
+      "Secure registration using Sri Lankan National Identity Card for verified access",
+  },
+  {
+    icon: Activity,
+    title: "Real-time Updates",
+    description:
+      "Live inventory tracking and appointment availability across all connected hospitals",
+  },
+  {
+    icon: MapPin,
+    title: "Location-based Services",
+    description:
+      "Find nearest hospitals, available medicines, and alternative locations instantly",
+  },
+  {
+    icon: Clock,
+    title: "24/7 Access",
+    description:
+      "Round-the-clock access to medical services and emergency information",
+  },
+];

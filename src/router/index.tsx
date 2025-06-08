@@ -1,8 +1,14 @@
+import { HomePage } from "@/pages";
+import { AboutPage } from "@/pages/about";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Front-End Setup is working!</div>,
+    element: <HomePage />,
+  },
+  {
+    path: "/about",
+    element: <AboutPage />,
   },
 ]);

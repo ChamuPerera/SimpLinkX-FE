@@ -1,10 +1,16 @@
 @import "tailwindcss";
 
+@custom-variant hover (&:hover);
+
+@theme {
+  --font-poppins: "font", "Poppins", sans-serif;
+}
+
 @layer base {
   * {
     @apply !scroll-smooth border-0;
   }
   body {
-    @apply bg-white text-slate-900;
+    @apply font-poppins bg-white text-slate-900;
   }
 }

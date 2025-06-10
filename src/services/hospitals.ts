@@ -1,0 +1,52 @@
+import type { hospitalSchema } from "@/validations/hospitals";
+import type { z } from "zod";
+
+import { api } from "@/services/api";
+
+type HospitalWithoutId = z.infer<typeof hospitalSchema>;
+export type Hospital = HospitalWithoutId & { id?: number };
+
+export const hospitalsServices = {
+  // Get hospitals with pagination
+  getHospitals: async (params: {
+    pageSize: number;
+    currentPage: number;
+    search?: string;
+  }) => {
+    const { data } = await api.get(
+      `/hospitals?page=${params.currentPage}&size=${params.pageSize}${
+        params.search ? `&search=${params.search}` : ""
+      }`,
+    );
+    return {
+      hospitals: data.data as Hospital[],
+      total: data.total as number,
+      from: data.from as number,
+      to: data.to as number,
+      endPage: data.last_page as number,
+    };
+  },
+
+  // get a single hospital by identifier
+  getHospitalByIdentifier: async (identifier: string) => {
+    const { data } = await api.get(`/hospitals/${identifier}`);
+    return data as Hospital;
+  },
+
+  // Create a new hospital
+  createHospital: async (hospital: Hospital) => {
+    const { data } = await api.post("/hospitals", hospital);
+    return data;
+  },
+
+  // Update an existing hospital
+  updateHospital: async (hospital: Hospital) => {
+    const { data } = await api.put(`/hospitals/${hospital.id}`, hospital);
+    return data;
+  },
+
+  // Delete a hospital
+  deleteHospital: async (id: number) => {
+    await api.delete(`/hospitals/${id}`);
+  },
+};

@@ -1,8 +1,8 @@
 import type { FC } from "react";
 
+import { Loader } from "@/components/custom";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect } from "react";
-import { ImSpinner3 } from "react-icons/im";
 import { useNavigate } from "react-router";
 
 export const PrivateRoute: FC<{
@@ -17,9 +17,5 @@ export const PrivateRoute: FC<{
     }
   }, [isAuthenticated, isUserLoading, navigate]);
 
-  return isAuthenticated ? (
-    <>{children}</>
-  ) : (
-    <ImSpinner3 className="animate-spin" />
-  );
+  return isAuthenticated ? <>{children}</> : <Loader />;
 };

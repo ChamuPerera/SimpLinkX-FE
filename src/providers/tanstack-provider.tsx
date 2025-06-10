@@ -14,7 +14,7 @@ export const TanstackProvider = ({ children }: TanstackProviderProps) => {
       <ReactQueryDevtools
         initialIsOpen={false}
         position="left"
-        buttonPosition="bottom-left"
+        buttonPosition="bottom-right"
       />
     </QueryClientProvider>
   );

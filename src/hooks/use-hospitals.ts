@@ -47,6 +47,22 @@ export const useHospitalByIdentifier = (identifier: string) =>
     refetchOnWindowFocus: false,
   });
 
+// get single hospital by id
+export const useHospitalById = (id: number) =>
+  useQuery({
+    queryKey: ["hospital", id],
+    queryFn: async () => {
+      try {
+        const hospital = await hospitalsServices.getHospitalById(id);
+        return hospital;
+      } catch (error) {
+        return null;
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
 // create hospital
 export const useCreateHospital = () => {
   const queryClient = useQueryClient();

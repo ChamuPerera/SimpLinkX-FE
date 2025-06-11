@@ -4,6 +4,8 @@ export * from "./breadcrumb";
 export * from "./button";
 export * from "./calendar";
 export * from "./collapsible";
+export * from "./combobox";
+export * from "./command";
 export * from "./dialog";
 export * from "./dropdown-menu";
 export * from "./form";

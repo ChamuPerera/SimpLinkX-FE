@@ -1,7 +1,13 @@
 import type { hospitalSchema } from "@/validations/hospitals";
 import type { z } from "zod";
 
+
+
 import { api } from "@/services/api";
+
+
+
+
 
 type HospitalWithoutId = z.infer<typeof hospitalSchema>;
 export type Hospital = HospitalWithoutId & { id?: number };
@@ -30,6 +36,12 @@ export const hospitalsServices = {
   // get a single hospital by identifier
   getHospitalByIdentifier: async (identifier: string) => {
     const { data } = await api.get(`/hospitals/${identifier}`);
+    return data as Hospital;
+  },
+
+  // get single hospital by id
+  getHospitalById: async (id: number) => {
+    const { data } = await api.get(`/hospitals/single/${id}`);
     return data as Hospital;
   },
 

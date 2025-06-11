@@ -1,4 +1,4 @@
-import { Layout, Loader } from "@/components/custom";
+import { Layout, Loader, Users } from "@/components/custom";
 import { permissions } from "@/constants/permissions";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import { PrivateRoute } from "@/providers/private-route";
@@ -28,8 +28,7 @@ export const StaffPage = () => {
       >
         <Suspense fallback={<Loader />}>
           <Layout breadcrumbs={breadcrumb}>
-            {/* Add your staff content here */}
-            <p className="">To be implemented</p>
+            <Users />
           </Layout>
         </Suspense>
       </PermissionWrapper>

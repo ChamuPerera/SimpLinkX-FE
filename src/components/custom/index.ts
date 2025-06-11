@@ -1,4 +1,5 @@
 export * from "./hospitals";
+export * from "./users";
 export * from "./back-to-top";
 export * from "./brand";
 export * from "./footer";

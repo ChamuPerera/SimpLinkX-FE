@@ -1,7 +1,14 @@
 import type { LoginFormValues } from "@/validations/login";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "@/validations/login";
+import { useAuth } from "@/hooks/use-auth";
 
-import { Brand } from "@/components/custom";
-import { Button } from "@/components/ui/button";
+import { ImSpinner3 } from "react-icons/im";
+import { FaFacebook, FaGoogle, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router";
+import { toast } from "sonner";
+
 import {
   Form,
   FormControl,
@@ -11,13 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/use-auth";
-import { loginSchema } from "@/validations/login";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { ImSpinner3 } from "react-icons/im";
-import { Link } from "react-router";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export const LoginPage = () => {
   const { login } = useAuth();
@@ -31,8 +32,7 @@ export const LoginPage = () => {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    const email = data.email;
-    const password = data.password;
+    const { email, password } = data;
     await login
       .mutateAsync({ email, password })
       .then(() => {
@@ -41,88 +41,125 @@ export const LoginPage = () => {
         });
       })
       .catch((error) => {
-        toast.error("Error occurred", {
-          description: error.message || "Login Failed",
+        toast.error("Login failed", {
+          description: error.message || "Invalid email or password",
         });
       });
   };
 
   return (
-    <main className="p-3 h-full min-h-screen flex flex-col">
-      <div className="h-10">
-        <Brand />
-      </div>
-      <div className="flex flex-col w-full justify-center items-center flex-1">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full max-w-xl space-y-6  border rounded-md  shadow-md drop-shadow-2xl p-4 md:p-6"
-          >
-            <div className="">
-              <h1 className="text-2xl font-medium">Welcome back!</h1>
-              {/* welcome note */}
-              <p className="text-sm text-muted-foreground">
-                Please enter your credentials.
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200 px-4">
+      <div className="bg-white rounded-2xl shadow-2xl flex w-full max-w-5xl overflow-hidden">
+        {/* Left: Form Side */}
+        <div className="w-full md:w-1/2 p-8 space-y-6">
+          {/* Brand: Logo + Name on the same line */}
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <img src="/logo.png" alt="logo" className="h-10 w-10" />
+            <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              SimpLinkX
+            </span>
+          </div>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-blue-700">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your email"
+                        className={`rounded-md bg-gray-100 focus:ring-2 ${
+                          form.formState.errors.email
+                            ? "ring-red-500"
+                            : "ring-blue-300"
+                        }`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-600 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-blue-700">Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter your password"
+                        className={`rounded-md bg-gray-100 focus:ring-2 ${
+                          form.formState.errors.password
+                            ? "ring-red-500"
+                            : "ring-blue-300"
+                        }`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-600 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              {/* Remember me + Forgot password */}
+              <div className="flex justify-between items-center text-sm">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="accent-blue-600" />
+                  <span className="text-blue-700">Remember Me</span>
+                </label>
+                <Link to="/forgot" className="text-blue-600 hover:underline">
+                  Forgot Password?
+                </Link>
+              </div>
+
+              {/* Login button */}
+              <Button
+                type="submit"
+                className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold"
+                disabled={login.isPending}
+              >
+                {login.isPending && (
+                  <ImSpinner3 className="animate-spin mr-2 text-lg" />
+                )}
+                Login
+              </Button>
+
+              {/* Social login icons */}
+              <div className="flex justify-center gap-4 text-xl text-blue-600 mt-2">
+                <FaFacebook className="hover:text-blue-700 cursor-pointer" />
+                <FaGoogle className="hover:text-blue-500 cursor-pointer" />
+                <FaTwitter className="hover:text-blue-400 cursor-pointer" />
+              </div>
+
+              {/* Signup link */}
+              <p className="text-sm text-center text-gray-600">
+                Don't you have an account?{" "}
+                <Link
+                  to="/register"
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  Sign up
+                </Link>
               </p>
-            </div>
+            </form>
+          </Form>
+        </div>
 
-            {/* email */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Email <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="john@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* password */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Password <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="*********" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" disabled={login.isPending} className="w-full">
-              {login.isPending && <ImSpinner3 className="animate-spin" />}
-              Sign in
-            </Button>
-
-            {/* register link */}
-            <div className="flex justify-center text-sm">
-              <span className="text-muted-foreground mr-2">
-                Don't have an account?
-              </span>
-              <Link to={"/register"}>Register</Link>
-            </div>
-          </form>
-        </Form>
+        {/* Right: Image Side */}
+        <div className="hidden md:block w-1/2">
+          <img
+            src="src/components/ui/images/log-img.jpeg"
+            alt="Login Visual"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
-
-      {/* footer */}
-      <footer className="text-center text-xs text-gray-600">
-        <p>
-          &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri
-          Lanka Initiative
-        </p>
-      </footer>
     </main>
   );
 };

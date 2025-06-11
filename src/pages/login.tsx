@@ -1,14 +1,6 @@
 import type { LoginFormValues } from "@/validations/login";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/validations/login";
-import { useAuth } from "@/hooks/use-auth";
 
-import { ImSpinner3 } from "react-icons/im";
-import { FaFacebook, FaGoogle, FaTwitter } from "react-icons/fa";
-import { Link } from "react-router";
-import { toast } from "sonner";
-
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,7 +10,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { loginSchema } from "@/validations/login";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { ImSpinner3 } from "react-icons/im";
+import { Link } from "react-router";
+import { toast } from "sonner";
 
 export const LoginPage = () => {
   const { login } = useAuth();
@@ -130,13 +128,6 @@ export const LoginPage = () => {
                 Login
               </Button>
 
-              {/* Social login icons */}
-              <div className="flex justify-center gap-4 text-xl text-blue-600 mt-2">
-                <FaFacebook className="hover:text-blue-700 cursor-pointer" />
-                <FaGoogle className="hover:text-blue-500 cursor-pointer" />
-                <FaTwitter className="hover:text-blue-400 cursor-pointer" />
-              </div>
-
               {/* Signup link */}
               <p className="text-sm text-center text-gray-600">
                 Don't you have an account?{" "}
@@ -154,7 +145,7 @@ export const LoginPage = () => {
         {/* Right: Image Side */}
         <div className="hidden md:block w-1/2">
           <img
-            src="src/components/ui/images/log-img.jpeg"
+            src="/images/log-img.jpeg"
             alt="Login Visual"
             className="w-full h-full object-cover"
           />

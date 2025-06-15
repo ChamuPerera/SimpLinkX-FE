@@ -38,6 +38,7 @@ const roleDefaultValues: Role = {
 export const Roles: FC = React.memo(() => {
   const [open, setOpen] = useState(false);
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [search, setSearch] = useState("");
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 20,
@@ -45,6 +46,7 @@ export const Roles: FC = React.memo(() => {
   const { data } = useRoles({
     currentPage: pagination.currentPage,
     pageSize: pagination.pageSize,
+    search,
   });
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
@@ -67,6 +69,8 @@ export const Roles: FC = React.memo(() => {
         <RoleTable
           columns={roleColumns}
           data={data?.roles || []}
+          search={search}
+          setSearch={setSearch}
           setSelectedRole={setSelectedRole}
           setOpen={setOpen}
           setShowDetails={setShowDetails}

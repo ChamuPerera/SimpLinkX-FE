@@ -34,6 +34,8 @@ import { useState } from "react";
 interface RoleTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  search: string;
+  setSearch: (search: string) => void;
   setOpen: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
   setSelectedRole: (role: Role) => void;
@@ -58,6 +60,8 @@ interface RoleTableProps<TData, TValue> {
 export function RoleTable<TData, TValue>({
   columns,
   data,
+  search,
+  setSearch,
   setOpen,
   setSelectedRole,
   setShowDetails,
@@ -95,10 +99,8 @@ export function RoleTable<TData, TValue>({
       <div className="mb-5 flex flex-col items-center justify-center gap-3 sm:flex-row sm:justify-between">
         <Input
           placeholder="Filter roles..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
           className="w-full sm:max-w-sm !ring-0"
         />
 

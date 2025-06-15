@@ -1,4 +1,5 @@
 export * from "./hospitals";
+export * from "./permissions";
 export * from "./roles";
 export * from "./users";
 export * from "./back-to-top";

@@ -4,7 +4,7 @@ import type { z } from "zod";
 import { api } from "@/services/api";
 
 type UserWithoutId = z.infer<typeof userSchema>;
-export type User = UserWithoutId & { id?: number };
+export type User = UserWithoutId & { id?: number; permissions?: string[] };
 
 export const usersServices = {
   // Get users with pagination

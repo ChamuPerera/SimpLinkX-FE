@@ -29,5 +29,16 @@ export const sidebarData = {
       isActive: false,
       permissions: [permissions.createHospitals, permissions.updateHospitals],
     },
+    {
+      title: "Roles",
+      url: "/roles",
+      icon: PersonIcon,
+      isActive: false,
+      permissions: [
+        permissions.viewRoles,
+        permissions.createRoles,
+        permissions.updateRoles,
+      ],
+    },
   ],
 };

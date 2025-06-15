@@ -6,5 +6,6 @@ export * from "./home";
 export * from "./hospitals";
 export * from "./login";
 export * from "./register";
+export * from "./roles";
 export * from "./selected-hospital";
 export * from "./staff";

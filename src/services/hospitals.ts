@@ -1,13 +1,7 @@
 import type { hospitalSchema } from "@/validations/hospitals";
 import type { z } from "zod";
 
-
-
 import { api } from "@/services/api";
-
-
-
-
 
 type HospitalWithoutId = z.infer<typeof hospitalSchema>;
 export type Hospital = HospitalWithoutId & { id?: number };

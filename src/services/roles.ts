@@ -4,7 +4,11 @@ import type { z } from "zod";
 import { api } from "@/services/api";
 
 type RoleWithoutId = z.infer<typeof roleSchema>;
-export type Role = RoleWithoutId & { id?: number };
+export type Role = RoleWithoutId & {
+  id?: number;
+  created_at?: Date;
+  updated_at?: Date;
+};
 
 export const rolesServices = {
   // Get roles with pagination

@@ -1,6 +1,6 @@
 import { permissions } from "@/constants/permissions";
 import { DashboardIcon, PersonIcon } from "@radix-ui/react-icons";
-import { Hospital } from "lucide-react";
+import { Hospital, Shield } from "lucide-react";
 
 export const sidebarData = {
   navMain: [
@@ -28,6 +28,28 @@ export const sidebarData = {
       icon: Hospital,
       isActive: false,
       permissions: [permissions.createHospitals, permissions.updateHospitals],
+    },
+    {
+      title: "Roles",
+      url: "/roles",
+      icon: PersonIcon,
+      isActive: false,
+      permissions: [
+        permissions.viewRoles,
+        permissions.createRoles,
+        permissions.updateRoles,
+      ],
+    },
+    {
+      title: "Permissions",
+      url: "/permissions",
+      icon: Shield,
+      isActive: false,
+      permissions: [
+        permissions.viewPermissions,
+        permissions.createPermissions,
+        permissions.updatePermissions,
+      ],
     },
   ],
 };

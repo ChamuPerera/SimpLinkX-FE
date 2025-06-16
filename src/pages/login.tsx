@@ -145,7 +145,7 @@ export const LoginPage = () => {
         {/* Right: Image Side */}
         <div className="hidden md:block w-1/2">
           <img
-            src="/images/log-img.jpeg"
+            src="/images/login-img.jpeg"
             alt="Login Visual"
             className="w-full h-full object-cover"
           />

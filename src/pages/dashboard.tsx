@@ -28,9 +28,9 @@ export const DashboardPage = () => {
       <Suspense fallback={<Loader />}>
         <Layout breadcrumbs={breadcrumb}>
           {/* Dashboard content */}
-          <div className="flex flex-col items-center text-center p-6 space-y-6">
+          <div className="flex flex-col items-center text-center space-y-6">
             {/* Header row: user info on right */}
-            <div className="flex justify-between items-center w-full max-w-6xl mb-5">
+            <div className="flex justify-between items-center w-full max-w-6xl mb-6">
               <div /> {/* empty div to push right side */}
 
               <div className="text-right">
@@ -60,7 +60,7 @@ export const DashboardPage = () => {
             </p>
 
             {/* Health info cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl mt-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl mt-8">
               {/* Tip 1 */}
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow">
                 <h3 className="text-blue-700 font-bold mb-2">💧 Stay Hydrated</h3>
@@ -109,9 +109,9 @@ export const DashboardPage = () => {
                 </p>
               </div>
             </div>
-            <footer className="text-center text-xs text-gray-500 mt-3">
-              &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
-            </footer>
+            <footer className="text-center text-xs text-gray-500 mt-6">
+          &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+        </footer>
           </div>
         </Layout>
       </Suspense>

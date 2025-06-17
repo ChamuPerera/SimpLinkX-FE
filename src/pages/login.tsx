@@ -69,11 +69,10 @@ export const LoginPage = () => {
                     <FormControl>
                       <Input
                         placeholder="Enter your email"
-                        className={`rounded-md bg-gray-100 focus:ring-2 ${
-                          form.formState.errors.email
+                        className={`rounded-md bg-gray-100 focus:ring-2 ${form.formState.errors.email
                             ? "ring-red-500"
                             : "ring-blue-300"
-                        }`}
+                          }`}
                         {...field}
                       />
                     </FormControl>
@@ -92,11 +91,10 @@ export const LoginPage = () => {
                       <Input
                         type="password"
                         placeholder="Enter your password"
-                        className={`rounded-md bg-gray-100 focus:ring-2 ${
-                          form.formState.errors.password
+                        className={`rounded-md bg-gray-100 focus:ring-2 ${form.formState.errors.password
                             ? "ring-red-500"
                             : "ring-blue-300"
-                        }`}
+                          }`}
                         {...field}
                       />
                     </FormControl>
@@ -140,6 +138,9 @@ export const LoginPage = () => {
               </p>
             </form>
           </Form>
+          <footer className="text-center text-xs text-gray-500 mt-6">
+            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+          </footer>
         </div>
 
         {/* Right: Image Side */}

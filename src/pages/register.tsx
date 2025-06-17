@@ -56,7 +56,6 @@ export const RegisterPage = () => {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    // standardize date format
     const localMidnight = moment(data.date_of_birth).local().endOf("day");
     const utcDateString = moment(localMidnight).utc().format();
     data.date_of_birth = new Date(utcDateString);
@@ -76,25 +75,37 @@ export const RegisterPage = () => {
   };
 
   return (
-    <main className="p-3 h-full min-h-screen flex flex-col gap-y-6">
-      <div className="h-10">
-        <Brand />
-      </div>
+    <main className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br from-blue-100 via-white to-indigo-100 animate-gradient">
+      {/* Background overlay */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-blue-100 via-white to-indigo-100 bg-[length:300%_300%] animate-gradient opacity-30"></div>
 
-      <div className="flex flex-col w-full justify-center items-center flex-1">
+      <div className="relative z-10 w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-8">
+        {/* Brand */}
+        <div className="flex justify-center mb-4">
+          <Brand />
+        </div>
+
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full max-w-3xl space-y-6 border rounded-md shadow-md drop-shadow-2xl p-4 bg-white"
-          >
-            <div>
-              <h1 className="text-2xl font-medium">Create your account</h1>
-              <p className="text-sm text-muted-foreground">
-                Please fill in your details to register.
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {/* Title */}
+            <div className="text-center">
+              <h1 className="text-3xl font-extrabold text-blue-800">
+                Patient Registration
+              </h1>
+              <p className="text-gray-600 text-sm mt-1">
+                Fill in the details below to create your account.
               </p>
             </div>
 
-            <div className="md:grid md:grid-cols-2 flex flex-col gap-6">
+            {/* Section 1: Personal Info */}
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold text-blue-700">
+                Part 1: Personal Information
+              </h3>
+              <hr className="border-blue-200" />
+            </div>
+
+            <div className="md:grid md:grid-cols-2 gap-6 space-y-6 md:space-y-0">
               {/* Name */}
               <FormField
                 control={form.control}
@@ -139,10 +150,7 @@ export const RegisterPage = () => {
                       NIC <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="National Identity Card Number"
-                        {...field}
-                      />
+                      <Input placeholder="National Identity Card Number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -197,13 +205,11 @@ export const RegisterPage = () => {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          endMonth={
-                            new Date(
-                              new Date().setFullYear(
-                                new Date().getFullYear() - 16,
-                              ),
-                            )
-                          }
+                          endMonth={new Date(
+                            new Date().setFullYear(
+                              new Date().getFullYear() - 16,
+                            ),
+                          )}
                           selected={field.value}
                           onSelect={field.onChange}
                           disabled={(date) =>
@@ -265,7 +271,20 @@ export const RegisterPage = () => {
                   </FormItem>
                 )}
               />
+            </div>
 
+            {/* Section 2: Password */}
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold text-blue-700">
+                Part 2: Password
+              </h3>
+              <hr className="border-blue-200" />
+              <p className="text-gray-500 text-sm">
+                Password must contain at least 8 characters.
+              </p>
+            </div>
+
+            <div className="md:grid md:grid-cols-2 gap-6 space-y-6 md:space-y-0">
               {/* Password */}
               <FormField
                 control={form.control}
@@ -276,11 +295,7 @@ export const RegisterPage = () => {
                       Password <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Password"
-                        {...field}
-                      />
+                      <Input type="password" placeholder="Password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -309,33 +324,33 @@ export const RegisterPage = () => {
               />
             </div>
 
+            {/* Submit Button */}
             <Button
               type="submit"
               disabled={register.isPending}
-              className="w-full"
+              className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3"
             >
-              {register.isPending && <ImSpinner3 className="animate-spin" />}
+              {register.isPending && <ImSpinner3 className="animate-spin mr-2" />}
               Register
             </Button>
 
-            {/* login link */}
-            <div className="flex justify-center text-sm ">
-              <span className="text-muted-foreground mr-2">
+            {/* Login Link */}
+            <div className="flex justify-center text-sm">
+              <span className="text-gray-600 mr-2">
                 Already have an account?
               </span>
-              <Link to={"/login"}>Login</Link>
+              <Link to={"/login"} className="text-blue-600 font-medium hover:underline">
+                Login
+              </Link>
             </div>
           </form>
         </Form>
-      </div>
 
-      {/* footer */}
-      <footer className="text-center text-xs text-gray-600">
-        <p>
-          &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri
-          Lanka Initiative
-        </p>
-      </footer>
+        {/* Footer */}
+        <footer className="text-center text-xs text-gray-500 mt-6">
+          &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+        </footer>
+      </div>
     </main>
   );
 };

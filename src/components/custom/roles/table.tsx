@@ -1,4 +1,4 @@
-import type { Hospital } from "@/services/hospitals";
+import type { Role } from "@/services/roles";
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -31,14 +31,14 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
-interface HospitalTableProps<TData, TValue> {
+interface RoleTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   search: string;
   setSearch: (search: string) => void;
   setOpen: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
-  setSelectedHospital: (hospital: Hospital) => void;
+  setSelectedRole: (role: Role) => void;
   setPagination: ({
     currentPage,
     pageSize,
@@ -57,18 +57,18 @@ interface HospitalTableProps<TData, TValue> {
   children?: React.ReactNode;
 }
 
-export function HospitalTable<TData, TValue>({
+export function RoleTable<TData, TValue>({
   columns,
   data,
   search,
-  setOpen,
   setSearch,
-  setSelectedHospital,
+  setOpen,
+  setSelectedRole,
   setShowDetails,
   setPagination,
   pagination,
   children,
-}: HospitalTableProps<TData, TValue>) {
+}: RoleTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -89,7 +89,7 @@ export function HospitalTable<TData, TValue>({
     },
     meta: {
       setOpen,
-      setSelectedHospital,
+      setSelectedRole,
       setShowDetails,
     },
   });
@@ -98,7 +98,7 @@ export function HospitalTable<TData, TValue>({
     <div className="w-full">
       <div className="mb-5 flex flex-col items-center justify-center gap-3 sm:flex-row sm:justify-between">
         <Input
-          placeholder="Filter data..."
+          placeholder="Filter roles..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           className="w-full sm:max-w-sm !ring-0"
@@ -108,7 +108,7 @@ export function HospitalTable<TData, TValue>({
           {children}
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="w-32 h-8">
-              <Button variant="outline" className="">
+              <Button variant="outline">
                 Columns <ArrowUpDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

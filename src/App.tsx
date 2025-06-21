@@ -7,7 +7,9 @@ import {
   HospitalsPage,
   LoginPage,
   NotFoundPage,
+  PermissionsPage,
   RegisterPage,
+  RolesPage,
   SelectedHospitalPage,
   StaffPage
 } from "@/pages";
@@ -33,6 +35,8 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/hospitals" element={<HospitalsPage />} />
           <Route path="/staff" element={<StaffPage />} />
+          <Route path="/roles" element={<RolesPage />} />
+          <Route path="/permissions" element={<PermissionsPage />} />
 
           {/* 404 route */}
           <Route path="*" element={<NotFoundPage />} />

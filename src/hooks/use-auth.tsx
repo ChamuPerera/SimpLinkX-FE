@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { IUser } from "@/types/user";
+import type { User } from "@/services/users";
 import type { RegisterFormValues } from "@/validations/register";
 import type { UseMutationResult } from "@tanstack/react-query";
 import type { FC, ReactNode } from "react";
@@ -11,11 +11,11 @@ import { useNavigate } from "react-router";
 
 // Authentication context
 interface AuthContextType {
-  user: IUser | null | undefined;
+  user: User | null | undefined;
   isAuthenticated: boolean;
   isUserLoading: boolean;
   login: UseMutationResult<
-    IUser,
+    User,
     Error,
     { email: string; password: string },
     unknown
@@ -35,7 +35,7 @@ const AuthContext = createContext<AuthContextType>({
   isUserLoading: true,
   isAuthenticated: false,
   login: {} as UseMutationResult<
-    IUser,
+    User,
     Error,
     { email: string; password: string },
     unknown
@@ -56,7 +56,7 @@ export const AuthProvider: FC<{
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   // get current user
-  const { data: user, isLoading: isUserLoading } = useQuery<IUser | null>({
+  const { data: user, isLoading: isUserLoading } = useQuery<User | null>({
     queryKey: ["user"],
     queryFn: async () => {
       try {

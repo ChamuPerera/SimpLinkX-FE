@@ -1,31 +1,16 @@
+;
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import type { Hospital } from "@/services/hospitals";
 import type { FC } from "react";
 import type { z } from "zod";
 
+
+
 import { hospitalColumns, HospitalTable } from "@/components/custom/hospitals";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Textarea,
-} from "@/components/ui";
+import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Textarea } from "@/components/ui";
 import { permissions } from "@/constants/permissions";
-import {
-  useCreateHospital,
-  useHospitals,
-  useUpdateHospital,
-} from "@/hooks/use-hospitals";
+import { useCreateHospital, useHospitals, useUpdateHospital } from "@/hooks/use-hospitals";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import { hospitalSchema } from "@/validations/hospitals";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +19,35 @@ import { useForm } from "react-hook-form";
 import { BiError } from "react-icons/bi";
 import { PiSpinnerGapBold } from "react-icons/pi";
 import { toast } from "sonner";
+
+
+
+
+
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const hospitalDefaultValues: Hospital = {
   name: "",
@@ -47,6 +61,7 @@ const hospitalDefaultValues: Hospital = {
 export const Hospitals: FC = React.memo(() => {
   const [open, setOpen] = useState(false);
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [search, setSearch] = useState("");
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 20,
@@ -54,6 +69,7 @@ export const Hospitals: FC = React.memo(() => {
   const { data } = useHospitals({
     currentPage: pagination.currentPage,
     pageSize: pagination.pageSize,
+    search,
   });
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(
     null,
@@ -64,6 +80,14 @@ export const Hospitals: FC = React.memo(() => {
     setSelectedHospital(null);
     setOpen(false);
   };
+
+  // reset current page when search is change
+  useEffect(() => {
+    setPagination({
+      ...pagination,
+      currentPage: 1,
+    });
+  }, [search]);
 
   return (
     <div className="flex w-full flex-col">
@@ -82,6 +106,8 @@ export const Hospitals: FC = React.memo(() => {
         <HospitalTable
           columns={hospitalColumns}
           data={data?.hospitals || []}
+          search={search}
+          setSearch={setSearch}
           setSelectedHospital={setSelectedHospital}
           setOpen={setOpen}
           setShowDetails={setShowDetails}

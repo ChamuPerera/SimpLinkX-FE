@@ -33,6 +33,12 @@ export const hospitalsServices = {
     return data as Hospital;
   },
 
+  // get single hospital by id
+  getHospitalById: async (id: number) => {
+    const { data } = await api.get(`/hospitals/single/${id}`);
+    return data as Hospital;
+  },
+
   // Create a new hospital
   createHospital: async (hospital: Hospital) => {
     const { data } = await api.post("/hospitals", hospital);

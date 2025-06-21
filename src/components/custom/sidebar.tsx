@@ -43,6 +43,7 @@ export const AppSidebar = ({
           user={{
             name: user?.name || "Guest",
             email: user?.email || "",
+            role: user?.role || "",
           }}
         />
       </SidebarFooter>

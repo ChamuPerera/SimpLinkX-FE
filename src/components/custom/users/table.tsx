@@ -1,4 +1,4 @@
-import type { Hospital } from "@/services/hospitals";
+import type { User } from "@/services/users";
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -31,14 +31,16 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
-interface HospitalTableProps<TData, TValue> {
+interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  user: User;
   search: string;
   setSearch: (search: string) => void;
-  setOpen: (open: boolean) => void;
+  setShowStatusChange: (open: boolean) => void;
+  setShowHospitalChange: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
-  setSelectedHospital: (hospital: Hospital) => void;
+  setSelectedUser: (user: User) => void;
   setPagination: ({
     currentPage,
     pageSize,
@@ -57,18 +59,20 @@ interface HospitalTableProps<TData, TValue> {
   children?: React.ReactNode;
 }
 
-export function HospitalTable<TData, TValue>({
+export function UserTable<TData, TValue>({
   columns,
   data,
+  user,
   search,
-  setOpen,
   setSearch,
-  setSelectedHospital,
+  setShowStatusChange,
+  setShowHospitalChange,
+  setSelectedUser,
   setShowDetails,
   setPagination,
   pagination,
   children,
-}: HospitalTableProps<TData, TValue>) {
+}: UserTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -88,9 +92,11 @@ export function HospitalTable<TData, TValue>({
       columnVisibility,
     },
     meta: {
-      setOpen,
-      setSelectedHospital,
+      setShowHospitalChange,
+      setShowStatusChange,
+      setSelectedUser,
       setShowDetails,
+      user,
     },
   });
 
@@ -108,7 +114,7 @@ export function HospitalTable<TData, TValue>({
           {children}
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="w-32 h-8">
-              <Button variant="outline" className="">
+              <Button variant="outline">
                 Columns <ArrowUpDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

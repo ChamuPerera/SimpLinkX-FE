@@ -1,4 +1,4 @@
-import { Layout, Loader, Users } from "@/components/custom";
+import { Layout, Loader, Roles } from "@/components/custom";
 import { permissions } from "@/constants/permissions";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import { PrivateRoute } from "@/providers/private-route";
@@ -10,25 +10,24 @@ const breadcrumb = [
     url: "/",
   },
   {
-    title: "Staff",
+    title: "Roles",
   },
 ];
 
-export const StaffPage = () => {
+export const RolesPage = () => {
   return (
     <PrivateRoute>
       <PermissionWrapper
         permissions={[
-          permissions.viewUsers,
-          permissions.createUsers,
-          permissions.updateUsers,
-          permissions.updateUsersHospital,
+          permissions.viewRoles,
+          permissions.createRoles,
+          permissions.updateRoles,
         ]}
         is404
       >
         <Suspense fallback={<Loader />}>
           <Layout breadcrumbs={breadcrumb}>
-            <Users />
+            <Roles />
           </Layout>
         </Suspense>
       </PermissionWrapper>

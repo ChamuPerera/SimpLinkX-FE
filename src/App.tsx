@@ -9,7 +9,7 @@ import {
   NotFoundPage,
   RegisterPage,
   SelectedHospitalPage,
-  StaffPage,
+  StaffPage
 } from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -19,6 +19,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/appointment" element={<AboutPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

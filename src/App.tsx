@@ -3,15 +3,17 @@ import {
   AboutPage,
   DashboardPage,
   FindHospitalsPage,
+  ForgotPasswordPage,
   HomePage,
   HospitalsPage,
   LoginPage,
   NotFoundPage,
   PermissionsPage,
   RegisterPage,
+  ResetPasswordPage,
   RolesPage,
   SelectedHospitalPage,
-  StaffPage
+  StaffPage,
 } from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -25,6 +27,8 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/find-hospitals" element={<FindHospitalsPage />} />
           <Route
             path="/find-hospitals/:identifier"

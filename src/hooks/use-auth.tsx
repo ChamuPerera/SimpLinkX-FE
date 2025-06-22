@@ -17,7 +17,7 @@ interface AuthContextType {
   login: UseMutationResult<
     User,
     Error,
-    { email: string; password: string },
+    { email: string; password: string; rememberMe: boolean },
     unknown
   >;
   register: UseMutationResult<void, Error, RegisterFormValues, unknown>;
@@ -25,6 +25,24 @@ interface AuthContextType {
     void,
     Error,
     { currentPassword: string; newPassword: string; confirmPassword: string },
+    unknown
+  >;
+  forgotPassword: UseMutationResult<void, Error, { email: string }, unknown>;
+  validateResetToken: UseMutationResult<
+    { valid: boolean; email: string },
+    Error,
+    { token: string; email: string },
+    unknown
+  >;
+  resetPassword: UseMutationResult<
+    void,
+    Error,
+    {
+      token: string;
+      email: string;
+      newPassword: string;
+      confirmPassword: string;
+    },
     unknown
   >;
   logout: UseMutationResult<void, Error, void, unknown>;
@@ -37,10 +55,33 @@ const AuthContext = createContext<AuthContextType>({
   login: {} as UseMutationResult<
     User,
     Error,
-    { email: string; password: string },
+    { email: string; password: string; rememberMe: boolean },
     unknown
   >,
   register: {} as UseMutationResult<void, Error, RegisterFormValues, unknown>,
+  forgotPassword: {} as UseMutationResult<
+    void,
+    Error,
+    { email: string },
+    unknown
+  >,
+  validateResetToken: {} as UseMutationResult<
+    { valid: boolean; email: string },
+    Error,
+    { token: string; email: string },
+    unknown
+  >,
+  resetPassword: {} as UseMutationResult<
+    void,
+    Error,
+    {
+      token: string;
+      email: string;
+      newPassword: string;
+      confirmPassword: string;
+    },
+    unknown
+  >,
   changePassword: {} as UseMutationResult<
     void,
     Error,
@@ -74,8 +115,16 @@ export const AuthProvider: FC<{
 
   // login mutation
   const loginMutation = useMutation({
-    mutationFn: (credential: { email: string; password: string }) =>
-      authServices.login(credential.email, credential.password),
+    mutationFn: (credential: {
+      email: string;
+      password: string;
+      rememberMe: boolean;
+    }) =>
+      authServices.login(
+        credential.email,
+        credential.password,
+        credential.rememberMe,
+      ),
     onSuccess() {
       queryClient
         .invalidateQueries({
@@ -131,6 +180,46 @@ export const AuthProvider: FC<{
     },
   });
 
+  // forgot password mutation
+  const forgotPasswordMutation = useMutation({
+    mutationFn: (data: { email: string }) =>
+      authServices.forgotPassword(data.email),
+    onSuccess: () => {
+      // redirect to login page
+      navigate("/login");
+    },
+  });
+
+  // validate reset token mutation
+  const validateResetTokenMutation = useMutation({
+    mutationFn: (data: { token: string; email: string }) =>
+      authServices.validateResetToken(data.token, data.email),
+
+    onSuccess: (data) => {
+      return { valid: data.valid, email: data.email };
+    },
+  });
+
+  // reset password mutation
+  const resetPasswordMutation = useMutation({
+    mutationFn: (data: {
+      token: string;
+      email: string;
+      newPassword: string;
+      confirmPassword: string;
+    }) =>
+      authServices.resetPassword(
+        data.token,
+        data.email,
+        data.newPassword,
+        data.confirmPassword,
+      ),
+    onSuccess: () => {
+      // redirect to login page
+      navigate("/login");
+    },
+  });
+
   // context value
   const authContextValue: AuthContextType = {
     user,
@@ -138,6 +227,9 @@ export const AuthProvider: FC<{
     isAuthenticated: !!user,
     login: loginMutation,
     logout: logoutMutation,
+    forgotPassword: forgotPasswordMutation,
+    validateResetToken: validateResetTokenMutation,
+    resetPassword: resetPasswordMutation,
     changePassword: changePasswordMutation,
     register: registerMutation,
   };

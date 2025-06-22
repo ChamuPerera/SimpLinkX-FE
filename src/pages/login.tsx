@@ -26,13 +26,14 @@ export const LoginPage = () => {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    const { email, password } = data;
+    const { email, password, rememberMe } = data;
     await login
-      .mutateAsync({ email, password })
+      .mutateAsync({ email, password, rememberMe })
       .then(() => {
         toast.success("Login successful", {
           description: new Date().toLocaleString(),
@@ -69,10 +70,11 @@ export const LoginPage = () => {
                     <FormControl>
                       <Input
                         placeholder="Enter your email"
-                        className={`rounded-md bg-gray-100 focus:ring-2 ${form.formState.errors.email
+                        className={`rounded-md bg-gray-100 focus:ring-2 ${
+                          form.formState.errors.email
                             ? "ring-red-500"
                             : "ring-blue-300"
-                          }`}
+                        }`}
                         {...field}
                       />
                     </FormControl>
@@ -91,10 +93,11 @@ export const LoginPage = () => {
                       <Input
                         type="password"
                         placeholder="Enter your password"
-                        className={`rounded-md bg-gray-100 focus:ring-2 ${form.formState.errors.password
+                        className={`rounded-md bg-gray-100 focus:ring-2 ${
+                          form.formState.errors.password
                             ? "ring-red-500"
                             : "ring-blue-300"
-                          }`}
+                        }`}
                         {...field}
                       />
                     </FormControl>
@@ -106,10 +109,17 @@ export const LoginPage = () => {
               {/* Remember me + Forgot password */}
               <div className="flex justify-between items-center text-sm">
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="accent-blue-600" />
+                  <input
+                    type="checkbox"
+                    className="accent-blue-600"
+                    {...form.register("rememberMe")}
+                  />
                   <span className="text-blue-700">Remember Me</span>
                 </label>
-                <Link to="/forgot" className="text-blue-600 hover:underline">
+                <Link
+                  to="/forgot-password"
+                  className="text-blue-600 hover:underline"
+                >
                   Forgot Password?
                 </Link>
               </div>
@@ -139,7 +149,8 @@ export const LoginPage = () => {
             </form>
           </Form>
           <footer className="text-center text-xs text-gray-500 mt-6">
-            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri
+            Lanka Initiative
           </footer>
         </div>
 

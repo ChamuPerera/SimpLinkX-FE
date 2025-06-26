@@ -52,13 +52,6 @@ export const services = [
   },
 ];
 
-export const stats = [
-  { number: "500+", label: "Hospitals Connected" },
-  { number: "15,000+", label: "Registered Doctors" },
-  { number: "1M+", label: "Patients Served" },
-  { number: "24/7", label: "System Availability" },
-];
-
 export const features = [
   {
     icon: Shield,

@@ -1,5 +1,5 @@
 import { BackToTopButton, Footer, Header } from "@/components/custom";
-import { features, services, stats } from "@/constants/home";
+import { features, services } from "@/constants/home";
 import {
   ArrowRight,
   Calendar,
@@ -37,7 +37,7 @@ export const HomePage = () => {
 
               <div className="flex flex-col sm:flex-row gap-4 mt-3">
                 <Link
-                  to="/login"
+                  to="/register"
                   className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-2 rounded-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-x-2"
                 >
                   <span className="font-semibold">Get Started</span>
@@ -84,17 +84,6 @@ export const HomePage = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 w-full">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-blue-600">
-                  {stat.number}
-                </div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

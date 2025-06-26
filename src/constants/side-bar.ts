@@ -1,6 +1,7 @@
 import { permissions } from "@/constants/permissions";
 import { DashboardIcon, PersonIcon } from "@radix-ui/react-icons";
-import { Hospital, Shield } from "lucide-react";
+import { Hospital, Shield, CalendarDays } from "lucide-react";
+import { FaPills } from "react-icons/fa";
 
 export const sidebarData = {
   navMain: [
@@ -8,6 +9,18 @@ export const sidebarData = {
       title: "Dashboard",
       url: "/dashboard",
       icon: DashboardIcon,
+      isActive: true,
+    },
+    {
+      title: "Appoinments",
+      url: "/appoinments",
+      icon: CalendarDays ,
+      isActive: true,
+    },
+    {
+      title: "Prescriptions",
+      url: "/prescriptions",
+      icon: FaPills ,
       isActive: true,
     },
     {

@@ -28,7 +28,6 @@ export const services = [
       "Search medicine availability across hospitals and find nearest alternatives",
     features: [
       "Real-time inventory",
-      "Location-based search",
       "Alternative suggestions",
     ],
   },
@@ -37,18 +36,7 @@ export const services = [
     title: "Hospital Directory",
     description:
       "Comprehensive database of hospitals, specialties, and medical services",
-    features: ["Detailed profiles", "Service listings", "Contact information"],
-  },
-  {
-    icon: Users,
-    title: "Doctor Profiles",
-    description:
-      "Find qualified doctors by specialty, location, and availability",
-    features: [
-      "Verified credentials",
-      "Patient reviews",
-      "Scheduling integration",
-    ],
+    features: ["Detailed profiles", "Contact information"],
   },
 ];
 

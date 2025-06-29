@@ -16,9 +16,6 @@ export const sidebarData = {
       url: "/appoinments",
       icon: CalendarDays,
       isActive: false,
-      permissions: [
-
-      ],
     },
     {
       title: "Prescriptions",

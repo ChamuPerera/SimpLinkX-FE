@@ -15,6 +15,7 @@ import {
   SelectedHospitalPage,
   StaffPage,
 } from "@/pages";
+import AccountPage from "@/pages/account"; // <-- Import AccountPage
 import { BrowserRouter, Route, Routes } from "react-router";
 
 function App() {
@@ -41,6 +42,9 @@ function App() {
           <Route path="/staff" element={<StaffPage />} />
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/permissions" element={<PermissionsPage />} />
+
+          {/* Account route */}
+          <Route path="/account" element={<AccountPage />} />
 
           {/* 404 route */}
           <Route path="*" element={<NotFoundPage />} />

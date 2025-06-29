@@ -14,14 +14,20 @@ export const sidebarData = {
     {
       title: "Appoinments",
       url: "/appoinments",
-      icon: CalendarDays ,
-      isActive: true,
+      icon: CalendarDays,
+      isActive: false,
+      permissions: [
+
+      ],
     },
     {
       title: "Prescriptions",
       url: "/prescriptions",
-      icon: FaPills ,
-      isActive: true,
+      icon: FaPills,
+      isActive: false,
+      permissions: [
+        permissions.viewPrescriptions,
+      ],
     },
     {
       title: "Staff",
@@ -40,7 +46,9 @@ export const sidebarData = {
       url: "/hospitals",
       icon: Hospital,
       isActive: false,
-      permissions: [permissions.createHospitals, permissions.updateHospitals],
+      permissions: [
+        permissions.createHospitals,
+        permissions.updateHospitals],
     },
     {
       title: "Roles",

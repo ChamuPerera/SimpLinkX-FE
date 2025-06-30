@@ -16,6 +16,7 @@ import {
   StaffPage,
 } from "@/pages";
 import AccountPage from "@/pages/account"; // <-- Import AccountPage
+import PrescriptionsPage from "@/pages/prescriptions";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/find-hospitals" element={<FindHospitalsPage />} />
+          <Route path="/prescriptions" element={<PrescriptionsPage />} />
           <Route
             path="/find-hospitals/:identifier"
             element={<SelectedHospitalPage />}

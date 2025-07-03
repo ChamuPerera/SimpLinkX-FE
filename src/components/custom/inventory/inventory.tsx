@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import type { Hospital } from "@/services/hospitals";
+import type { Inventory } from "@/services/inventory";
 import type { FC } from "react";
 import type { z } from "zod";
 
-import { hospitalColumns, HospitalTable } from "@/components/custom/hospitals";
+import { InventoryTable } from "@/components/custom/inventory/table";
+import { inventoryColumns } from "@/components/custom/inventory/table-columns";
 import {
   Button,
+  Calendar,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -18,33 +20,37 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Textarea,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui";
 import { permissions } from "@/constants/permissions";
 import {
-  useCreateHospital,
-  useHospitals,
-  useUpdateHospital,
-} from "@/hooks/use-hospitals";
+  useCreateInventory,
+  useInventories,
+  useUpdateInventory,
+} from "@/hooks/use-inventory";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
-import { hospitalSchema } from "@/validations/hospitals";
+import { cn } from "@/utils";
+import { inventorySchema } from "@/validations/inventory";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiError } from "react-icons/bi";
 import { PiSpinnerGapBold } from "react-icons/pi";
 import { toast } from "sonner";
 
-const hospitalDefaultValues: Hospital = {
-  name: "",
-  address: "",
-  phone: "",
-  email: "",
-  district: "",
-  location_url: "",
+const inventoryDefaultValues: Inventory = {
+  drug_name: "",
+  brand_name: "",
+  batch_number: "",
+  expiry_date: new Date(),
+  quantity: 0,
 };
 
-export const Hospitals: FC = React.memo(() => {
+export const Inventories: FC = React.memo(() => {
   const [open, setOpen] = useState(false);
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [search, setSearch] = useState("");
@@ -52,22 +58,22 @@ export const Hospitals: FC = React.memo(() => {
     currentPage: 1,
     pageSize: 20,
   });
-  const { data } = useHospitals({
+  const { data } = useInventories({
     currentPage: pagination.currentPage,
     pageSize: pagination.pageSize,
     search,
   });
-  const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(
+  const [selectedInventory, setSelectedInventory] = useState<Inventory | null>(
     null,
   );
 
-  // clear selected hospital when dialog closes
+  // clear selected inventory when dialog closes
   const closeDialog = () => {
-    setSelectedHospital(null);
+    setSelectedInventory(null);
     setOpen(false);
   };
 
-  // reset current page when search is change
+  // reset current page when search is changed
   useEffect(() => {
     setPagination({
       ...pagination,
@@ -77,24 +83,25 @@ export const Hospitals: FC = React.memo(() => {
 
   return (
     <div className="flex w-full flex-col">
-      <h2 className="text-lg font-semibold">Hospitals</h2>
-      <p className="text-sm text-gray-500">Manage hospitals</p>
+      <h2 className="text-lg font-semibold">Inventory</h2>
+      <p className="text-sm text-gray-500">Manage inventory</p>
 
-      {/* hospital dialog */}
-      <HospitalDialog
+      {/* inventory dialog */}
+      <InventoryDialog
         open={open}
         onClose={closeDialog}
-        data={selectedHospital}
+        data={selectedInventory}
+        setSelectedInventory={setSelectedInventory}
       />
 
-      {/* hospitals list */}
+      {/* inventory list */}
       <div className="mt-4 flex w-full justify-center overflow-hidden">
-        <HospitalTable
-          columns={hospitalColumns}
-          data={data?.hospitals || []}
+        <InventoryTable
+          columns={inventoryColumns}
+          data={data?.inventories || []}
           search={search}
           setSearch={setSearch}
-          setSelectedHospital={setSelectedHospital}
+          setSelectedInventory={setSelectedInventory}
           setOpen={setOpen}
           setShowDetails={setShowDetails}
           setPagination={setPagination}
@@ -107,7 +114,7 @@ export const Hospitals: FC = React.memo(() => {
             endPage: data?.endPage || 0,
           }}
         >
-          <PermissionWrapper permissions={[permissions.createHospitals]}>
+          <PermissionWrapper permissions={[permissions.manageInventories]}>
             <Button
               size={"sm"}
               variant={"outline"}
@@ -117,13 +124,13 @@ export const Hospitals: FC = React.memo(() => {
               Add New
             </Button>
           </PermissionWrapper>
-        </HospitalTable>
+        </InventoryTable>
       </div>
 
       {/* details dialog */}
-      {showDetails && selectedHospital && (
+      {showDetails && selectedInventory && (
         <ShowDetails
-          showDetails={selectedHospital}
+          showDetails={selectedInventory}
           setShowDetails={setShowDetails}
         />
       )}
@@ -131,39 +138,37 @@ export const Hospitals: FC = React.memo(() => {
   );
 });
 
-const HospitalDialog: FC<{
+const InventoryDialog: FC<{
   open: boolean;
   onClose: () => void;
-  data?: Hospital | null;
-}> = React.memo(({ open, onClose, data }) => {
+  setSelectedInventory: (inventory: Inventory | null) => void;
+  data?: Inventory | null;
+}> = React.memo(({ open, onClose, data, setSelectedInventory }) => {
   const [errors, setErrors] = useState<{ [key: string]: string[] | string }>(
     {},
   );
-  const { mutateAsync: createHospital, isPending: createPending } =
-    useCreateHospital();
-  const { mutateAsync: updateHospital, isPending: updatePending } =
-    useUpdateHospital();
+  const { mutateAsync: createInventory, isPending: createPending } =
+    useCreateInventory();
+  const { mutateAsync: updateInventory, isPending: updatePending } =
+    useUpdateInventory();
 
-  const form = useForm<z.infer<typeof hospitalSchema>>({
-    resolver: zodResolver(hospitalSchema),
-    defaultValues: hospitalDefaultValues,
+  const form = useForm<z.infer<typeof inventorySchema>>({
+    resolver: zodResolver(inventorySchema),
+    defaultValues: inventoryDefaultValues,
   });
 
   // form submit handler
-  const onSubmit = async (values: z.infer<typeof hospitalSchema>) => {
-    // clear errors
+  const onSubmit = async (values: z.infer<typeof inventorySchema>) => {
     setErrors({});
-
-    // if data is available
     if (data) {
-      // append id to values
       const updatedValues = { ...values, id: data.id };
-      await updateHospital(updatedValues)
+      await updateInventory(updatedValues)
         .then(() => {
-          toast.success("Hospital updated", {
+          toast.success("Inventory updated", {
             description: new Date().toLocaleString(),
           });
           form.reset();
+          setSelectedInventory(null);
           onClose();
         })
         .catch((error) => {
@@ -174,9 +179,9 @@ const HospitalDialog: FC<{
           );
         });
     } else {
-      await createHospital(values)
+      await createInventory(values)
         .then(() => {
-          toast.success("Hospital created", {
+          toast.success("Inventory created", {
             description: new Date().toLocaleString(),
           });
           form.reset();
@@ -195,9 +200,12 @@ const HospitalDialog: FC<{
   // set form values if data is available
   useEffect(() => {
     if (data) {
-      form.reset(data);
+      form.reset({
+        ...data,
+        expiry_date: data.expiry_date ? new Date(data.expiry_date) : new Date(),
+      });
     } else {
-      form.reset(hospitalDefaultValues);
+      form.reset(inventoryDefaultValues);
     }
   }, [data]);
 
@@ -206,18 +214,18 @@ const HospitalDialog: FC<{
       open={open}
       onOpenChange={() => {
         onClose();
-        form.reset(hospitalDefaultValues);
+        form.reset(inventoryDefaultValues);
       }}
     >
       <DialogContent className="max-h-[80vh] max-w-xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {data ? "Edit Hospital" : "Create Hospital"}
+            {data ? "Edit Inventory" : "Create Inventory"}
           </DialogTitle>
           <DialogDescription>
             {data
-              ? "Edit the details of the hospital."
-              : "Fill in the details to create a new hospital."}
+              ? "Edit the details of the inventory item."
+              : "Fill in the details to create a new inventory item."}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -225,103 +233,121 @@ const HospitalDialog: FC<{
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-3 overflow-y-auto p-1"
           >
-            {/* name */}
+            {/* drug_name */}
             <FormField
               control={form.control}
-              name="name"
+              name="drug_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Drug Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter name" {...field} />
+                    <Input placeholder="Enter drug name" {...field} />
                   </FormControl>
                   <FormMessage>
-                    {errors["name"] && errors["name"][0]}
+                    {errors["drug_name"] && errors["drug_name"][0]}
                   </FormMessage>
                 </FormItem>
               )}
             />
 
-            {/* address */}
+            {/* brand_name */}
             <FormField
               control={form.control}
-              name="address"
+              name="brand_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>Brand Name</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter address" {...field} />
+                    <Input placeholder="Enter brand name" {...field} />
                   </FormControl>
                   <FormMessage>
-                    {errors["address"] && errors["address"][0]}
+                    {errors["brand_name"] && errors["brand_name"][0]}
                   </FormMessage>
                 </FormItem>
               )}
             />
 
-            {/* phone */}
+            {/* batch_number */}
             <FormField
               control={form.control}
-              name="phone"
+              name="batch_number"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>Batch Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter phone" {...field} />
+                    <Input placeholder="Enter batch number" {...field} />
                   </FormControl>
                   <FormMessage>
-                    {errors["phone"] && errors["phone"][0]}
+                    {errors["batch_number"] && errors["batch_number"][0]}
                   </FormMessage>
                 </FormItem>
               )}
             />
 
-            {/* email */}
+            {/* expiry_date */}
             <FormField
               control={form.control}
-              name="email"
+              name="expiry_date"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter email" {...field} />
-                  </FormControl>
-                  <FormMessage>
-                    {errors["email"] && errors["email"][0]}
-                  </FormMessage>
+                <FormItem className="flex flex-col">
+                  <FormLabel>Expiry Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        startMonth={field.value || new Date()}
+                        selected={field.value}
+                        endMonth={
+                          // 10 years from now
+                          field.value
+                            ? new Date(field.value.getFullYear() + 10, 0, 1)
+                            : new Date(new Date().getFullYear() + 10, 0, 1)
+                        }
+                        onSelect={field.onChange}
+                        disabled={(date) => date < new Date()}
+                        captionLayout="dropdown"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* district */}
+            {/* quantity */}
             <FormField
               control={form.control}
-              name="district"
+              name="quantity"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>District</FormLabel>
+                  <FormLabel>Quantity</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter district" {...field} />
+                    <Input
+                      type="number"
+                      placeholder="Enter quantity"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage>
-                    {errors["district"] && errors["district"][0]}
-                  </FormMessage>
-                </FormItem>
-              )}
-            />
-
-            {/* location url */}
-            <FormField
-              control={form.control}
-              name="location_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Location URL</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter location URL" {...field} />
-                  </FormControl>
-                  <FormMessage>
-                    {errors["location_url"] && errors["location_url"][0]}
+                    {errors["quantity"] && errors["quantity"][0]}
                   </FormMessage>
                 </FormItem>
               )}
@@ -345,7 +371,7 @@ const HospitalDialog: FC<{
                 {(createPending || updatePending) && (
                   <PiSpinnerGapBold className="animate-spin" />
                 )}
-                Save Hospital
+                Save Inventory
               </Button>
             </div>
           </form>
@@ -356,57 +382,40 @@ const HospitalDialog: FC<{
 });
 
 const ShowDetails: FC<{
-  showDetails: Hospital | null;
+  showDetails: Inventory | null;
   setShowDetails: (show: boolean) => void;
 }> = React.memo(({ showDetails, setShowDetails }) => {
   return (
     <Dialog open={!!showDetails} onOpenChange={() => setShowDetails(false)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Hospital Details</DialogTitle>
+          <DialogTitle>Inventory Details</DialogTitle>
           <DialogDescription className="sr-only">
-            Here are the details of the hospital you selected.
+            Here are the details of the inventory item you selected.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-0.5 text-sm">
           <div>
-            <span className="font-medium">Name:</span> {showDetails?.name} (
-            <a
-              href={`/find-hospitals/${showDetails?.identifier}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              Visit
-            </a>
-            )
+            <span className="font-medium">Drug Name:</span>{" "}
+            {showDetails?.drug_name}
           </div>
           <div>
-            <span className="font-medium">Location:</span>{" "}
+            <span className="font-medium">Brand Name:</span>{" "}
+            {showDetails?.brand_name}
           </div>
           <div>
-            <span className="font-medium">Address:</span> {showDetails?.address}
+            <span className="font-medium">Batch Number:</span>{" "}
+            {showDetails?.batch_number}
           </div>
           <div>
-            <span className="font-medium">Phone:</span> {showDetails?.phone}
+            <span className="font-medium">Expiry Date:</span>{" "}
+            {showDetails?.expiry_date
+              ? format(showDetails.expiry_date, "yyyy-MM-dd")
+              : "N/A"}
           </div>
           <div>
-            <span className="font-medium">Email:</span> {showDetails?.email}
-          </div>
-          <div>
-            <span className="font-medium">District:</span>{" "}
-            {showDetails?.district}
-          </div>
-          <div>
-            <span className="font-medium">Location:</span>{" "}
-            <a
-              href={showDetails?.location_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              {showDetails?.location_url}
-            </a>
+            <span className="font-medium">Quantity:</span>{" "}
+            {showDetails?.quantity}
           </div>
         </div>
       </DialogContent>

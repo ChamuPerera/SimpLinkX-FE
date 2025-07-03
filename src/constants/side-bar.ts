@@ -1,6 +1,6 @@
 import { permissions } from "@/constants/permissions";
 import { DashboardIcon, PersonIcon } from "@radix-ui/react-icons";
-import { Hospital, Shield, CalendarDays } from "lucide-react";
+import { CalendarDays, Hospital, Shield } from "lucide-react";
 import { FaPills } from "react-icons/fa";
 
 export const sidebarData = {
@@ -22,9 +22,7 @@ export const sidebarData = {
       url: "/prescriptions",
       icon: FaPills,
       isActive: false,
-      permissions: [
-        permissions.viewPrescriptions,
-      ],
+      permissions: [permissions.viewPrescriptions],
     },
     {
       title: "Staff",
@@ -43,9 +41,7 @@ export const sidebarData = {
       url: "/hospitals",
       icon: Hospital,
       isActive: false,
-      permissions: [
-        permissions.createHospitals,
-        permissions.updateHospitals],
+      permissions: [permissions.createHospitals, permissions.updateHospitals],
     },
     {
       title: "Roles",
@@ -68,6 +64,13 @@ export const sidebarData = {
         permissions.createPermissions,
         permissions.updatePermissions,
       ],
+    },
+    {
+      title: "Inventories",
+      url: "/inventories",
+      icon: Shield,
+      isActive: false,
+      permissions: [permissions.manageInventories],
     },
   ],
 };

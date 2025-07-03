@@ -5,6 +5,7 @@ export * from "./find-hospitals";
 export * from "./forgot-password";
 export * from "./home";
 export * from "./hospitals";
+export * from "./inventories";
 export * from "./login";
 export * from "./permissions";
 export * from "./register";

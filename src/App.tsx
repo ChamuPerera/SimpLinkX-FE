@@ -6,6 +6,7 @@ import {
   ForgotPasswordPage,
   HomePage,
   HospitalsPage,
+  InventoriesPage,
   LoginPage,
   NotFoundPage,
   PermissionsPage,
@@ -44,6 +45,7 @@ function App() {
           <Route path="/staff" element={<StaffPage />} />
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/permissions" element={<PermissionsPage />} />
+          <Route path="/inventories" element={<InventoriesPage />} />
 
           {/* Account route */}
           <Route path="/account" element={<AccountPage />} />

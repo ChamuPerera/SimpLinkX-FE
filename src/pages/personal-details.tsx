@@ -30,7 +30,7 @@ const UpdatePersonalDetailsPage: React.FC = () => {
     <PrivateRoute>
       <Suspense fallback={<Loader />}>
         <Layout breadcrumbs={[{ title: "Home", url: "/" }, { title: "Personal Details" }]}>
-          <div className="w-full max-w-xl mx-auto bg-white rounded-xl shadow-md p-8 border border-blue-100">
+          <div className="w-full bg-white rounded-xl shadow-md p-8 border border-blue-100">
             {/* Brand Header */}
             <div className="flex items-center justify-center gap-3 mb-6">
               <img src="/logo.png" alt="logo" className="h-7 w-7" />
@@ -45,7 +45,7 @@ const UpdatePersonalDetailsPage: React.FC = () => {
               <p className="text-gray-600 text-sm">Update your personal information</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Name */}
               <div>
                 <label className="block text-gray-700 font-medium mb-1">Name</label>
@@ -120,8 +120,8 @@ const UpdatePersonalDetailsPage: React.FC = () => {
                 />
               </div>
 
-              {/* Address */}
-              <div>
+              {/* Address (takes full width on all screens) */}
+              <div className="md:col-span-2">
                 <label className="block text-gray-700 font-medium mb-1">Address</label>
                 <input
                   name="address"
@@ -132,8 +132,8 @@ const UpdatePersonalDetailsPage: React.FC = () => {
                 />
               </div>
 
-              {/* Submit */}
-              <div className="text-center mt-4">
+              {/* Submit (spans full row) */}
+              <div className="md:col-span-2 text-center mt-4">
                 <button
                   type="submit"
                   className="px-6 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition font-medium"

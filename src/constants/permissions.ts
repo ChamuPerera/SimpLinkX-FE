@@ -26,4 +26,5 @@ export const permissions = {
   manageInventories: "manage_inventories",
   updatePersonalDetails: "update_personal_details",
   viewAppointments: "view_appointments",
+  calculateNpmRisk: "calculate_npm_risk",
 };

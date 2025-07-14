@@ -1,7 +1,7 @@
 import { permissions } from "@/constants/permissions";
 import { DashboardIcon, PersonIcon } from "@radix-ui/react-icons";
-import { CalendarDays, Hospital, Shield, UserSquare  } from "lucide-react";
-import { FaPills } from "react-icons/fa";
+import { CalendarDays, Hospital, Shield, UserSquare, FileText  } from "lucide-react";
+import { BsSpeedometer2 } from "react-icons/bs";
 
 export const sidebarData = {
   navMain: [
@@ -20,9 +20,16 @@ export const sidebarData = {
     {
       title: "Prescriptions",
       url: "/prescriptions",
-      icon: FaPills,
+      icon: FileText,
       isActive: false,
       permissions: [permissions.viewPrescriptions],
+    },
+    {
+      title: "Calculate NPM Risk",
+      url: "/calculate-npm-risk",
+      icon: BsSpeedometer2,
+      isActive: false,
+      permissions: [permissions.calculateNpmRisk],
     },
     {
       title: "Personal details",

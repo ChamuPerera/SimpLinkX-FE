@@ -25,8 +25,8 @@ export const sidebarData = {
       permissions: [permissions.viewPrescriptions],
     },
     {
-      title: "Calculate NPM Risk",
-      url: "/calculate-npm-risk",
+      title: "Calculate NCD Risk",
+      url: "/calculate-ncd-risk",
       icon: BsSpeedometer2,
       isActive: false,
       permissions: [permissions.calculateNcdRisk],

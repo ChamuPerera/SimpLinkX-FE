@@ -16,7 +16,8 @@ import {
   SelectedHospitalPage,
   StaffPage,
 } from "@/pages";
-import AccountPage from "@/pages/account"; // <-- Import AccountPage
+import AccountPage from "@/pages/account";
+import UpdatePersonalDetailsPage from "@/pages/personal-details";
 import PrescriptionsPage from "@/pages/prescriptions";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -34,20 +35,14 @@ function App() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/find-hospitals" element={<FindHospitalsPage />} />
           <Route path="/prescriptions" element={<PrescriptionsPage />} />
-          <Route
-            path="/find-hospitals/:identifier"
-            element={<SelectedHospitalPage />}
-          />
-
-          {/* protected routes */}
+          <Route path="/personal-details" element={<UpdatePersonalDetailsPage />} />
+          <Route path="/find-hospitals/:identifier" element={<SelectedHospitalPage />}/>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/hospitals" element={<HospitalsPage />} />
           <Route path="/staff" element={<StaffPage />} />
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/permissions" element={<PermissionsPage />} />
           <Route path="/inventories" element={<InventoriesPage />} />
-
-          {/* Account route */}
           <Route path="/account" element={<AccountPage />} />
 
           {/* 404 route */}

@@ -1,6 +1,6 @@
 import { permissions } from "@/constants/permissions";
 import { DashboardIcon, PersonIcon } from "@radix-ui/react-icons";
-import { CalendarDays, Hospital, Shield } from "lucide-react";
+import { CalendarDays, Hospital, Shield, UserSquare  } from "lucide-react";
 import { FaPills } from "react-icons/fa";
 
 export const sidebarData = {
@@ -23,6 +23,13 @@ export const sidebarData = {
       icon: FaPills,
       isActive: false,
       permissions: [permissions.viewPrescriptions],
+    },
+    {
+      title: "Personal details",
+      url: "/personal-details",
+      icon: UserSquare,
+      isActive: false,
+      permissions: [permissions.updatePersonalDetails],
     },
     {
       title: "Staff",

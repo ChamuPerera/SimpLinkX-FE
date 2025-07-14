@@ -36,7 +36,7 @@ const AccountPage: React.FC = () => {
         <Layout breadcrumbs={[{ title: "Home", url: "/" }, { title: "My Account" }]}>
           <div className="w-full max-w-xl mx-auto bg-white rounded-xl shadow-md p-8 border border-blue-100">
             {/* Brand Header */}
-            <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <img src="/logo.png" alt="logo" className="h-7 w-7" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 SimpLinkX

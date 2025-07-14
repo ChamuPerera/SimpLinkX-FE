@@ -32,7 +32,7 @@ const UpdatePersonalDetailsPage: React.FC = () => {
         <Layout breadcrumbs={[{ title: "Home", url: "/" }, { title: "Personal Details" }]}>
           <div className="w-full bg-white rounded-xl shadow-md p-8 border border-blue-100">
             {/* Brand Header */}
-            <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <img src="/logo.png" alt="logo" className="h-7 w-7" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 SimpLinkX
@@ -122,7 +122,7 @@ const UpdatePersonalDetailsPage: React.FC = () => {
 
               {/* Address (takes full width on all screens) */}
               <div className="md:col-span-2">
-                <label className="block text-gray-700 font-medium mb-1">Address</label>
+                <label className="block text-gray-700 font-medium mb-">Address</label>
                 <input
                   name="address"
                   type="text"
@@ -133,7 +133,7 @@ const UpdatePersonalDetailsPage: React.FC = () => {
               </div>
 
               {/* Submit (spans full row) */}
-              <div className="md:col-span-2 text-center mt-4">
+              <div className="md:col-span-2 text-center">
                 <button
                   type="submit"
                   className="px-6 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition font-medium"

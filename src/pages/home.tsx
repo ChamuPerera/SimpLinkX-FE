@@ -191,12 +191,6 @@ export const HomePage = () => {
               >
                 Register with NIC
               </Link>
-              <Link
-                to={"/about"}
-                className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-200 font-semibold"
-              >
-                Explore as Guest
-              </Link>
             </div>
           </div>
         </div>

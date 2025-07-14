@@ -29,7 +29,7 @@ export const sidebarData = {
       url: "/calculate-npm-risk",
       icon: BsSpeedometer2,
       isActive: false,
-      permissions: [permissions.calculateNpmRisk],
+      permissions: [permissions.calculateNcdRisk],
     },
     {
       title: "Personal details",

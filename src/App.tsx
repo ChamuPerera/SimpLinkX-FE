@@ -19,6 +19,7 @@ import {
 import AccountPage from "@/pages/account";
 import UpdatePersonalDetailsPage from "@/pages/personal-details";
 import PrescriptionsPage from "@/pages/prescriptions";
+import CalculateNCDRiskPage from "@/pages/calculate-ncd-risk";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/permissions" element={<PermissionsPage />} />
           <Route path="/inventories" element={<InventoriesPage />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/calculate-ncd-risk" element={<CalculateNCDRiskPage />} />
 
           {/* 404 route */}
           <Route path="*" element={<NotFoundPage />} />

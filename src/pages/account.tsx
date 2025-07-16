@@ -49,7 +49,7 @@ const AccountPage: React.FC = () => {
               <p className="text-gray-600 text-sm">Change your password</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-9">
               {/* Email (disabled) */}
               <div>
                 <label className="block text-gray-700 font-medium mb-1">Email</label>
@@ -99,6 +99,9 @@ const AccountPage: React.FC = () => {
               </div>
             </form>
           </div>
+          <footer className="text-center text-xs text-gray-500 mt-4">
+            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+          </footer>
         </Layout>
       </Suspense>
     </PrivateRoute>

@@ -30,9 +30,9 @@ const UpdatePersonalDetailsPage: React.FC = () => {
     <PrivateRoute>
       <Suspense fallback={<Loader />}>
         <Layout breadcrumbs={[{ title: "Home", url: "/" }, { title: "Personal Details" }]}>
-          <div className="w-full bg-white rounded-xl shadow-md p-8 border border-blue-100">
+          <div className="w-full bg-white rounded-xl shadow-md p-7 border border-blue-100">
             {/* Brand Header */}
-            <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="flex items-center justify-center gap-3 mb-3">
               <img src="/logo.png" alt="logo" className="h-7 w-7" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 SimpLinkX
@@ -40,12 +40,12 @@ const UpdatePersonalDetailsPage: React.FC = () => {
             </div>
 
             {/* Title */}
-            <div className="text-center mb-8">
+            <div className="text-center mb-4">
               <h1 className="text-3xl font-bold text-blue-800">Personal Details</h1>
               <p className="text-gray-600 text-sm">Update your personal information</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Name */}
               <div>
                 <label className="block text-gray-700 font-medium mb-1">Name</label>
@@ -143,6 +143,9 @@ const UpdatePersonalDetailsPage: React.FC = () => {
               </div>
             </form>
           </div>
+          <footer className="text-center text-xs text-gray-500 mt-1">
+            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+          </footer>
         </Layout>
       </Suspense>
     </PrivateRoute>

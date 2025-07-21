@@ -77,7 +77,7 @@ const NavButtons: FC = () => {
         About
       </Link>
       <Link
-        to="/login"
+        to="/appointment"
         className="text-sm font-medium text-gray-700 hover:text-blue-600 "
       >
         Appointment

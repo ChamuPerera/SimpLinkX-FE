@@ -19,6 +19,7 @@ import {
 import AccountPage from "@/pages/account"; // <-- Import AccountPage
 import PrescriptionsPage from "@/pages/prescriptions";
 import { BrowserRouter, Route, Routes } from "react-router";
+import AppointmentsPage from "./pages/appointment";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/appointment" element={<AboutPage />} />
+          <Route path="/appointment" element={<AppointmentsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

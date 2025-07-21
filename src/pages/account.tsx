@@ -6,17 +6,13 @@ import { Suspense } from "react";
 
 const AccountPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: "Mandira Perera",
     email: "mandiraperera@gmail.com",
-    phone: "077-1234567",
-    gender: "Female",
-    nic: "200170903050",
-    dob: "2001-09-25",
-    address: "123, Main Street, Wattala",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -24,7 +20,13 @@ const AccountPage: React.FC = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    alert("Profile updated:\n" + JSON.stringify(formData, null, 2));
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    alert("Password updated:\n" + JSON.stringify(formData, null, 2));
     // Send to backend here
   };
 
@@ -32,9 +34,9 @@ const AccountPage: React.FC = () => {
     <PrivateRoute>
       <Suspense fallback={<Loader />}>
         <Layout breadcrumbs={[{ title: "Home", url: "/" }, { title: "My Account" }]}>
-          <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow-md p-8 border border-blue-100">
+          <div className="w-full max-w-xl mx-auto bg-white rounded-xl shadow-md p-8 border border-blue-100">
             {/* Brand Header */}
-            <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <img src="/logo.png" alt="logo" className="h-7 w-7" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 SimpLinkX
@@ -43,23 +45,11 @@ const AccountPage: React.FC = () => {
 
             {/* Title */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-blue-800">My Account</h1>
-              <p className="text-gray-600 text-sm">Update your personal information</p>
+              <h1 className="text-3xl font-bold text-blue-800">Account Settings</h1>
+              <p className="text-gray-600 text-sm">Change your password</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">Name</label>
-                <input
-                  name="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full border rounded px-3 py-2 focus:outline-blue-500"
-                />
-              </div>
-
+            <form onSubmit={handleSubmit} className="space-y-9">
               {/* Email (disabled) */}
               <div>
                 <label className="block text-gray-700 font-medium mb-1">Email</label>
@@ -72,79 +62,46 @@ const AccountPage: React.FC = () => {
                 />
               </div>
 
-              {/* NIC (disabled) */}
+              {/* New Password */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">NIC</label>
+                <label className="block text-gray-700 font-medium mb-1">New Password</label>
                 <input
-                  name="nic"
-                  type="text"
-                  value={formData.nic}
-                  disabled
-                  className="w-full border rounded px-3 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">Phone</label>
-                <input
-                  name="phone"
-                  type="text"
-                  value={formData.phone}
+                  name="newPassword"
+                  type="password"
+                  value={formData.newPassword}
                   onChange={handleChange}
+                  placeholder="Enter new password"
                   className="w-full border rounded px-3 py-2 focus:outline-blue-500"
                 />
               </div>
 
-              {/* Gender */}
+              {/* Confirm Password */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Gender</label>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  className="w-full border rounded px-3 py-2 focus:outline-blue-500"
-                >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
-
-              {/* DOB */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">Date of Birth</label>
+                <label className="block text-gray-700 font-medium mb-1">Confirm New Password</label>
                 <input
-                  name="dob"
-                  type="date"
-                  value={formData.dob}
+                  name="confirmPassword"
+                  type="password"
+                  value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full border rounded px-3 py-2 focus:outline-blue-500"
-                />
-              </div>
-
-              {/* Address */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">Address</label>
-                <input
-                  name="address"
-                  type="text"
-                  value={formData.address}
-                  onChange={handleChange}
+                  placeholder="Re-enter new password"
                   className="w-full border rounded px-3 py-2 focus:outline-blue-500"
                 />
               </div>
 
               {/* Submit */}
-              <div className="text-center">
+              <div className="text-center mt-4">
                 <button
                   type="submit"
                   className="px-6 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition font-medium"
                 >
-                  Update Profile
+                  Update Password
                 </button>
               </div>
             </form>
           </div>
+          <footer className="text-center text-xs text-gray-500 mt-4">
+            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+          </footer>
         </Layout>
       </Suspense>
     </PrivateRoute>

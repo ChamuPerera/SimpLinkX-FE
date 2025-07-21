@@ -1,5 +1,10 @@
 import React, { Suspense } from "react";
-import { CalendarDays, ClipboardList, Stethoscope, Building2 } from "lucide-react";
+import {
+  CalendarDays,
+  ClipboardList,
+  Stethoscope,
+  Building2,
+} from "lucide-react";
 import { Layout, Loader } from "@/components/custom";
 import { PrivateRoute } from "@/providers/private-route";
 
@@ -11,6 +16,7 @@ const mockPrescription = {
     { name: "Paracetamol 500mg", dosage: "1 tablet, 3 times a day after meals" },
     { name: "Amoxicillin 250mg", dosage: "1 capsule, 2 times a day before meals" },
     { name: "Vitamin C", dosage: "1 tablet, once a day" },
+    { name: "Omeprazole 20mg", dosage: "1 capsule, once a day before breakfast" },
   ],
 };
 
@@ -24,7 +30,7 @@ const PrescriptionsPage: React.FC = () => {
     <PrivateRoute>
       <Suspense fallback={<Loader />}>
         <Layout breadcrumbs={breadcrumbs}>
-          <div className="w-full max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md border border-blue-100">
+          <div className="w-full bg-white p-8 rounded-xl shadow-md border border-blue-100">
             {/* Title */}
             <div className="mb-6 border-b pb-4 flex items-center gap-3">
               <ClipboardList className="text-blue-600" size={28} />
@@ -32,18 +38,24 @@ const PrescriptionsPage: React.FC = () => {
             </div>
 
             {/* Info Header */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm text-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 text-sm text-gray-700">
               <div className="flex items-center gap-2">
                 <Stethoscope className="text-blue-500" size={18} />
-                <span><strong>Doctor:</strong> {mockPrescription.doctor}</span>
+                <span>
+                  <strong>Doctor:</strong> {mockPrescription.doctor}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Building2 className="text-blue-500" size={18} />
-                <span><strong>Hospital:</strong> {mockPrescription.hospital}</span>
+                <span>
+                  <strong>Hospital:</strong> {mockPrescription.hospital}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <CalendarDays className="text-blue-500" size={18} />
-                <span><strong>Date:</strong> {mockPrescription.date}</span>
+                <span>
+                  <strong>Date:</strong> {mockPrescription.date}
+                </span>
               </div>
             </div>
 
@@ -60,6 +72,11 @@ const PrescriptionsPage: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Footer */}
+          <footer className="text-center text-xs text-gray-500 mt-4">
+            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+          </footer>
         </Layout>
       </Suspense>
     </PrivateRoute>

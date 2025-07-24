@@ -6,7 +6,6 @@ import {
   MapPin,
   Search,
   Shield,
-  Users,
 } from "lucide-react";
 
 export const services = [
@@ -26,10 +25,7 @@ export const services = [
     title: "Medicine Finder",
     description:
       "Search medicine availability across hospitals and find nearest alternatives",
-    features: [
-      "Real-time inventory",
-      "Alternative suggestions",
-    ],
+    features: ["Real-time inventory", "Alternative suggestions"],
   },
   {
     icon: Building2,

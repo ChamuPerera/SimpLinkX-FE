@@ -1,11 +1,9 @@
-"use client"
-
-import type { Clinic } from "./appointments"
+import type { Clinic } from "@/types/appointments";
 
 interface ClinicCardProps {
-  clinic: Clinic
-  onSelect: (clinic: Clinic) => void
-  isSelected: boolean
+  clinic: Clinic;
+  onSelect: (clinic: Clinic) => void;
+  isSelected: boolean;
 }
 
 export function ClinicCard({ clinic, onSelect, isSelected }: ClinicCardProps) {
@@ -25,7 +23,9 @@ export function ClinicCard({ clinic, onSelect, isSelected }: ClinicCardProps) {
         </div>
         <div>
           <h3 className="text-xl font-bold text-gray-800">{clinic.name}</h3>
-          <p className="text-blue-600 font-semibold text-sm">{clinic.specialty}</p>
+          <p className="text-blue-600 font-semibold text-sm">
+            {clinic.specialty}
+          </p>
           <p className="text-gray-500 text-xs">Clinic Services</p>
         </div>
       </div>
@@ -41,7 +41,10 @@ export function ClinicCard({ clinic, onSelect, isSelected }: ClinicCardProps) {
         <p className="text-xs font-medium text-gray-500 mb-2">AVAILABLE DAYS</p>
         <div className="flex flex-wrap gap-1">
           {clinic.availability.map((day) => (
-            <span key={day} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-md font-medium">
+            <span
+              key={day}
+              className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-md font-medium"
+            >
               {day.slice(0, 3)}
             </span>
           ))}
@@ -55,5 +58,5 @@ export function ClinicCard({ clinic, onSelect, isSelected }: ClinicCardProps) {
         </button>
       </div>
     </div>
-  )
+  );
 }

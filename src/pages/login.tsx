@@ -13,13 +13,16 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { loginSchema } from "@/validations/login";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { BiError } from "react-icons/bi";
 import { ImSpinner3 } from "react-icons/im";
 import { Link } from "react-router";
 import { toast } from "sonner";
 
 export const LoginPage = () => {
   const { login } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -40,6 +43,17 @@ export const LoginPage = () => {
         });
       })
       .catch((error) => {
+        if (error.response?.status === 401) {
+          return setError(
+            error.response.data.message || "Invalid email or password",
+          );
+        }
+        if (error.response?.status === 403) {
+          return setError(
+            error.response.data.message ||
+              "You do not have permission to access this resource",
+          );
+        }
         toast.error("Login failed", {
           description: error.message || "Invalid email or password",
         });
@@ -135,6 +149,16 @@ export const LoginPage = () => {
                 )}
                 Login
               </Button>
+
+              {/* error message */}
+              {error && (
+                <div className="bg-red-500 px-3 py-2">
+                  <p className="text-white text-sm flex justify-center items-center">
+                    <BiError className="inline mr-1 size-5" />
+                    {error}
+                  </p>
+                </div>
+              )}
 
               {/* Signup link */}
               <p className="text-sm text-center text-gray-600">

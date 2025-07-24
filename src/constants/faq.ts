@@ -1,4 +1,4 @@
-import type { FAQ } from "../appointments"
+import type { FAQ } from "@/types/appointments";
 
 export const faqs: FAQ[] = [
   {
@@ -61,4 +61,4 @@ export const faqs: FAQ[] = [
     answer:
       "Test results are available through our patient portal within 24-48 hours. You'll receive an email notification when results are ready.",
   },
-]
+];

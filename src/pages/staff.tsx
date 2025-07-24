@@ -10,7 +10,7 @@ const breadcrumb = [
     url: "/",
   },
   {
-    title: "Staff",
+    title: "People",
   },
 ];
 

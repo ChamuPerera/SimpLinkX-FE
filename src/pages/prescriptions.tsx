@@ -25,7 +25,7 @@ const breadcrumbs = [
   { title: "Prescriptions" },
 ];
 
-const PrescriptionsPage: React.FC = () => {
+export const PrescriptionsPage: React.FC = () => {
   return (
     <PrivateRoute>
       <Suspense fallback={<Loader />}>
@@ -82,5 +82,3 @@ const PrescriptionsPage: React.FC = () => {
     </PrivateRoute>
   );
 };
-
-export default PrescriptionsPage;

@@ -24,7 +24,5 @@ export const permissions = {
   addReports: "add_reports",
   viewInventories: "view_inventories",
   manageInventories: "manage_inventories",
-  updatePersonalDetails: "update_personal_details",
   viewAppointments: "view_appointments",
-  calculateNcdRisk: "calculate_ncd_risk",
 };

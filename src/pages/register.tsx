@@ -31,13 +31,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import moment from "moment";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { BiError } from "react-icons/bi";
 import { ImSpinner3 } from "react-icons/im";
 import { Link } from "react-router";
 import { toast } from "sonner";
 
 export const RegisterPage = () => {
   const { register } = useAuth();
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -68,6 +71,17 @@ export const RegisterPage = () => {
         form.reset();
       })
       .catch((error) => {
+        if (error.response?.status === 401) {
+          return setError(
+            error.response.data.message || "Invalid email or password",
+          );
+        }
+        if (error.response?.status === 403) {
+          return setError(
+            error.response.data.message ||
+              "You do not have permission to access this resource",
+          );
+        }
         toast.error("Error occurred", {
           description: error.message || "Registration Failed",
         });
@@ -75,11 +89,11 @@ export const RegisterPage = () => {
   };
 
   return (
-    <main className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br from-blue-100 via-white to-indigo-100 animate-gradient">
+    <main className="relative min-h-screen py-10 flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br from-blue-100 via-white to-indigo-100 animate-gradient">
       {/* Background overlay */}
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-blue-100 via-white to-indigo-100 bg-[length:300%_300%] animate-gradient opacity-30"></div>
 
-      <div className="relative z-10 w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-8">
+      <div className="relative z-10 w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 space-y-8">
         {/* Brand */}
         <div className="flex justify-center mb-4">
           <Brand />
@@ -150,7 +164,10 @@ export const RegisterPage = () => {
                       NIC <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="National Identity Card Number" {...field} />
+                      <Input
+                        placeholder="National Identity Card Number"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,11 +222,13 @@ export const RegisterPage = () => {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          endMonth={new Date(
-                            new Date().setFullYear(
-                              new Date().getFullYear() - 16,
-                            ),
-                          )}
+                          endMonth={
+                            new Date(
+                              new Date().setFullYear(
+                                new Date().getFullYear() - 16,
+                              ),
+                            )
+                          }
                           selected={field.value}
                           onSelect={field.onChange}
                           disabled={(date) =>
@@ -295,7 +314,11 @@ export const RegisterPage = () => {
                       Password <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Password" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -330,16 +353,31 @@ export const RegisterPage = () => {
               disabled={register.isPending}
               className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3"
             >
-              {register.isPending && <ImSpinner3 className="animate-spin mr-2" />}
+              {register.isPending && (
+                <ImSpinner3 className="animate-spin mr-2" />
+              )}
               Register
             </Button>
+
+            {/* error message */}
+            {error && (
+              <div className="bg-red-500 px-3 py-2">
+                <p className="text-white text-sm flex justify-center items-center">
+                  <BiError className="inline mr-1 size-5" />
+                  {error}
+                </p>
+              </div>
+            )}
 
             {/* Login Link */}
             <div className="flex justify-center text-sm">
               <span className="text-gray-600 mr-2">
                 Already have an account?
               </span>
-              <Link to={"/login"} className="text-blue-600 font-medium hover:underline">
+              <Link
+                to={"/login"}
+                className="text-blue-600 font-medium hover:underline"
+              >
                 Login
               </Link>
             </div>
@@ -348,7 +386,8 @@ export const RegisterPage = () => {
 
         {/* Footer */}
         <footer className="text-center text-xs text-gray-500 mt-6">
-          &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+          &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri
+          Lanka Initiative
         </footer>
       </div>
     </main>

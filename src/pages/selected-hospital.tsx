@@ -47,7 +47,7 @@ export const SelectedHospitalPage = () => {
                   {hospital?.phone ?? "N/A"}
                 </a>
               </p>
-              |
+              <span className="hidden sm:inline">|</span>
               <p className="text-sm text-gray-500">
                 Email:{" "}
                 <a
@@ -57,7 +57,7 @@ export const SelectedHospitalPage = () => {
                   {hospital?.email ?? "N/A"}
                 </a>
               </p>{" "}
-              |
+              <span className="hidden sm:inline">|</span>
               <p className="text-sm text-gray-500">
                 Location:{" "}
                 <a
@@ -167,7 +167,7 @@ export const SelectedHospitalPage = () => {
                 {/* Action Button */}
                 <div className="flex justify-end">
                   <Link
-                    to={`/hospitals/${identifier}/search`}
+                    to={`/find-hospitals/${identifier}/medicines`}
                     className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
                   >
                     Search Medicines

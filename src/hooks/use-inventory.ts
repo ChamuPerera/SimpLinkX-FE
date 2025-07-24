@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Inventory } from "@/services/inventory";
+import type { Batch, Inventory } from "@/services/inventory";
 
 import { inventoryServices } from "@/services/inventory";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ export const useInventories = (data: {
   pageSize: number;
   currentPage: number;
   search?: string;
+  identifier?: string;
 }) =>
   useQuery({
     queryKey: ["inventories", data],
@@ -81,6 +82,63 @@ export const useDeleteInventory = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: number) => inventoryServices.deleteInventory(id),
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: ["inventories"] });
+    },
+    onError: (error) => {
+      return error;
+    },
+  });
+};
+
+// Add batch to inventory
+export const useAddBatchToInventory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Batch) => inventoryServices.addBatch(data),
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: ["inventories"] });
+    },
+    onError: (error) => {
+      return error;
+    },
+  });
+};
+
+// Update batch in inventory
+export const useUpdateBatchInInventory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Batch) => inventoryServices.updateBatch(data),
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: ["inventories"] });
+    },
+    onError: (error) => {
+      return error;
+    },
+  });
+};
+
+// Delete batch from inventory
+export const useDeleteBatchFromInventory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => inventoryServices.deleteBatch(id),
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: ["inventories"] });
+    },
+    onError: (error) => {
+      return error;
+    },
+  });
+};
+
+// Release medicine from inventory
+export const useReleaseMedicine = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (prescriptionId: number) =>
+      inventoryServices.releaseMedicine(prescriptionId),
     onSettled: () => {
       queryClient.refetchQueries({ queryKey: ["inventories"] });
     },

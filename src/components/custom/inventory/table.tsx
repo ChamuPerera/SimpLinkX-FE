@@ -37,7 +37,9 @@ interface InventoryTableProps<TData, TValue> {
   search: string;
   setSearch: (search: string) => void;
   setOpen: (open: boolean) => void;
+  setBatchOpen: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
+  setShowBatchDetails: (show: boolean) => void;
   setSelectedInventory: (inventory: Inventory) => void;
   setPagination: ({
     currentPage,
@@ -62,9 +64,11 @@ export function InventoryTable<TData, TValue>({
   data,
   search,
   setOpen,
+  setBatchOpen,
   setSearch,
   setSelectedInventory,
   setShowDetails,
+  setShowBatchDetails,
   setPagination,
   pagination,
   children,
@@ -89,8 +93,10 @@ export function InventoryTable<TData, TValue>({
     },
     meta: {
       setOpen,
+      setBatchOpen,
       setSelectedInventory,
       setShowDetails,
+      setShowBatchDetails,
     },
   });
 

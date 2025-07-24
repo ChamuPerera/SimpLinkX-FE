@@ -1,5 +1,6 @@
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
+import type { IconType } from "react-icons/lib";
 
 import {
   Collapsible,
@@ -29,7 +30,8 @@ export function NavMain({
     url: string;
     icon?:
       | LucideIcon
-      | ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
+      | ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
+      | IconType;
     isActive?: boolean;
     permissions?: string[];
     items?: {

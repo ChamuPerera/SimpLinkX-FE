@@ -77,10 +77,10 @@ const NavButtons: FC = () => {
         About
       </Link>
       <Link
-        to="/appointment"
+        to="/ncd-risk"
         className="text-sm font-medium text-gray-700 hover:text-blue-600 "
       >
-        Appointment
+        NCD Risk
       </Link>
     </>
   );

@@ -26,29 +26,43 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
     cell: ({ row }) => <span>{row.getValue("brand_name")}</span>,
   },
   {
-    accessorKey: "batch_number",
-    header: "Batch Number",
-    cell: ({ row }) => <span>{row.getValue("batch_number")}</span>,
+    accessorKey: "weight",
+    header: "Weight",
+    cell: ({ row }) => <span>{row.getValue("weight")}mg</span>,
   },
   {
-    accessorKey: "expiry_date",
-    header: "Expiry Date",
-    cell: ({ row }) => <span>{row.getValue("expiry_date")}</span>,
+    accessorKey: "type",
+    header: "Type",
+    cell: ({ row }) => (
+      <span className="capitalize">{row.getValue("type")}</span>
+    ),
   },
   {
-    accessorKey: "quantity",
-    header: "Quantity",
-    cell: ({ row }) => <span>{row.getValue("quantity")}</span>,
+    accessorKey: "available_quantity",
+    header: "Available Qty",
+    cell: ({ row }) => (
+      <span className="flex justify-center">
+        {row.getValue("available_quantity")}
+      </span>
+    ),
   },
   {
     id: "actions",
     cell: ({ table, row }) => {
       const meta = table.options.meta as {
         setOpen: (open: boolean) => void;
+        setBatchOpen: (open: boolean) => void;
         setSelectedInventory: (inventory: Inventory) => void;
         setShowDetails: (show: boolean) => void;
+        setShowBatchDetails: (show: boolean) => void;
       };
-      const { setOpen, setSelectedInventory, setShowDetails } = meta;
+      const {
+        setOpen,
+        setBatchOpen,
+        setSelectedInventory,
+        setShowDetails,
+        setShowBatchDetails,
+      } = meta;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -69,6 +83,15 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
               >
                 Edit Inventory
               </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => {
+                  setSelectedInventory(row.original);
+                  setBatchOpen(true);
+                }}
+              >
+                Add Batch
+              </DropdownMenuItem>
             </PermissionWrapper>
             <PermissionWrapper permissions={[permissions.viewInventories]}>
               <DropdownMenuItem
@@ -78,6 +101,14 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
                 }}
               >
                 More Details
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setShowBatchDetails(true);
+                  setSelectedInventory(row.original);
+                }}
+              >
+                View Batches
               </DropdownMenuItem>
             </PermissionWrapper>
           </DropdownMenuContent>

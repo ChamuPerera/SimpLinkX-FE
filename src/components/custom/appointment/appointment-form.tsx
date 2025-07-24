@@ -1,14 +1,19 @@
-import type React from "react"
-import { useState } from "react"
-import type { Clinic, PatientForm } from "./appointments"
+import type { Clinic, PatientForm } from "@/types/appointments";
+import type React from "react";
+
+import { useState } from "react";
 
 interface AppointmentFormProps {
-  selectedClinic: Clinic
-  onSubmit: (formData: PatientForm) => void
-  onBack: () => void
+  selectedClinic: Clinic;
+  onSubmit: (formData: PatientForm) => void;
+  onBack: () => void;
 }
 
-export function AppointmentForm({ selectedClinic, onSubmit, onBack }: AppointmentFormProps) {
+export function AppointmentForm({
+  selectedClinic,
+  onSubmit,
+  onBack,
+}: AppointmentFormProps) {
   const [formData, setFormData] = useState<PatientForm>({
     name: "",
     phone: "",
@@ -20,65 +25,71 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
     selectedTimeSlot: "",
     emergencyContact: "",
     medicalHistory: "",
-  })
+  });
 
-  const [selectedDate, setSelectedDate] = useState<string>("")
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("")
-  const [currentStep, setCurrentStep] = useState<number>(1)
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [currentStep, setCurrentStep] = useState<number>(1);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (isFormValid()) {
       onSubmit({
         ...formData,
         selectedDate,
         selectedTimeSlot,
-      })
+      });
     }
-  }
+  };
 
   const isFormValid = () => {
-    return formData.name && formData.phone && formData.age && selectedDate && selectedTimeSlot
-  }
+    return (
+      formData.name &&
+      formData.phone &&
+      formData.age &&
+      selectedDate &&
+      selectedTimeSlot
+    );
+  };
 
   const getNextFourDays = () => {
-    const dates = []
-    const today = new Date()
+    const dates = [];
+    const today = new Date();
     for (let i = 1; i <= 4; i++) {
-      const date = new Date(today)
-      date.setDate(today.getDate() + i)
-      dates.push(date)
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      dates.push(date);
     }
-    return dates
-  }
+    return dates;
+  };
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
       weekday: "short",
       month: "short",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   const isDateAvailable = (date: Date) => {
-    const dayName = date.toLocaleDateString("en-US", { weekday: "long" })
-    return selectedClinic.availability.includes(dayName)
-  }
+    const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+    return selectedClinic.availability.includes(dayName);
+  };
 
   const generateTimeSlots = () => {
-    const slots = []
-    const startTime = 8 * 60 // 8:00 AM in minutes
-    const endTime = 16 * 60 // 4:00 PM in minutes
+    const slots = [];
+    const startTime = 8 * 60; // 8:00 AM in minutes
+    const endTime = 16 * 60; // 4:00 PM in minutes
 
     for (let time = startTime; time <= endTime; time += 10) {
-      const hours = Math.floor(time / 60)
-      const minutes = time % 60
-      const period = hours >= 12 ? "PM" : "AM"
-      const displayHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours
-      const timeString = `${displayHours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${period}`
+      const hours = Math.floor(time / 60);
+      const minutes = time % 60;
+      const period = hours >= 12 ? "PM" : "AM";
+      const displayHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
+      const timeString = `${displayHours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${period}`;
 
       // Randomly set some slots as booked for demonstration
-      const isBooked = Math.random() < 0.3 // 30% chance of being booked
+      const isBooked = Math.random() < 0.3; // 30% chance of being booked
 
       slots.push({
         id: `slot-${time}`,
@@ -87,20 +98,23 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
         tokensLeft: isBooked ? 0 : 1,
         maxTokens: 1,
         status: isBooked ? "full" : "available",
-      })
+      });
     }
 
-    return slots
-  }
+    return slots;
+  };
 
-  const timeSlots = generateTimeSlots()
+  const timeSlots = generateTimeSlots();
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 text-white">
         <div className="flex items-center justify-between">
-          <button onClick={onBack} className="flex items-center text-blue-100 hover:text-white transition-colors">
+          <button
+            onClick={onBack}
+            className="flex items-center text-blue-100 hover:text-white transition-colors"
+          >
             <span className="mr-2">←</span>
             Back to Services
           </button>
@@ -119,13 +133,21 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
             <div key={step} className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                  currentStep >= step ? "bg-blue-600 text-white" : "bg-gray-300 text-gray-600"
+                  currentStep >= step
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-300 text-gray-600"
                 }`}
               >
                 {step}
               </div>
-              <span className={`ml-2 text-sm ${currentStep >= step ? "text-blue-600" : "text-gray-500"}`}>
-                {step === 1 ? "Personal Info" : step === 2 ? "Select Date & Time" : "Confirmation"}
+              <span
+                className={`ml-2 text-sm ${currentStep >= step ? "text-blue-600" : "text-gray-500"}`}
+              >
+                {step === 1
+                  ? "Personal Info"
+                  : step === 2
+                    ? "Select Date & Time"
+                    : "Confirmation"}
               </span>
               {step < 3 && <div className="w-16 h-0.5 bg-gray-300 ml-4"></div>}
             </div>
@@ -137,7 +159,9 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
         {/* Step 1: Personal Information */}
         {currentStep === 1 && (
           <div className="space-y-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Personal Information</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-6">
+              Personal Information
+            </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -150,7 +174,9 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   placeholder="Enter your full name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                 />
               </div>
 
@@ -164,7 +190,9 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   placeholder="(555) 123-4567"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
                 />
               </div>
 
@@ -180,7 +208,12 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   placeholder="25"
                   value={formData.age || ""}
-                  onChange={(e) => setFormData({ ...formData, age: Number.parseInt(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      age: Number.parseInt(e.target.value) || 0,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -202,7 +235,9 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
         {currentStep === 2 && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-800">Select Date & Time</h2>
+              <h2 className="text-xl font-bold text-gray-800">
+                Select Date & Time
+              </h2>
               <button
                 type="button"
                 onClick={() => setCurrentStep(1)}
@@ -219,8 +254,8 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {getNextFourDays().map((date, index) => {
-                  const dateString = date.toISOString().split("T")[0]
-                  const available = isDateAvailable(date)
+                  const dateString = date.toISOString().split("T")[0];
+                  const available = isDateAvailable(date);
 
                   return (
                     <button
@@ -231,17 +266,19 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
                         selectedDate === dateString
                           ? "bg-blue-600 text-white border-blue-600 transform scale-105"
                           : available
-                          ? "bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50"
-                          : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                            ? "bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50"
+                            : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
                       }`}
                       onClick={() => available && setSelectedDate(dateString)}
                     >
                       <div className="text-center">
                         <div className="font-bold">{formatDate(date)}</div>
-                        <div className="text-xs mt-1">{available ? "Available" : "Closed"}</div>
+                        <div className="text-xs mt-1">
+                          {available ? "Available" : "Closed"}
+                        </div>
                       </div>
                     </button>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -262,10 +299,12 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
                         selectedTimeSlot === slot.time
                           ? "bg-blue-600 text-white border-blue-600 transform scale-105"
                           : slot.available
-                          ? "bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50"
-                          : "bg-gray-200 text-gray-500 border-gray-200 cursor-not-allowed"
+                            ? "bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50"
+                            : "bg-gray-200 text-gray-500 border-gray-200 cursor-not-allowed"
                       }`}
-                      onClick={() => slot.available && setSelectedTimeSlot(slot.time)}
+                      onClick={() =>
+                        slot.available && setSelectedTimeSlot(slot.time)
+                      }
                     >
                       <div className="text-center">
                         <div className="font-bold">{slot.time}</div>
@@ -300,7 +339,9 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
         {currentStep === 3 && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-800">Review Your Appointment</h2>
+              <h2 className="text-xl font-bold text-gray-800">
+                Review Your Appointment
+              </h2>
               <button
                 type="button"
                 onClick={() => setCurrentStep(2)}
@@ -313,13 +354,16 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
             <div className="bg-gray-50 rounded-lg p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-3">Patient Information</h3>
+                  <h3 className="font-semibold text-gray-800 mb-3">
+                    Patient Information
+                  </h3>
                   <div className="space-y-2 text-sm">
                     <p>
                       <span className="font-medium">Name:</span> {formData.name}
                     </p>
                     <p>
-                      <span className="font-medium">Phone:</span> {formData.phone}
+                      <span className="font-medium">Phone:</span>{" "}
+                      {formData.phone}
                     </p>
                     <p>
                       <span className="font-medium">Age:</span> {formData.age}
@@ -328,10 +372,13 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-3">Appointment Details</h3>
+                  <h3 className="font-semibold text-gray-800 mb-3">
+                    Appointment Details
+                  </h3>
                   <div className="space-y-2 text-sm">
                     <p>
-                      <span className="font-medium">Service:</span> {selectedClinic.name}
+                      <span className="font-medium">Service:</span>{" "}
+                      {selectedClinic.name}
                     </p>
                     <p>
                       <span className="font-medium">Date:</span>{" "}
@@ -343,7 +390,8 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
                       })}
                     </p>
                     <p>
-                      <span className="font-medium">Time:</span> {selectedTimeSlot}
+                      <span className="font-medium">Time:</span>{" "}
+                      {selectedTimeSlot}
                     </p>
                   </div>
                 </div>
@@ -351,7 +399,9 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
             </div>
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-semibold text-blue-800 mb-2">Important Instructions</h4>
+              <h4 className="font-semibold text-blue-800 mb-2">
+                Important Instructions
+              </h4>
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• Arrive 15 minutes before your appointment time</li>
                 <li>• Bring valid ID</li>
@@ -378,5 +428,5 @@ export function AppointmentForm({ selectedClinic, onSubmit, onBack }: Appointmen
         )}
       </form>
     </div>
-  )
+  );
 }

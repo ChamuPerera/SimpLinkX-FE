@@ -1,4 +1,4 @@
-import type { HealthTip } from "../appointments"
+import type { HealthTip } from "@/types/appointments";
 
 export const healthTips: HealthTip[] = [
   {
@@ -73,4 +73,4 @@ export const healthTips: HealthTip[] = [
     icon: "👁️",
     priority: "medium",
   },
-]
+];

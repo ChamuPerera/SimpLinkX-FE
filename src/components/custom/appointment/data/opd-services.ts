@@ -1,4 +1,4 @@
-import type { Clinic } from "../appointments"
+import type { Clinic } from "@/types/appointments";
 
 export const opdServices: Clinic[] = [
   {

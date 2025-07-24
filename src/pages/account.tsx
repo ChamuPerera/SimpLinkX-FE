@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import type { FormEvent, ChangeEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
+
 import { Layout, Loader } from "@/components/custom";
 import { PrivateRoute } from "@/providers/private-route";
-import { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 
-const AccountPage: React.FC = () => {
+export const AccountPage: React.FC = () => {
   const [formData, setFormData] = useState({
     email: "mandiraperera@gmail.com",
     newPassword: "",
     confirmPassword: "",
   });
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -33,7 +31,9 @@ const AccountPage: React.FC = () => {
   return (
     <PrivateRoute>
       <Suspense fallback={<Loader />}>
-        <Layout breadcrumbs={[{ title: "Home", url: "/" }, { title: "My Account" }]}>
+        <Layout
+          breadcrumbs={[{ title: "Home", url: "/" }, { title: "My Account" }]}
+        >
           <div className="w-full max-w-xl mx-auto bg-white rounded-xl shadow-md p-8 border border-blue-100">
             {/* Brand Header */}
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -45,14 +45,18 @@ const AccountPage: React.FC = () => {
 
             {/* Title */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-blue-800">Account Settings</h1>
+              <h1 className="text-3xl font-bold text-blue-800">
+                Account Settings
+              </h1>
               <p className="text-gray-600 text-sm">Change your password</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-9">
               {/* Email (disabled) */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Email</label>
+                <label className="block text-gray-700 font-medium mb-1">
+                  Email
+                </label>
                 <input
                   name="email"
                   type="email"
@@ -64,7 +68,9 @@ const AccountPage: React.FC = () => {
 
               {/* New Password */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">New Password</label>
+                <label className="block text-gray-700 font-medium mb-1">
+                  New Password
+                </label>
                 <input
                   name="newPassword"
                   type="password"
@@ -77,7 +83,9 @@ const AccountPage: React.FC = () => {
 
               {/* Confirm Password */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Confirm New Password</label>
+                <label className="block text-gray-700 font-medium mb-1">
+                  Confirm New Password
+                </label>
                 <input
                   name="confirmPassword"
                   type="password"
@@ -100,12 +108,11 @@ const AccountPage: React.FC = () => {
             </form>
           </div>
           <footer className="text-center text-xs text-gray-500 mt-4">
-            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka Initiative
+            &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri
+            Lanka Initiative
           </footer>
         </Layout>
       </Suspense>
     </PrivateRoute>
   );
 };
-
-export default AccountPage;

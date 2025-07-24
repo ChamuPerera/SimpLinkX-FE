@@ -96,3 +96,20 @@ export const useUpdateHospital = () => {
     },
   });
 };
+
+// manage hospital
+export const useManageHospital = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Hospital) =>
+      hospitalsServices.manageHospital(data),
+    onSettled: () => {
+      queryClient.refetchQueries({
+        queryKey: ["hospitals"],
+      });
+    },
+    onError: (error) => {
+      return error;
+    },
+  });
+}

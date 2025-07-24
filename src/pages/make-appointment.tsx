@@ -1,20 +1,29 @@
 import type { Clinic, PatientForm } from "@/types/appointments";
 
-import { AppointmentForm } from "@/components/custom/appointment/appointment-form";
-import { ClinicCard } from "@/components/custom/appointment/clinic-card";
-import { clinics } from "@/components/custom/appointment/data/clinics";
-import { opdServices } from "@/components/custom/appointment/data/opd-services";
-import { FAQSection } from "@/components/custom/appointment/faq-section";
-import { HealthTips } from "@/components/custom/appointment/health-tips";
+import { Loader } from "@/components/custom";
 import { Header } from "@/components/custom/header";
+import { AppointmentForm } from "@/components/custom/make-appointment/appointment-form";
+import { ClinicCard } from "@/components/custom/make-appointment/clinic-card";
+import { clinics } from "@/components/custom/make-appointment/data/clinics";
+import { opdServices } from "@/components/custom/make-appointment/data/opd-services";
+import { FAQSection } from "@/components/custom/make-appointment/faq-section";
+import { HealthTips } from "@/components/custom/make-appointment/health-tips";
+import { useHospitalByIdentifier } from "@/hooks/use-hospitals";
+import { HospitalIcon } from "lucide-react";
 import React, { useState } from "react";
+import { Navigate, useParams } from "react-router";
 
 export const MakeAppointmentsPage: React.FC = () => {
+  // get identifier from url /:identifier
+  const { identifier } = useParams();
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [activeTab, setActiveTab] = useState<"opd" | "clinic">("opd");
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [appointmentDetails, setAppointmentDetails] =
     useState<PatientForm | null>(null);
+
+  const { data: hospital, isLoading: isLoadingHospital } =
+    useHospitalByIdentifier(identifier as string);
 
   const currentServices = activeTab === "opd" ? opdServices : clinics;
 
@@ -36,6 +45,21 @@ export const MakeAppointmentsPage: React.FC = () => {
     setShowConfirmation(false);
     setAppointmentDetails(null);
   };
+
+  if (isLoadingHospital) return <Loader />;
+
+  if (!hospital) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Hospital not found.</p>
+      </div>
+    );
+  }
+
+  // Check if appointment booking is activated for the hospital
+  if (!hospital?.is_appointment_activated) {
+    return <Navigate to={`/find-hospitals/${identifier}`} replace />;
+  }
 
   if (showConfirmation && appointmentDetails) {
     const service = [...opdServices, ...clinics].find(
@@ -220,32 +244,55 @@ export const MakeAppointmentsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="text-center">
             <div className="flex justify-center mb-4">
-              <div
-                className="w-16 h-16 bg-opacity-20 bg-white  rounded-full flex items-center justify-center"
-                style={{ background: "#6475d0" }}
-              >
-                <svg
-                  className="w-8 h-8"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2M7 8h10M7 12h4m1 8l-1-1v-1a1 1 0 011-1h2a1 1 0 011 1v1l-1 1"
-                  />
-                </svg>
-              </div>
+              <HospitalIcon className="w-14 h-14 text-white bg-white/20 px-3 rounded-full" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Hospital Management System
+              {hospital?.name}{" "}
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base text-blue-100 max-w-3xl mx-auto leading-relaxed">
               Professional healthcare appointment booking with token-based
               system for efficient patient management.
             </p>
+
+            <p className="text-lg text-gray-100">
+              {hospital?.address} -{" "}
+              <span className="capitalize">{hospital?.district}</span> District
+            </p>
+            <div className="flex gap-4 flex-col sm:flex-row justify-center items-center">
+              <p className="text-sm text-gray-50">
+                Contact:{" "}
+                <a
+                  href={`tel:${hospital?.phone}`}
+                  className="text-blue-50 hover:underline"
+                >
+                  {hospital?.phone ?? "N/A"}
+                </a>
+              </p>
+              <span className="hidden sm:inline">|</span>
+              <p className="text-sm text-gray-50">
+                Email:{" "}
+                <a
+                  href={`mailto:${hospital?.email}`}
+                  className="text-blue-50 hover:underline"
+                >
+                  {hospital?.email ?? "N/A"}
+                </a>
+              </p>{" "}
+              <span className="hidden sm:inline">|</span>
+              <p className="text-sm text-gray-50">
+                Location:{" "}
+                <a
+                  href={hospital?.location_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-50 hover:underline"
+                >
+                  {hospital?.location_url
+                    ? "View on Map"
+                    : "Location not available"}
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -1,27 +1,10 @@
 import { AuthProvider } from "@/hooks/use-auth";
-import {
-  AboutPage,
-  AccountPage,
-  CalculateNCDRiskPage,
-  DashboardPage,
-  FindHospitalsPage,
-  ForgotPasswordPage,
-  HomePage,
-  HospitalsPage,
-  InventoriesPage,
-  LoginPage,
-  MakeAppointmentsPage,
-  MedicineSearchPage,
-  NotFoundPage,
-  PermissionsPage,
-  PrescriptionsPage,
-  RegisterPage,
-  ResetPasswordPage,
-  RolesPage,
-  SelectedHospitalPage,
-  StaffPage,
-} from "@/pages";
+import { AboutPage, AccountPage, CalculateNCDRiskPage, DashboardPage, FindHospitalsPage, ForgotPasswordPage, HomePage, HospitalSettingsPage, HospitalsPage, InventoriesPage, LoginPage, MakeAppointmentsPage, MedicineSearchPage, NotFoundPage, PermissionsPage, PrescriptionsPage, RegisterPage, ResetPasswordPage, RolesPage, SelectedHospitalPage, StaffPage } from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router";
+
+
+
+
 
 function App() {
   return (
@@ -44,10 +27,13 @@ function App() {
             path="/find-hospitals/:identifier/medicines"
             element={<MedicineSearchPage />}
           />
+          <Route
+            path="/find-hospitals/:identifier/token"
+            element={<MakeAppointmentsPage />}
+          />
 
           {/* protected routes */}
           <Route path="/prescriptions" element={<PrescriptionsPage />} />
-          <Route path="/appointments" element={<MakeAppointmentsPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/hospitals" element={<HospitalsPage />} />
           <Route path="/people" element={<StaffPage />} />
@@ -55,6 +41,7 @@ function App() {
           <Route path="/permissions" element={<PermissionsPage />} />
           <Route path="/inventories" element={<InventoriesPage />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/settings/hospital" element={<HospitalSettingsPage />} />
 
           {/* 404 route */}
           <Route path="*" element={<NotFoundPage />} />

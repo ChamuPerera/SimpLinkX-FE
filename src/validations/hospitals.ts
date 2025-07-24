@@ -21,4 +21,6 @@ export const hospitalSchema = z.object({
     .min(2, { message: "District must be at least 2 characters" })
     .max(100, { message: "District should contain maximum 100 characters" }),
   location_url: z.string().url({ message: "Invalid URL" }),
+  is_inventory_activated: z.boolean().optional(),
+  is_appointment_activated: z.boolean().optional(),
 });

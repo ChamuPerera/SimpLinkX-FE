@@ -7,7 +7,7 @@ import { useInventories } from "@/hooks/use-inventory";
 import { ArrowRightIcon } from "lucide-react";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
-import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 export const MedicineSearchPage = () => {
   // get identifier from url /:identifier
@@ -28,6 +28,19 @@ export const MedicineSearchPage = () => {
   });
 
   if (isLoadingHospital) return <Loader />;
+
+  if (!hospital) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Hospital not found.</p>
+      </div>
+    );
+  }
+
+  // Check if inventory is activated for the hospital
+  if (!hospital?.is_inventory_activated) {
+    return <Navigate to={`/find-hospitals/${identifier}`} replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">

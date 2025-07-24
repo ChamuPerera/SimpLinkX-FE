@@ -1,6 +1,13 @@
 import { permissions } from "@/constants/permissions";
 import { DashboardIcon, PersonIcon } from "@radix-ui/react-icons";
-import { CalendarDays, Hospital, Shield, UserSquare, FileText  } from "lucide-react";
+import {
+  CalendarDays,
+  FileText,
+  Hospital,
+  Settings,
+  Shield,
+  UserSquare,
+} from "lucide-react";
 
 export const sidebarData = {
   navMain: [
@@ -22,12 +29,6 @@ export const sidebarData = {
       icon: FileText,
       isActive: false,
       permissions: [permissions.viewPrescriptions],
-    },
-    {
-      title: "Personal details",
-      url: "/personal-details",
-      icon: UserSquare,
-      isActive: false,
     },
     {
       title: "People",
@@ -76,6 +77,19 @@ export const sidebarData = {
       icon: Shield,
       isActive: false,
       permissions: [permissions.manageInventories],
+    },
+    {
+      title: "Account",
+      url: "/account",
+      icon: UserSquare,
+      isActive: false,
+    },
+    {
+      title: "Settings",
+      url: "/settings/hospital",
+      icon: Settings,
+      isActive: false,
+      permissions: [permissions.manageHospitals],
     },
   ],
 };

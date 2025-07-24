@@ -35,6 +35,12 @@ export const hospitalsServices = {
 
   // get single hospital by id
   getHospitalById: async (id: number) => {
+    if (!id) {
+      throw new Error("Hospital ID is required");
+    }
+    if (id <= 0) {
+      throw new Error("Hospital ID must be a positive integer");
+    }
     const { data } = await api.get(`/hospitals/single/${id}`);
     return data as Hospital;
   },
@@ -48,6 +54,12 @@ export const hospitalsServices = {
   // Update an existing hospital
   updateHospital: async (hospital: Hospital) => {
     const { data } = await api.put(`/hospitals/${hospital.id}`, hospital);
+    return data;
+  },
+
+  // Manage hospital settings
+  manageHospital: async (hospital: Hospital) => {
+    const { data } = await api.post(`/hospitals/manage`, hospital);
     return data;
   },
 

@@ -117,12 +117,18 @@ export const SelectedHospitalPage = () => {
 
                 {/* Action Button */}
                 <div className="flex justify-end">
-                  <Link
-                    to={`/hospitals/${identifier}/token`}
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
-                  >
-                    Get Token
-                  </Link>
+                  {hospital?.is_appointment_activated ? (
+                    <Link
+                      to={`/hospitals/${identifier}/token`}
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                    >
+                      Get Token
+                    </Link>
+                  ) : (
+                    <p className="text-sm text-red-500">
+                      Token service is currently unavailable
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -166,12 +172,18 @@ export const SelectedHospitalPage = () => {
 
                 {/* Action Button */}
                 <div className="flex justify-end">
-                  <Link
-                    to={`/find-hospitals/${identifier}/medicines`}
-                    className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
-                  >
-                    Search Medicines
-                  </Link>
+                  {hospital?.is_inventory_activated ? (
+                    <Link
+                      to={`/find-hospitals/${identifier}/medicines`}
+                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                    >
+                      Search Medicines
+                    </Link>
+                  ) : (
+                    <p className="text-sm text-red-500">
+                      Medicine search service is currently unavailable
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

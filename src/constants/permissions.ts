@@ -2,6 +2,7 @@ export const permissions = {
   viewHospitals: "view_hospitals",
   createHospitals: "create_hospitals",
   updateHospitals: "update_hospitals",
+  manageHospitals: "manage_hospitals",
   viewUsers: "view_users",
   createUsers: "create_users",
   updateUsers: "update_users",

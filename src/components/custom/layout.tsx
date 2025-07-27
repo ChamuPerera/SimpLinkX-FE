@@ -2,6 +2,7 @@ import type { FC } from "react";
 
 import { AppSidebar } from "@/components/custom";
 import {
+  Badge,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -13,6 +14,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui";
+import { useAuth } from "@/hooks/use-auth";
 import React, { Fragment } from "react";
 
 export const Layout: FC<{
@@ -22,6 +24,7 @@ export const Layout: FC<{
   }[];
   children: React.ReactNode;
 }> = React.memo(({ breadcrumbs, children }) => {
+  const { user } = useAuth();
   return (
     <SidebarProvider
       style={
@@ -61,6 +64,16 @@ export const Layout: FC<{
                 })}
               </BreadcrumbList>
             </Breadcrumb>
+          </div>
+
+          {/* role */}
+          <div className="ml-auto flex items-center gap-2 pr-4 capitalize">
+            <Badge
+              className="rounded-sm border-blue-500 text-blue-600"
+              variant={"outline"}
+            >
+              {user?.role.replace("_", " ")}
+            </Badge>
           </div>
         </header>
 

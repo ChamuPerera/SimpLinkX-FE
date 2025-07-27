@@ -26,4 +26,5 @@ export const permissions = {
   viewInventories: "view_inventories",
   manageInventories: "manage_inventories",
   viewAppointments: "view_appointments",
+  manageAppointments: "manage_appointments",
 };

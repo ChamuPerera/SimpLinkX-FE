@@ -5,6 +5,7 @@ export * from "./permissions";
 export * from "./roles";
 export * from "./settings";
 export * from "./users";
+export * from "./clinics";
 export * from "./back-to-top";
 export * from "./brand";
 export * from "./footer";

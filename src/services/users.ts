@@ -12,11 +12,12 @@ export const usersServices = {
     pageSize: number;
     currentPage: number;
     search?: string;
+    role?: string;
   }) => {
     const { data } = await api.get(
       `/users?page=${params.currentPage}&size=${params.pageSize}${
         params.search ? `&search=${params.search}` : ""
-      }`,
+      } ${params.role ? `&role=${params.role}` : ""}`,
     );
     return {
       users: data.data as User[],

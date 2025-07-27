@@ -2,6 +2,7 @@ export * from "./404";
 export * from "./about";
 export * from "./account";
 export * from "./calculate-ncd-risk";
+export * from "./clinics";
 export * from "./dashboard";
 export * from "./find-hospitals";
 export * from "./forgot-password";

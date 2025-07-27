@@ -8,6 +8,7 @@ import {
   Shield,
   UserSquare,
 } from "lucide-react";
+import { FaHospitalAlt } from "react-icons/fa";
 
 export const sidebarData = {
   navMain: [
@@ -22,13 +23,22 @@ export const sidebarData = {
       url: "/appointments",
       icon: CalendarDays,
       isActive: false,
+      permissions: [
+        permissions.viewAppointments,
+        permissions.manageAppointments,
+      ],
     },
     {
       title: "Prescriptions",
       url: "/prescriptions",
       icon: FileText,
       isActive: false,
-      permissions: [permissions.viewPrescriptions],
+      permissions: [
+        permissions.viewPrescriptions,
+        permissions.createPrescriptions,
+        permissions.updatePrescriptions,
+        permissions.deletePrescriptions,
+      ],
     },
     {
       title: "People",
@@ -82,6 +92,12 @@ export const sidebarData = {
       title: "Account",
       url: "/account",
       icon: UserSquare,
+      isActive: false,
+    },
+    {
+      title: "Clinics",
+      url: "/clinics",
+      icon: FaHospitalAlt,
       isActive: false,
     },
     {

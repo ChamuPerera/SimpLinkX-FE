@@ -9,6 +9,7 @@ export const useUsers = (data: {
   pageSize: number;
   currentPage: number;
   search?: string;
+  role?: string;
 }) =>
   useQuery({
     queryKey: ["users", data],

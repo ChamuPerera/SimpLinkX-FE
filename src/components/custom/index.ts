@@ -6,6 +6,8 @@ export * from "./roles";
 export * from "./settings";
 export * from "./users";
 export * from "./clinics";
+export * from "./clinic-dates";
+export * from "./opd-dates";
 export * from "./back-to-top";
 export * from "./brand";
 export * from "./footer";

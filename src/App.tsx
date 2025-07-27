@@ -3,6 +3,7 @@ import {
   AboutPage,
   AccountPage,
   CalculateNCDRiskPage,
+  ClinicDatesPage,
   ClinicsPage,
   DashboardPage,
   FindHospitalsPage,
@@ -15,6 +16,7 @@ import {
   MakeAppointmentsPage,
   MedicineSearchPage,
   NotFoundPage,
+  OpdDatesPage,
   PermissionsPage,
   PrescriptionsPage,
   RegisterPage,
@@ -54,9 +56,11 @@ function App() {
           {/* protected routes */}
           <Route path="/account" element={<AccountPage />} />
           <Route path="/clinics" element={<ClinicsPage />} />
+          <Route path="/clinics/dates" element={<ClinicDatesPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/hospitals" element={<HospitalsPage />} />
           <Route path="/inventories" element={<InventoriesPage />} />
+          <Route path="/opd-dates" element={<OpdDatesPage />} />
           <Route path="/permissions" element={<PermissionsPage />} />
           <Route path="/people" element={<StaffPage />} />
           <Route path="/prescriptions" element={<PrescriptionsPage />} />

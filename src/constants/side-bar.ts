@@ -1,7 +1,9 @@
 import { permissions } from "@/constants/permissions";
 import { DashboardIcon, PersonIcon } from "@radix-ui/react-icons";
 import {
+  Calendar1Icon,
   CalendarDays,
+  CalendarRange,
   FileText,
   Hospital,
   Settings,
@@ -99,6 +101,21 @@ export const sidebarData = {
       url: "/clinics",
       icon: FaHospitalAlt,
       isActive: false,
+      permissions: [permissions.manageHospitals],
+    },
+    {
+      title: "Clinic Dates",
+      url: "/clinics/dates",
+      icon: CalendarRange,
+      isActive: false,
+      permissions: [permissions.manageHospitals],
+    },
+    {
+      title: "OPD Dates",
+      url: "/opd-dates",
+      icon: Calendar1Icon,
+      isActive: false,
+      permissions: [permissions.manageHospitals],
     },
     {
       title: "Settings",

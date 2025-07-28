@@ -19,11 +19,6 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Textarea,
 } from "@/components/ui";
 import { permissions } from "@/constants/permissions";
@@ -268,41 +263,6 @@ const ClinicDialog: FC<{
             />
 
             {/* doctor_id */}
-            <FormField
-              control={form.control}
-              name="doctor_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Doctor</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a doctor" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {usersData?.users
-                        .filter((user) => user.role === "doctor")
-                        .map((doctor) => (
-                          <SelectItem
-                            key={doctor.id}
-                            value={doctor.id?.toString() || ""}
-                          >
-                            {doctor.name}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage>
-                    {errors["doctor_id"] && errors["doctor_id"][0]}
-                  </FormMessage>
-                </FormItem>
-              )}
-            />
-
             <Combobox
               isLoading={isDoctorsLoading}
               items={
@@ -317,7 +277,11 @@ const ClinicDialog: FC<{
               placeholder="Doctor"
               search={doctorSearch}
               setValue={(value) => form.setValue("doctor_id", Number(value))}
-              value={form.watch("doctor_id").toString()}
+              value={
+                form.watch("doctor_id") === 0
+                  ? ""
+                  : form.watch("doctor_id").toString()
+              }
             />
 
             {/* location */}

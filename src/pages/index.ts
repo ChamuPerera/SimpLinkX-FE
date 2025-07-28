@@ -1,6 +1,7 @@
 export * from "./404";
 export * from "./about";
 export * from "./account";
+export * from "./appointments";
 export * from "./calculate-ncd-risk";
 export * from "./clinic-dates";
 export * from "./clinics";

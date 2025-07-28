@@ -4,7 +4,18 @@ import type { z } from "zod";
 import { api } from "@/services/api";
 
 type ClinicDateWithoutId = z.infer<typeof clinicDateSchema>;
-export type ClinicDate = ClinicDateWithoutId & { id?: number };
+export type ClinicDate = ClinicDateWithoutId & {
+  id?: number;
+  clinic?: {
+    id: number;
+    name: string;
+    hospital_id: number;
+    hospital: {
+      id: number;
+      name: string;
+    };
+  };
+};
 
 export const clinicDatesServices = {
   // Get clinic dates with pagination and filters

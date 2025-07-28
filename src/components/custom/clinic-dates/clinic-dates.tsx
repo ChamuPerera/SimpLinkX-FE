@@ -340,7 +340,9 @@ const ClinicDateDialog: FC<{
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
+                  <FormMessage>
+                    {errors["date"] && errors["date"][0]}
+                  </FormMessage>
                 </FormItem>
               )}
             />

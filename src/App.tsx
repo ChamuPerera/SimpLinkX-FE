@@ -2,6 +2,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import {
   AboutPage,
   AccountPage,
+  AppointmentsPage,
   CalculateNCDRiskPage,
   ClinicDatesPage,
   ClinicsPage,
@@ -55,6 +56,7 @@ function App() {
 
           {/* protected routes */}
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/clinics" element={<ClinicsPage />} />
           <Route path="/clinics/dates" element={<ClinicDatesPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />

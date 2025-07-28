@@ -11,6 +11,7 @@ import type {
 } from "@/validations/appointments";
 
 import { api } from "@/services/api";
+import moment from "moment";
 
 // Clinic Token Services
 export const clinicTokenServices = {
@@ -19,10 +20,20 @@ export const clinicTokenServices = {
     currentPage?: number;
     pageSize?: number;
     search?: string;
-    clinic_date_id?: number;
+    date?: Date;
     type?: string;
   }) => {
-    const { data } = await api.get(`/clinic-tokens`, { params });
+    // Ensure date is in yyyy-mm-dd format if provided
+    let date: undefined | string = undefined;
+    if (params.date) {
+      date = moment(params.date).format("YYYY-MM-DD");
+    }
+    const { data } = await api.get(`/clinic-tokens`, {
+      params: {
+        ...params,
+        date: date,
+      },
+    });
     return {
       clinicTokens: data.data as ClinicToken[],
       total: data.total as number,
@@ -33,36 +44,39 @@ export const clinicTokenServices = {
   },
 
   // Get single clinic token by ID
-  getClinicToken: async (id: number): Promise<ClinicToken> => {
-    const response = await api.get(`/clinic-tokens/${id}`);
-    return response.data;
+  getClinicToken: async (id: number) => {
+    const { data } = await api.get(`/clinic-tokens/${id}`);
+    return data as ClinicToken;
   },
 
   // Get available slots for a clinic date
-  getAvailableSlots: async (clinicDateId: number): Promise<AvailableSlot[]> => {
-    const response = await api.get(
+  getAvailableSlots: async (clinicDateId: number) => {
+    const { data } = await api.get(
       `/clinic-dates/${clinicDateId}/available-slots`,
     );
-    return response.data;
+    return data as AvailableSlot[];
   },
 
   // Create new clinic token
-  createClinicToken: async (data: ClinicTokenSchema) => {
-    const response = await api.post("/clinic-tokens", data);
-    return response.data;
+  createClinicToken: async (clinicToken: ClinicTokenSchema) => {
+    const { data } = await api.post("/clinic-tokens", clinicToken);
+    return data;
   },
 
   // Update existing clinic token
-  updateClinicToken: async (data: {
+  updateClinicToken: async (clinicToken: {
     id: number;
     values: ClinicTokenUpdateSchema;
   }) => {
-    const response = await api.put(`/clinic-tokens/${data.id}`, data.values);
-    return response.data;
+    const { data } = await api.put(
+      `/clinic-tokens/${clinicToken.id}`,
+      clinicToken.values,
+    );
+    return data;
   },
 
   // Delete clinic token
-  deleteClinicToken: async (id: number): Promise<void> => {
+  deleteClinicToken: async (id: number) => {
     await api.delete(`/clinic-tokens/${id}`);
   },
 };
@@ -74,10 +88,18 @@ export const opdTokenServices = {
     currentPage?: number;
     pageSize?: number;
     search?: string;
-    opd_date_id?: number;
+    date?: Date;
     type?: string;
   }) => {
-    const { data } = await api.get(`/opd-tokens`, { params });
+    // Ensure date is in yyyy-mm-dd format if provided
+    let date: undefined | string = undefined;
+    if (params.date) {
+      date = moment(params.date).format("YYYY-MM-DD");
+    }
+
+    const { data } = await api.get(`/opd-tokens`, {
+      params: { ...params, date: date },
+    });
     return {
       opdTokens: data.data as OpdToken[],
       total: data.total as number,
@@ -88,21 +110,21 @@ export const opdTokenServices = {
   },
 
   // Get single opd token by ID
-  getOpdToken: async (id: number): Promise<OpdToken> => {
-    const response = await api.get(`/opd-tokens/${id}`);
-    return response.data;
+  getOpdToken: async (id: number) => {
+    const { data } = await api.get(`/opd-tokens/${id}`);
+    return data;
   },
 
   // Get available slots for an opd date
-  getAvailableSlots: async (opdDateId: number): Promise<AvailableSlot[]> => {
-    const response = await api.get(`/opd-dates/${opdDateId}/available-slots`);
-    return response.data;
+  getAvailableSlots: async (opdDateId: number) => {
+    const { data } = await api.get(`/opd-dates/${opdDateId}/available-slots`);
+    return data;
   },
 
   // Create new opd token
   createOpdToken: async (data: OpdTokenSchema) => {
-    const response = await api.post("/opd-tokens", data);
-    return response.data;
+    const { data: responseData } = await api.post("/opd-tokens", data);
+    return responseData;
   },
 
   // Update existing opd token
@@ -110,12 +132,15 @@ export const opdTokenServices = {
     id: number;
     values: OpdTokenUpdateSchema;
   }) => {
-    const response = await api.put(`/opd-tokens/${data.id}`, data.values);
-    return response.data;
+    const { data: responseData } = await api.put(
+      `/opd-tokens/${data.id}`,
+      data.values,
+    );
+    return responseData;
   },
 
   // Delete opd token
-  deleteOpdToken: async (id: number): Promise<void> => {
+  deleteOpdToken: async (id: number) => {
     await api.delete(`/opd-tokens/${id}`);
   },
 };

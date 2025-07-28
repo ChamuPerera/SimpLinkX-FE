@@ -53,6 +53,7 @@ export interface HealthTip {
 export interface Patient {
   id: number;
   user_id: number;
+  nic: string;
   user?: {
     id: number;
     name: string;

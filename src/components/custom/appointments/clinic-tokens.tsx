@@ -1,212 +1,87 @@
 import type { ClinicToken } from "@/types/appointments";
 import type { FC } from "react";
 
-import { ClinicTokenDialog } from "@/components/custom/appointments/clinic-token-dialog";
+import {
+  ClinicTable,
+  clinicTableColumns,
+  ClinicTokenDialog,
+} from "@/components/custom/appointments";
 import { Button } from "@/components/ui";
 import { permissions } from "@/constants/permissions";
-import {
-  useClinicTokens,
-  useDeleteClinicToken,
-} from "@/hooks/use-appointments";
+import { useClinicTokens } from "@/hooks/use-appointments";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 export const ClinicTokens: FC = React.memo(() => {
-  const [search] = useState("");
-  const [clinicDateFilter] = useState("default");
-  const [typeFilter] = useState("default");
-  const [pagination] = useState({
+  const [open, setOpen] = useState(false);
+  const [, setShowDetails] = useState<boolean>(false);
+  const [search, setSearch] = useState("");
+  const [clinicDateFilter, setClinicDateFilter] = useState<Date | undefined>(
+    undefined,
+  );
+  const [typeFilter, setTypeFilter] = useState("default");
+  const [selectedClinicToken, setSelectedClinicToken] = useState<
+    ClinicToken | undefined
+  >();
+  const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 20,
   });
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedToken, setSelectedToken] = useState<ClinicToken | undefined>();
 
   // Fetch data
-  const { data, isLoading, error } = useClinicTokens({
+  const { data } = useClinicTokens({
     currentPage: pagination.currentPage,
     pageSize: pagination.pageSize,
     search,
-    clinic_date_id:
-      clinicDateFilter === "default" ? undefined : Number(clinicDateFilter),
+    date: clinicDateFilter,
     type: typeFilter === "default" ? undefined : typeFilter,
   });
 
-  // Delete mutation
-  const { mutateAsync: deleteClinicToken } = useDeleteClinicToken();
-
-  // Handle delete function
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteClinicToken(id);
-      toast.success("Clinic appointment deleted successfully", {
-        description: new Date().toLocaleString(),
-      });
-    } catch {
-      toast.error("Failed to delete clinic appointment", {
-        description: "Please try again later",
-      });
-    }
-  };
-
-  const handleCreate = () => {
-    setSelectedToken(undefined);
-    setDialogOpen(true);
-  };
-
-  const handleEdit = (token: ClinicToken) => {
-    setSelectedToken(token);
-    setDialogOpen(true);
-  };
-
-  const handleDeleteClick = (token: ClinicToken) => {
-    if (
-      token.id &&
-      confirm("Are you sure you want to delete this clinic appointment?")
-    ) {
-      handleDelete(token.id);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex w-full flex-col">
-        <div className="flex items-center justify-center py-8">
-          <div className="text-gray-500">Loading clinic appointments...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex w-full flex-col">
-        <div className="flex items-center justify-center py-8">
-          <div className="text-red-500">Error loading clinic appointments</div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex w-full flex-col">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-lg font-semibold">Clinic Appointments</h3>
-          <p className="text-sm text-gray-500">
-            Manage clinic appointment tokens and schedules
-          </p>
-        </div>
-        <PermissionWrapper permissions={[permissions.manageAppointments]}>
-          <Button
-            size={"sm"}
-            variant={"outline"}
-            className="w-32"
-            onClick={handleCreate}
-          >
-            Add New
-          </Button>
-        </PermissionWrapper>
+      <div className="mt-4 flex w-full justify-center overflow-hidden">
+        <ClinicTable
+          columns={clinicTableColumns}
+          data={data?.clinicTokens || []}
+          search={search}
+          setSearch={setSearch}
+          typeFilter={typeFilter}
+          setTypeFilter={setTypeFilter}
+          clinicDateFilter={clinicDateFilter}
+          setClinicDateFilter={setClinicDateFilter}
+          setSelectedClinicToken={setSelectedClinicToken}
+          setOpen={setOpen}
+          setShowDetails={setShowDetails}
+          setPagination={setPagination}
+          pagination={{
+            currentPage: pagination.currentPage,
+            pageSize: pagination.pageSize,
+            from: data?.from || 0,
+            to: data?.to || 0,
+            total: data?.total || 0,
+            endPage: data?.endPage || 0,
+          }}
+        >
+          <PermissionWrapper permissions={[permissions.manageAppointments]}>
+            <Button
+              size={"sm"}
+              variant={"outline"}
+              className="w-32"
+              onClick={() => setOpen(true)}
+            >
+              Add New
+            </Button>
+          </PermissionWrapper>
+        </ClinicTable>
       </div>
 
-      {/* Basic table display */}
-      <div className="rounded-md border">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b bg-gray-50/50">
-                <th className="h-12 px-4 text-left align-middle font-medium text-gray-900">
-                  Token Number
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-gray-900">
-                  Patient
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-gray-900">
-                  Clinic
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-gray-900">
-                  Date
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-gray-900">
-                  Time
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-gray-900">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.clinicTokens?.length ? (
-                data.clinicTokens.map((token) => (
-                  <tr key={token.id} className="border-b hover:bg-gray-50/50">
-                    <td className="p-4 align-middle">{token.token_number}</td>
-                    <td className="p-4 align-middle">
-                      {token.patient?.user?.name || "Unknown"}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {token.clinic_date?.clinic?.name || "Unknown"}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {token.clinic_date?.date
-                        ? new Date(token.clinic_date.date).toLocaleDateString()
-                        : "N/A"}
-                    </td>
-                    <td className="p-4 align-middle">
-                      {token.start_time} - {token.end_time}
-                    </td>
-                    <td className="p-4 align-middle">
-                      <span className="capitalize">{token.type}</span>
-                    </td>
-                    <td className="p-4 align-middle">
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleEdit(token)}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDeleteClick(token)}
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={7} className="h-24 text-center text-gray-500">
-                    No clinic appointments found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Pagination info */}
-      {data?.total && (
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            Showing {data.from} to {data.to} of {data.total} results
-          </div>
-        </div>
-      )}
-
-      <ClinicTokenDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        token={selectedToken}
-      />
+      <PermissionWrapper permissions={[permissions.manageAppointments]}>
+        <ClinicTokenDialog
+          open={open}
+          onOpenChange={setOpen}
+          token={selectedClinicToken}
+        />
+      </PermissionWrapper>
     </div>
   );
 });

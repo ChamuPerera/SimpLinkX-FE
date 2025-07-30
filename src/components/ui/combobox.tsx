@@ -14,9 +14,11 @@ import { cn } from "@/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 
+type Items = { label: string; value: string }[];
+
 export const Combobox: React.FC<{
   value: string | number;
-  items: { label: string; value: string }[];
+  items: Items;
   placeholder: string;
   isLoading: boolean;
   search: string;
@@ -40,8 +42,8 @@ export const Combobox: React.FC<{
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
-        <Command className="w-full">
+      <PopoverContent className="p-0 w-(--radix-popover-trigger-width)">
+        <Command className="" shouldFilter={false}>
           <CommandInput
             placeholder={`Search ${placeholder}...`}
             className="h-9 w-full"

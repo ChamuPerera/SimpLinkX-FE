@@ -10,6 +10,7 @@ export const useClinicDates = (data: {
   search?: string;
   clinic_id?: number;
   status?: string;
+  future_only?: boolean;
 }) =>
   useQuery({
     queryKey: ["clinic-dates", data],
@@ -37,6 +38,7 @@ export const useClinicDateById = (id: number) =>
     queryKey: ["clinic-date", id],
     queryFn: async () => {
       try {
+        if (id === 0) return null;
         const clinicDate = await clinicDatesServices.getClinicDateById(id);
         return clinicDate;
       } catch {

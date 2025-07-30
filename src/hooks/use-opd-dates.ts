@@ -30,8 +30,17 @@ export const useOpdDates = (data: OpdDatesParams) => {
 export const useOpdDate = (id: number) => {
   return useQuery({
     queryKey: ["opd-date", id],
-    queryFn: () => opdDatesServices.getOpdDate(id),
-    enabled: !!id,
+    queryFn: async () => {
+      try {
+        if (id === 0) return null;
+        const opdDate = await opdDatesServices.getOpdDate(id);
+        return opdDate;
+      } catch {
+        return null;
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 };
 

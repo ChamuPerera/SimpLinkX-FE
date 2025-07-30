@@ -54,7 +54,7 @@ export const clinicTokenServices = {
     const { data } = await api.get(
       `/clinic-dates/${clinicDateId}/available-slots`,
     );
-    return data as AvailableSlot[];
+    return data?.slots as AvailableSlot[];
   },
 
   // Create new clinic token
@@ -118,7 +118,7 @@ export const opdTokenServices = {
   // Get available slots for an opd date
   getAvailableSlots: async (opdDateId: number) => {
     const { data } = await api.get(`/opd-dates/${opdDateId}/available-slots`);
-    return data;
+    return data.slots as AvailableSlot[];
   },
 
   // Create new opd token

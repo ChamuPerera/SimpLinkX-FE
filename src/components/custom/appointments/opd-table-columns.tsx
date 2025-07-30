@@ -23,7 +23,7 @@ export const opdTableColumns: ColumnDef<OpdToken>[] = [
   {
     id: "patient_name",
     header: "Patient Name",
-    cell: ({ row }) => <span>{row.original.patient?.user?.name}</span>,
+    cell: ({ row }) => <span>{row.original.patient?.name}</span>,
   },
   {
     id: "nic",

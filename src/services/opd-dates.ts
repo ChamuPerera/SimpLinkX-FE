@@ -1,3 +1,4 @@
+import type { Slots } from "@/services/clinic-dates";
 import type { opdDateSchema } from "@/validations/opd-dates";
 import type z from "zod";
 
@@ -19,6 +20,7 @@ export interface OpdDatesParams {
   search?: string;
   hospital_id?: number;
   status?: string;
+  future_only?: boolean;
 }
 
 type OpdDateWithoutId = z.infer<typeof opdDateSchema>;
@@ -38,31 +40,31 @@ export const opdDatesServices = {
   },
 
   // Get single opd date by ID
-  getOpdDate: async (id: number): Promise<OpdDate> => {
+  getOpdDate: async (id: number) => {
     const { data } = await api.get(`/opd-dates/${id}`);
-    return data as OpdDate;
+    return data as OpdDate & { slots: Slots[] };
   },
 
   // Get opd dates by hospital ID
-  getOpdDatesByHospital: async (hospitalId: number): Promise<OpdDate[]> => {
+  getOpdDatesByHospital: async (hospitalId: number) => {
     const { data } = await api.get(`/opd-dates/hospital/${hospitalId}`);
     return data as OpdDate[];
   },
 
   // Create new opd date
-  createOpdDate: async (data: Omit<OpdDate, "id">): Promise<OpdDate> => {
+  createOpdDate: async (data: Omit<OpdDate, "id">) => {
     const { data: responseData } = await api.post("/opd-dates", data);
     return responseData as OpdDate;
   },
 
   // Update existing opd date
-  updateOpdDate: async (data: OpdDate): Promise<OpdDate> => {
+  updateOpdDate: async (data: OpdDate) => {
     const { data: responseData } = await api.put(`/opd-dates/${data.id}`, data);
     return responseData as OpdDate;
   },
 
   // Delete opd date
-  deleteOpdDate: async (id: number): Promise<void> => {
+  deleteOpdDate: async (id: number) => {
     await api.delete(`/opd-dates/${id}`);
   },
 };

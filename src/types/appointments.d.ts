@@ -54,9 +54,10 @@ export interface Patient {
   id: number;
   user_id: number;
   nic: string;
+  name: string;
   user?: {
     id: number;
-    name: string;
+    name?: string;
     email?: string;
   };
 }
@@ -190,5 +191,6 @@ export interface OpdTokensParams {
 export interface AvailableSlot {
   start_time: string;
   end_time: string;
-  available: boolean;
+  available_slots: number;
+  total_available_slots?: number;
 }

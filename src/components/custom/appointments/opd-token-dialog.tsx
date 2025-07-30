@@ -5,32 +5,35 @@ import type {
 } from "@/validations/appointments";
 import type { FC } from "react";
 
-import { Button, Input } from "@/components/ui";
 import {
+  Button,
+  Combobox,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import {
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useCreateOpdToken, useUpdateOpdToken } from "@/hooks/use-appointments";
+} from "@/components/ui";
+import {
+  useCreateOpdToken,
+  useOpdAvailableSlots,
+  useUpdateOpdToken,
+} from "@/hooks/use-appointments";
 import { useOpdDates } from "@/hooks/use-opd-dates";
+import { usePatients } from "@/hooks/use-patients";
 import {
   opdTokenSchema,
   opdTokenUpdateSchema,
@@ -49,19 +52,15 @@ interface OpdTokenDialogProps {
 export const OpdTokenDialog: FC<OpdTokenDialogProps> = React.memo(
   ({ open, onOpenChange, token }) => {
     const isEdit = Boolean(token);
+    const [search, setSearch] = useState("");
     const [errors, setErrors] = useState<{ [key: string]: string[] | string }>(
       {},
     );
 
-    // Form setup
-    const form = useForm<OpdTokenSchema | OpdTokenUpdateSchema>({
-      resolver: zodResolver(isEdit ? opdTokenUpdateSchema : opdTokenSchema),
-      defaultValues: {
-        patient_id: 0,
-        opd_date_id: 0,
-        start_time: "",
-        end_time: "",
-      },
+    const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
+      pageSize: 20,
+      currentPage: 1,
+      search,
     });
 
     // Mutations
@@ -74,7 +73,24 @@ export const OpdTokenDialog: FC<OpdTokenDialogProps> = React.memo(
     const { data: opdDatesData } = useOpdDates({
       currentPage: 1,
       pageSize: 100,
+      future_only: true,
     });
+
+    // Form setup
+    const form = useForm<OpdTokenSchema | OpdTokenUpdateSchema>({
+      resolver: zodResolver(isEdit ? opdTokenUpdateSchema : opdTokenSchema),
+      defaultValues: {
+        patient_id: 0,
+        opd_date_id: 0,
+        start_time: "",
+        end_time: "",
+      },
+    });
+
+    // Fetch selected OPD date data
+    const { data: slots, isLoading: isSlotsLoading } = useOpdAvailableSlots(
+      form.watch("opd_date_id"),
+    );
 
     const onSubmit = async (data: OpdTokenSchema | OpdTokenUpdateSchema) => {
       if (isEdit && token?.id) {
@@ -138,7 +154,7 @@ export const OpdTokenDialog: FC<OpdTokenDialogProps> = React.memo(
 
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>
               {isEdit ? "Edit OPD Appointment" : "Create OPD Appointment"}
@@ -152,91 +168,136 @@ export const OpdTokenDialog: FC<OpdTokenDialogProps> = React.memo(
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="patient_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Patient ID</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter patient ID"
-                        type="number"
-                        {...field}
+              {/* Patient id */}
+              {!isEdit && (
+                <FormField
+                  control={form.control}
+                  name="patient_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label className="mb-2">Patient</Label>
+                      <Combobox
+                        isLoading={isPatientsLoading}
+                        items={
+                          patientsData?.patients?.map((patient) => ({
+                            label: `${patient.name} (${patient.nic})`,
+                            value: patient.id?.toString() || "",
+                          })) || []
+                        }
+                        onChange={setSearch}
+                        placeholder="Patient"
+                        search={search}
+                        setValue={(value) => field.onChange(Number(value))}
+                        value={field.value === 0 ? "" : field.value.toString()}
                       />
-                    </FormControl>
-                    {errors["patient_id"] && errors["patient_id"][0]}
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="opd_date_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>OPD Date</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select OPD date" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {opdDatesData?.opdDates?.map((opdDate) => {
-                          if (opdDate.id) {
-                            return (
-                              <SelectItem
-                                key={opdDate.id}
-                                value={opdDate.id.toString()}
-                              >
-                                {new Date(opdDate.date).toLocaleDateString()}
-                              </SelectItem>
-                            );
-                          }
-                        })}
-                      </SelectContent>
-                    </Select>
-                    {errors["opd_date_id"] && errors["opd_date_id"][0]}
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="start_time"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Start Time</FormLabel>
-                      <FormControl>
-                        <Input type="time" {...field} />
-                      </FormControl>
                       <FormMessage>
-                        {errors["start_time"] && errors["start_time"][0]}
+                        {errors["patient_id"] && errors["patient_id"][0]}
                       </FormMessage>
                     </FormItem>
                   )}
                 />
+              )}
 
+              {/* Opd date */}
+              {!isEdit && (
                 <FormField
                   control={form.control}
-                  name="end_time"
+                  name="opd_date_id"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>End Time</FormLabel>
-                      <FormControl>
-                        <Input type="time" {...field} />
-                      </FormControl>
+                      <FormLabel>OPD Date</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={
+                          field.value === 0 ? undefined : field.value.toString()
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select clinic date" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {opdDatesData?.opdDates?.map((opdDate) => {
+                            if (opdDate.id) {
+                              return (
+                                <SelectItem
+                                  key={opdDate.id}
+                                  value={opdDate.id?.toString()}
+                                >
+                                  {new Date(opdDate.date).toLocaleDateString()}{" "}
+                                  {` (${opdDate.start_time} - ${opdDate.end_time})`}
+                                </SelectItem>
+                              );
+                            }
+                          })}
+                        </SelectContent>
+                      </Select>
                       <FormMessage>
-                        {errors["end_time"] && errors["end_time"][0]}
+                        {errors["opd_date_id"] && errors["opd_date_id"][0]}
                       </FormMessage>
                     </FormItem>
                   )}
                 />
+              )}
+
+              {isEdit && (
+                <div className="text-sm pb-2 mb-5 border-b border-gray-300">
+                  <p className="">
+                    <span className="font-medium">OPD Date:</span>{" "}
+                    {token?.opd_date?.date
+                      ? new Date(token.opd_date.date).toLocaleDateString()
+                      : "N/A"}
+                  </p>
+                  <p className="">
+                    <span className="font-medium">Patient:</span>{" "}
+                    {token?.patient?.name || "N/A"}
+                  </p>
+                </div>
+              )}
+
+              <Label className="mb-2">Time slots</Label>
+
+              {isSlotsLoading && (
+                <p className="text-sm">Loading Time Slots...</p>
+              )}
+
+              {!isSlotsLoading && slots?.length === 0 && (
+                <p className="text-gray-500 text-sm">No Time Slots available</p>
+              )}
+
+              {!isSlotsLoading && !slots && (
+                <p className="text-gray-500 text-sm">
+                  Select an OPD date to view time slots
+                </p>
+              )}
+
+              {/* Start and End Time */}
+              <div className="grid grid-cols-3 gap-2">
+                {slots?.map((slot, index) => (
+                  <Button
+                    key={index}
+                    variant={
+                      form.watch("start_time") === slot.start_time
+                        ? "default"
+                        : "outline"
+                    }
+                    size={"sm"}
+                    type="button"
+                    disabled={slot.available_slots === 0}
+                    onClick={() => {
+                      form.setValue("start_time", slot.start_time);
+                      form.setValue("end_time", slot.end_time);
+                    }}
+                  >
+                    {`${slot.start_time} - ${slot.end_time}`} (
+                    {slot.available_slots}
+                    {slot?.total_available_slots
+                      ? `/${slot.total_available_slots}`
+                      : ""}
+                    )
+                  </Button>
+                ))}
               </div>
 
               <DialogFooter className="gap-2">

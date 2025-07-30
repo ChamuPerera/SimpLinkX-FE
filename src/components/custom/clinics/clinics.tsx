@@ -146,6 +146,7 @@ const ClinicDialog: FC<{
     currentPage: 1,
     pageSize: 100,
     role: "doctor",
+    search: doctorSearch,
   });
 
   const form = useForm<z.infer<typeof clinicSchema>>({

@@ -16,6 +16,11 @@ export type ClinicDate = ClinicDateWithoutId & {
     };
   };
 };
+export type Slots = {
+  start_time: string;
+  end_time: string;
+  available_slots: number;
+};
 
 export const clinicDatesServices = {
   // Get clinic dates with pagination and filters
@@ -25,6 +30,7 @@ export const clinicDatesServices = {
     search?: string;
     clinic_id?: number;
     status?: string;
+    future_only?: boolean;
   }) => {
     const { data } = await api.get(`/clinic-dates`, { params });
     return {
@@ -39,7 +45,7 @@ export const clinicDatesServices = {
   // Get a single clinic date by id
   getClinicDateById: async (id: number) => {
     const { data } = await api.get(`/clinic-dates/${id}`);
-    return data as ClinicDate;
+    return data as ClinicDate & { slots: Slots[] };
   },
 
   // Get clinic dates by clinic id

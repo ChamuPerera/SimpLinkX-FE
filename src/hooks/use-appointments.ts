@@ -50,6 +50,7 @@ export const useClinicAvailableSlots = (clinicDateId: number) => {
     queryKey: ["clinic-available-slots", clinicDateId],
     queryFn: async () => {
       try {
+        if (clinicDateId === 0) return [];
         const availableSlots =
           await clinicTokenServices.getAvailableSlots(clinicDateId);
         return availableSlots;
@@ -157,6 +158,7 @@ export const useOpdAvailableSlots = (opdDateId: number) => {
     queryKey: ["opd-available-slots", opdDateId],
     queryFn: async () => {
       try {
+        if (opdDateId === 0) return [];
         const availableSlots =
           await opdTokenServices.getAvailableSlots(opdDateId);
         return availableSlots;

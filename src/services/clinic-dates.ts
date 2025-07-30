@@ -69,6 +69,14 @@ export const clinicDatesServices = {
     return data;
   },
 
+  // Update clinic date status
+  updateClinicDateStatus: async (param: { id: number; status: string }) => {
+    const { data } = await api.patch(`/clinic-dates/${param.id}/status`, {
+      status: param.status,
+    });
+    return data as ClinicDate;
+  },
+
   // Delete a clinic date
   deleteClinicDate: async (id: number) => {
     await api.delete(`/clinic-dates/${id}`);

@@ -72,7 +72,7 @@ interface ClinicTableProps<TData, TValue> {
   children?: React.ReactNode;
 }
 
-export function ClinicTable<TData, TValue>({
+export function ClinicsTable<TData, TValue>({
   columns,
   data,
   search,

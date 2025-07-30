@@ -16,6 +16,7 @@ export * from "./login";
 export * from "./make-appointment";
 export * from "./medicine-search";
 export * from "./opd-dates";
+export * from "./patients";
 export * from "./permissions";
 export * from "./prescriptions";
 export * from "./register";

@@ -34,6 +34,7 @@ import {
   useClinicDates,
   useCreateClinicDate,
   useUpdateClinicDate,
+  useUpdateClinicDateStatus,
 } from "@/hooks/use-clinic-dates";
 import { useClinics } from "@/hooks/use-clinics";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
@@ -41,7 +42,7 @@ import { cn } from "@/utils";
 import { clinicDateSchema } from "@/validations/clinic-dates";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDays, format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Check } from "lucide-react";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -58,8 +59,9 @@ const clinicDateDefaultValues: ClinicDate = {
 };
 
 export const ClinicDates: FC = React.memo(() => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [showStatusDialog, setShowStatusDialog] = useState<boolean>(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("default");
   const [clinicId, setClinicId] = useState<number | null>(0);
@@ -87,6 +89,8 @@ export const ClinicDates: FC = React.memo(() => {
   const closeDialog = () => {
     setSelectedClinicDate(null);
     setOpen(false);
+    setShowDetails(false);
+    setShowStatusDialog(false);
   };
 
   // reset current page when search or status filter is changed
@@ -112,6 +116,13 @@ export const ClinicDates: FC = React.memo(() => {
         clinicsData={clinicsData?.clinics || []}
       />
 
+      {/* clinic date status dialog */}
+      <ClinicDateStatusDialog
+        open={showStatusDialog}
+        onClose={closeDialog}
+        data={selectedClinicDate}
+      />
+
       {/* clinic dates list */}
       <div className="mt-4 flex w-full justify-center overflow-hidden">
         <ClinicDateTable
@@ -127,6 +138,7 @@ export const ClinicDates: FC = React.memo(() => {
           setSelectedClinicDate={setSelectedClinicDate}
           setOpen={setOpen}
           setShowDetails={setShowDetails}
+          setShowStatusDialog={setShowStatusDialog}
           setPagination={setPagination}
           pagination={{
             currentPage: pagination.currentPage,
@@ -430,6 +442,59 @@ const ClinicDateDialog: FC<{
             </div>
           </form>
         </Form>
+      </DialogContent>
+    </Dialog>
+  );
+});
+
+const ClinicDateStatusDialog: FC<{
+  open: boolean;
+  data: ClinicDate | null;
+  onClose: () => void;
+}> = React.memo(({ open, data, onClose }) => {
+  const { mutateAsync: updateStatus, isPending: isUpdating } =
+    useUpdateClinicDateStatus();
+
+  const handleStatusChange = async (status: string) => {
+    if (data && data.id) {
+      await updateStatus({ id: data.id, status })
+        .then(() => {
+          toast.success(`OPD date status updated to ${status}`, {
+            description: new Date().toLocaleString(),
+          });
+          onClose();
+        })
+        .catch((error) => {
+          toast.error(
+            `Failed to update status: ${error?.response?.data?.message || "Something went wrong"}`,
+          );
+        });
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update Clinic Date Status</DialogTitle>
+          <DialogDescription>
+            Select a new status for the Clinic date.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex gap-3">
+          {["scheduled", "completed", "cancelled"].map((status) => (
+            <Button
+              key={status}
+              variant={data?.status === status ? "default" : "outline"}
+              onClick={() => handleStatusChange(status)}
+              disabled={isUpdating}
+              className="capitalize"
+            >
+              {data?.status === status && <Check className="mr-2 h-4 w-4" />}{" "}
+              {status}
+            </Button>
+          ))}
+        </div>
       </DialogContent>
     </Dialog>
   );

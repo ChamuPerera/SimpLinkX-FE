@@ -74,6 +74,7 @@ export const ClinicTokenDialog: FC<ClinicTokenDialogProps> = React.memo(
       currentPage: 1,
       pageSize: 100,
       future_only: true,
+      status: "scheduled",
     });
 
     // Form setup

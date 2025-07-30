@@ -1,19 +1,16 @@
 import type { ClinicDate } from "@/services/clinic-dates";
 import type { ColumnDef } from "@tanstack/react-table";
 
-import {
-  Badge,
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui";
+
+
+import { Badge, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui";
 import { permissions } from "@/constants/permissions";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import { MoreHorizontal } from "lucide-react";
+
+
+
+
 
 const getStatusBadgeVariant = (status: string) => {
   switch (status) {
@@ -66,8 +63,9 @@ export const clinicDateColumns: ColumnDef<ClinicDate>[] = [
         setOpen: (open: boolean) => void;
         setSelectedClinicDate: (clinicDate: ClinicDate) => void;
         setShowDetails: (show: boolean) => void;
+        setShowStatusDialog: (show: boolean) => void;
       };
-      const { setOpen, setSelectedClinicDate, setShowDetails } = meta;
+      const { setOpen, setSelectedClinicDate, setShowDetails, setShowStatusDialog } = meta;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -87,6 +85,16 @@ export const clinicDateColumns: ColumnDef<ClinicDate>[] = [
                 }}
               >
                 Edit Clinic Date
+              </DropdownMenuItem>
+            </PermissionWrapper>
+            <PermissionWrapper permissions={[permissions.manageHospitals]}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSelectedClinicDate(row.original);
+                  setShowStatusDialog(true);
+                }}
+              >
+                Update Status
               </DropdownMenuItem>
             </PermissionWrapper>
             <PermissionWrapper permissions={[permissions.manageHospitals]}>

@@ -2,7 +2,7 @@ import type { ClinicToken } from "@/types/appointments";
 import type { FC } from "react";
 
 import {
-  ClinicTable,
+  ClinicsTable,
   clinicTableColumns,
   ClinicTokenDialog,
 } from "@/components/custom/appointments";
@@ -40,7 +40,7 @@ export const ClinicTokens: FC = React.memo(() => {
   return (
     <div className="flex w-full flex-col">
       <div className="mt-4 flex w-full justify-center overflow-hidden">
-        <ClinicTable
+        <ClinicsTable
           columns={clinicTableColumns}
           data={data?.clinicTokens || []}
           search={search}
@@ -72,7 +72,7 @@ export const ClinicTokens: FC = React.memo(() => {
               Add New
             </Button>
           </PermissionWrapper>
-        </ClinicTable>
+        </ClinicsTable>
       </div>
 
       <PermissionWrapper permissions={[permissions.manageAppointments]}>

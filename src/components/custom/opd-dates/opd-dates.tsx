@@ -34,13 +34,14 @@ import {
   useCreateOpdDate,
   useOpdDates,
   useUpdateOpdDate,
+  useUpdateOpdDateStatus,
 } from "@/hooks/use-opd-dates";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import { cn } from "@/utils";
 import { opdDateSchema } from "@/validations/opd-dates";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDays, format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Check } from "lucide-react";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -58,8 +59,9 @@ const opdDateDefaultValues: OpdDate = {
 
 export const OpdDates: FC = React.memo(() => {
   const { user } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [showStatusDialog, setShowStatusDialog] = useState<boolean>(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("default");
   const [pagination, setPagination] = useState({
@@ -79,6 +81,8 @@ export const OpdDates: FC = React.memo(() => {
   const closeDialog = () => {
     setSelectedOpdDate(null);
     setOpen(false);
+    setShowDetails(false);
+    setShowStatusDialog(false);
   };
 
   // reset current page when search or status filter is changed
@@ -104,6 +108,13 @@ export const OpdDates: FC = React.memo(() => {
         hospitalId={user?.hospital_id || null}
       />
 
+      {/* opd date status dialog */}
+      <OpdDateStatusDialog
+        open={showStatusDialog}
+        onClose={closeDialog}
+        data={selectedOpdDate}
+      />
+
       {/* opd dates list */}
       <div className="mt-4 flex w-full justify-center overflow-hidden">
         <OpdDateTable
@@ -116,6 +127,7 @@ export const OpdDates: FC = React.memo(() => {
           setSelectedOpdDate={setSelectedOpdDate}
           setOpen={setOpen}
           setShowDetails={setShowDetails}
+          setShowStatusDialog={setShowStatusDialog}
           setPagination={setPagination}
           pagination={{
             currentPage: pagination.currentPage,
@@ -379,6 +391,59 @@ const OpdDateDialog: FC<{
             </div>
           </form>
         </Form>
+      </DialogContent>
+    </Dialog>
+  );
+});
+
+const OpdDateStatusDialog: FC<{
+  open: boolean;
+  data: OpdDate | null;
+  onClose: () => void;
+}> = React.memo(({ open, data, onClose }) => {
+  const { mutateAsync: updateStatus, isPending: isUpdating } =
+    useUpdateOpdDateStatus();
+
+  const handleStatusChange = async (status: string) => {
+    if (data && data.id) {
+      await updateStatus({ id: data.id, status })
+        .then(() => {
+          toast.success(`OPD date status updated to ${status}`, {
+            description: new Date().toLocaleString(),
+          });
+          onClose();
+        })
+        .catch((error) => {
+          toast.error(
+            `Failed to update status: ${error?.response?.data?.message || "Something went wrong"}`,
+          );
+        });
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update OPD Date Status</DialogTitle>
+          <DialogDescription>
+            Select a new status for the OPD date.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex gap-3">
+          {["scheduled", "completed", "cancelled"].map((status) => (
+            <Button
+              key={status}
+              variant={data?.status === status ? "default" : "outline"}
+              onClick={() => handleStatusChange(status)}
+              disabled={isUpdating}
+              className="capitalize"
+            >
+              {data?.status === status && <Check className="mr-2 h-4 w-4" />}{" "}
+              {status}
+            </Button>
+          ))}
+        </div>
       </DialogContent>
     </Dialog>
   );

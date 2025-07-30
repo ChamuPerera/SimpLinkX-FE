@@ -93,8 +93,14 @@ export const opdDateColumns: ColumnDef<OpdDate>[] = [
         setOpen: (open: boolean) => void;
         setSelectedOpdDate: (opdDate: OpdDate) => void;
         setShowDetails: (show: boolean) => void;
+        setShowStatusDialog: (show: boolean) => void;
       };
-      const { setOpen, setSelectedOpdDate, setShowDetails } = meta;
+      const {
+        setOpen,
+        setSelectedOpdDate,
+        setShowDetails,
+        setShowStatusDialog,
+      } = meta;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -114,6 +120,16 @@ export const opdDateColumns: ColumnDef<OpdDate>[] = [
                 }}
               >
                 Edit Opd Date
+              </DropdownMenuItem>
+            </PermissionWrapper>
+            <PermissionWrapper permissions={[permissions.manageHospitals]}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSelectedOpdDate(row.original);
+                  setShowStatusDialog(true);
+                }}
+              >
+                Update Status
               </DropdownMenuItem>
             </PermissionWrapper>
             <PermissionWrapper permissions={[permissions.manageHospitals]}>

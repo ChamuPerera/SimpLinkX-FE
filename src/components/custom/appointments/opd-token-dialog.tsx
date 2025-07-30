@@ -74,6 +74,7 @@ export const OpdTokenDialog: FC<OpdTokenDialogProps> = React.memo(
       currentPage: 1,
       pageSize: 100,
       future_only: true,
+      status: "scheduled",
     });
 
     // Form setup

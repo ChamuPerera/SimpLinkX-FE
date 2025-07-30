@@ -63,6 +63,14 @@ export const opdDatesServices = {
     return responseData as OpdDate;
   },
 
+  // Update opd date status
+  updateOpdDateStatus: async (param: { id: number; status: string }) => {
+    const { data } = await api.patch(`/opd-dates/${param.id}/status`, {
+      status: param.status,
+    });
+    return data as OpdDate;
+  },
+
   // Delete opd date
   deleteOpdDate: async (id: number) => {
     await api.delete(`/opd-dates/${id}`);

@@ -1,13 +1,12 @@
-import type { OpdDate } from "@/services/opd-dates";
+import type { Patient } from "@/services/patients";
 import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
 } from "@tanstack/react-table";
-import type { Dispatch, ReactNode, SetStateAction } from "react";
 
-import { Pagination } from "@/components/custom/pagination";
+import { Pagination } from "@/components/custom";
 import {
   Button,
   DropdownMenu,
@@ -15,11 +14,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Table,
   TableBody,
   TableCell,
@@ -31,30 +25,27 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Search } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
-interface DataTableProps<TData, TValue> {
+interface PatientTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   search: string;
-  setSearch: Dispatch<SetStateAction<string>>;
-  statusFilter: string;
-  setStatusFilter: Dispatch<SetStateAction<string>>;
-  setSelectedOpdDate: Dispatch<SetStateAction<OpdDate | null>>;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  setShowDetails: Dispatch<SetStateAction<boolean>>;
-  setShowStatusDialog: Dispatch<SetStateAction<boolean>>;
-  setPagination: Dispatch<
-    SetStateAction<{
-      currentPage: number;
-      pageSize: number;
-    }>
-  >;
+  setSearch: (search: string) => void;
+  setOpen: (open: boolean) => void;
+  setShowDetails: (show: boolean) => void;
+  setSelectedPatient: (patient: Patient) => void;
+  setPagination: ({
+    currentPage,
+    pageSize,
+  }: {
+    currentPage: number;
+    pageSize: number;
+  }) => void;
   pagination: {
     currentPage: number;
     pageSize: number;
@@ -63,83 +54,55 @@ interface DataTableProps<TData, TValue> {
     total: number;
     endPage: number;
   };
-  children?: ReactNode;
+  children?: React.ReactNode;
 }
 
-export function OpdDateTable<TData, TValue>({
+export function PatientTable<TData, TValue>({
   columns,
   data,
-  setOpen,
   search,
   setSearch,
-  statusFilter,
-  setStatusFilter,
+  setOpen,
+  setSelectedPatient,
   setShowDetails,
-  setSelectedOpdDate,
   setPagination,
-  setShowStatusDialog,
   pagination,
   children,
-}: DataTableProps<TData, TValue>) {
+}: PatientTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
     },
     meta: {
       setOpen,
-      setSelectedOpdDate,
+      setSelectedPatient,
       setShowDetails,
-      setShowStatusDialog,
     },
   });
 
   return (
     <div className="w-full">
-      {/* Filters */}
-      <div className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-            <Input
-              placeholder="Search OPD dates..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 sm:w-64"
-            />
-          </div>
-
-          {/* Status Filter */}
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-40">
-              <SelectValue placeholder="All Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">All Status</SelectItem>
-              <SelectItem value="scheduled">Scheduled</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="mb-5 flex flex-col items-center justify-center gap-3 sm:flex-row sm:justify-between">
+        <Input
+          placeholder="Filter data..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="w-full sm:max-w-sm !ring-0"
+        />
 
         <div className="flex gap-2 w-full justify-between sm:w-fit">
           {children}
@@ -172,7 +135,6 @@ export function OpdDateTable<TData, TValue>({
         </div>
       </div>
 
-      {/* Table */}
       <div className="w-full overflow-hidden rounded-md border border-gray-200">
         <Table>
           <TableHeader>
@@ -224,7 +186,7 @@ export function OpdDateTable<TData, TValue>({
         </Table>
       </div>
 
-      {/* Pagination */}
+      {/* pagination */}
       <div className="my-4 w-full">
         <Pagination
           setPagination={setPagination}

@@ -50,6 +50,7 @@ interface ClinicDateTableProps<TData, TValue> {
   setOpen: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
   setSelectedClinicDate: (clinicDate: ClinicDate) => void;
+  setShowStatusDialog: (show: boolean) => void;
   setPagination: ({
     currentPage,
     pageSize,
@@ -82,6 +83,7 @@ export function ClinicDateTable<TData, TValue>({
   setSelectedClinicDate,
   setShowDetails,
   setPagination,
+  setShowStatusDialog,
   pagination,
   children,
 }: ClinicDateTableProps<TData, TValue>) {
@@ -107,6 +109,7 @@ export function ClinicDateTable<TData, TValue>({
       setOpen,
       setSelectedClinicDate,
       setShowDetails,
+      setShowStatusDialog,
     },
   });
 

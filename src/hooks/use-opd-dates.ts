@@ -83,6 +83,21 @@ export const useUpdateOpdDate = () => {
   });
 };
 
+// Update opd date status mutation
+export const useUpdateOpdDateStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: opdDatesServices.updateOpdDateStatus,
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: ["opd-dates"] });
+    },
+    onError: (error) => {
+      return error;
+    },
+  });
+};
+
 // Delete opd date mutation
 export const useDeleteOpdDate = () => {
   const queryClient = useQueryClient();

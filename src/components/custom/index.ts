@@ -13,6 +13,7 @@ export * from "./make-appointment";
 export * from "./nav-main";
 export * from "./nav-user";
 export * from "./opd-dates";
+export * from "./patients";
 export * from "./pagination";
 export * from "./permissions";
 export * from "./roles";

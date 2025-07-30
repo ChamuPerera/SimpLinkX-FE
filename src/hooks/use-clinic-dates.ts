@@ -98,6 +98,21 @@ export const useUpdateClinicDate = () => {
   });
 };
 
+// Update clinic date status
+export const useUpdateClinicDateStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: clinicDatesServices.updateClinicDateStatus,
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: ["clinic-dates"] });
+      queryClient.refetchQueries({ queryKey: ["clinic-dates-by-clinic"] });
+    },
+    onError: (error) => {
+      return error;
+    },
+  });
+};
+
 // Delete clinic date
 export const useDeleteClinicDate = () => {
   const queryClient = useQueryClient();

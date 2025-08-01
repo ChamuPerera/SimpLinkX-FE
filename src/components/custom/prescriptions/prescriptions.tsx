@@ -224,7 +224,6 @@ export const Prescriptions: FC = React.memo(() => {
           data={data?.prescriptions || []}
           search={search}
           setSearch={setSearch}
-          setOpen={() => {}} // Placeholder - create/edit not implemented
           setSelectedPrescription={setSelectedPrescription}
           setShowDetails={setShowDetails}
           setShowMedicines={setShowMedicines}

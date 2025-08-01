@@ -17,11 +17,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiError } from "react-icons/bi";
 import { ImSpinner3 } from "react-icons/im";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { toast } from "sonner";
 
 export const LoginPage = () => {
   const { login } = useAuth();
+  // get query params for redirect
+  const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<LoginFormValues>({
@@ -36,7 +38,14 @@ export const LoginPage = () => {
   const onSubmit = async (data: LoginFormValues) => {
     const { email, password, rememberMe } = data;
     await login
-      .mutateAsync({ email, password, rememberMe })
+      .mutateAsync({
+        email,
+        password,
+        rememberMe,
+        navigate: searchParams
+          ? searchParams.get("redirect") || undefined
+          : "/dashboard",
+      })
       .then(() => {
         toast.success("Login successful", {
           description: new Date().toLocaleString(),

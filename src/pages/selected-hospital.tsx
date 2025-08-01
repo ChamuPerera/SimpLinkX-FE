@@ -114,12 +114,11 @@ export const SelectedHospitalPage = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* Action Button */}
                 <div className="flex justify-end">
                   {hospital?.is_appointment_activated ? (
                     <Link
-                      to={`/hospitals/${identifier}/token`}
+                      to={`/find-hospitals/${identifier}/token`}
                       className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
                     >
                       Get Token

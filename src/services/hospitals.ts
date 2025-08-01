@@ -1,10 +1,30 @@
+import type { AvailableSlot } from "@/types/appointments";
 import type { hospitalSchema } from "@/validations/hospitals";
 import type { z } from "zod";
 
 import { api } from "@/services/api";
 
 type HospitalWithoutId = z.infer<typeof hospitalSchema>;
-export type Hospital = HospitalWithoutId & { id?: number };
+export type Hospital = HospitalWithoutId & {
+  id?: number;
+  clinics: {
+    name: string;
+    description: string;
+    location: string;
+    dates: {
+      [date: string]: {
+        slots: AvailableSlot[];
+        date_id: number;
+      };
+    };
+  }[];
+  opd: {
+    [date: string]: {
+      slots: AvailableSlot[];
+      date_id: number;
+    };
+  };
+};
 
 export const hospitalsServices = {
   // Get hospitals with pagination

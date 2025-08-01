@@ -1,62 +1,96 @@
-import type { Clinic } from "@/types/appointments";
+import type { AvailableSlot } from "@/types/appointments";
+import type { FC } from "react";
+
+import { Button } from "@/components/ui";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface ClinicCardProps {
-  clinic: Clinic;
-  onSelect: (clinic: Clinic) => void;
-  isSelected: boolean;
+  date: {
+    slots: AvailableSlot[];
+    date_id: number;
+    date: string;
+    location: string;
+  };
+  handleBook: (data: {
+    startTime: string;
+    endTime: string;
+    dateId: number;
+  }) => void;
+  service?: string;
 }
 
-export function ClinicCard({ clinic, onSelect, isSelected }: ClinicCardProps) {
+export const ClinicCard: FC<ClinicCardProps> = ({
+  date,
+  handleBook,
+  service = "Clinic",
+}) => {
+  const [startTime, setStartTime] = useState<string | null>(null);
+  const [endTime, setEndTime] = useState<string | null>(null);
+
+  const handleSlotClick = (slot: AvailableSlot) => {
+    setStartTime(slot.start_time);
+    setEndTime(slot.end_time);
+  };
+
+  const handleSubmit = () => {
+    // Ensure both startTime and endTime are set before booking
+    if (startTime && endTime) {
+      handleBook({
+        startTime,
+        endTime,
+        dateId: date.date_id,
+      });
+    } else {
+      toast.error("Please select a time slot before booking.");
+      return;
+    }
+  };
+
   return (
-    <div
-      className={`bg-white rounded-xl shadow-lg p-6 cursor-pointer transition-all duration-300 hover:shadow-xl border-2 ${
-        isSelected
-          ? "border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 transform scale-105"
-          : "border-gray-200 hover:border-blue-300"
-      }`}
-      onClick={() => onSelect(clinic)}
-    >
+    <div className="border border-blue-500 rounded-md p-3">
       {/* Header */}
-      <div className="flex items-center mb-4">
-        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl mr-4">
-          {clinic.icon}
-        </div>
-        <div>
-          <h3 className="text-xl font-bold text-gray-800">{clinic.name}</h3>
-          <p className="text-blue-600 font-semibold text-sm">
-            {clinic.specialty}
-          </p>
-          <p className="text-gray-500 text-xs">Clinic Services</p>
-        </div>
+      <div className="flex items-center justify-between ">
+        <h3 className="font-medium text-gray-800">{date.date}</h3>
+        <p className="text-gray-500 text-xs">{service} Services</p>
       </div>
 
       {/* Location */}
       <div className="mb-4">
-        <p className="text-xs font-medium text-gray-500 mb-1">LOCATION</p>
-        <p className="text-sm text-gray-700">{clinic.location}</p>
+        <p className="text-sm text-gray-700">Location : {date.location}</p>
       </div>
 
       {/* Availability */}
       <div className="mb-4">
         <p className="text-xs font-medium text-gray-500 mb-2">AVAILABLE DAYS</p>
-        <div className="flex flex-wrap gap-1">
-          {clinic.availability.map((day) => (
-            <span
-              key={day}
-              className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-md font-medium"
+        <div className="flex flex-wrap gap-2">
+          {date.slots.map((day) => (
+            <Button
+              key={day.start_time}
+              variant={startTime === day.start_time ? "default" : "outline"}
+              size={"sm"}
+              type="button"
+              disabled={day.available_slots === 0}
+              onClick={() => {
+                handleSlotClick(day);
+              }}
             >
-              {day.slice(0, 3)}
-            </span>
+              {`${day.start_time} - ${day.end_time}`} ({day.available_slots})
+            </Button>
           ))}
         </div>
       </div>
 
       {/* Book Button */}
       <div className="pt-4 border-t border-gray-200">
-        <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm transition-colors">
+        <Button
+          disabled={!startTime || !endTime}
+          onClick={handleSubmit}
+          className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm transition-colors"
+        >
           Book Now
-        </button>
+        </Button>
       </div>
     </div>
   );
-}
+};

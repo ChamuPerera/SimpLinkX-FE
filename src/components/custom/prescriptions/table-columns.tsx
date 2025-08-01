@@ -91,16 +91,19 @@ export const prescriptionColumns: ColumnDef<Prescription>[] = [
                 View Details
               </DropdownMenuItem>
             </PermissionWrapper>
-            <PermissionWrapper permissions={manageMedicinePermission}>
-              <DropdownMenuItem
-                onClick={() => {
-                  setShowMedicines(true);
-                  setSelectedPrescription(row.original);
-                }}
-              >
-                Manage Medicines
-              </DropdownMenuItem>
-            </PermissionWrapper>
+            {manageMedicinePermission &&
+              manageMedicinePermission.length > 0 && (
+                <PermissionWrapper permissions={manageMedicinePermission}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setShowMedicines(true);
+                      setSelectedPrescription(row.original);
+                    }}
+                  >
+                    Manage Medicines
+                  </DropdownMenuItem>
+                </PermissionWrapper>
+              )}
             <PermissionWrapper permissions={[permissions.deletePrescriptions]}>
               <DropdownMenuSeparator />
               <DropdownMenuItem

@@ -6,7 +6,14 @@ import {
   opdTableColumns,
   OpdTokenDialog,
 } from "@/components/custom/appointments";
-import { Button } from "@/components/ui";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui";
 import { permissions } from "@/constants/permissions";
 import { useOpdTokens } from "@/hooks/use-appointments";
 import { useCreatePrescription } from "@/hooks/use-prescriptions";
@@ -16,7 +23,7 @@ import { toast } from "sonner";
 
 export const OpdTokens: FC = React.memo(() => {
   const [open, setOpen] = useState(false);
-  const [, setShowDetails] = useState<boolean>(false);
+  const [moreInfoOpen, setMoreInfoOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [opdDateFilter, setOpdDateFilter] = useState<Date | undefined>(
     undefined,
@@ -71,6 +78,15 @@ export const OpdTokens: FC = React.memo(() => {
   return (
     <div className="flex w-full flex-col">
       <div className="mt-4 flex w-full justify-center overflow-hidden">
+        {/* More info */}
+        <MoreInfo
+          open={moreInfoOpen}
+          setOpen={() => {
+            setMoreInfoOpen(false);
+            setSelectedOpdToken(undefined);
+          }}
+          selectedOpdToken={selectedOpdToken}
+        />
         <OpdTable
           columns={opdTableColumns}
           data={data?.opdTokens || []}
@@ -83,7 +99,7 @@ export const OpdTokens: FC = React.memo(() => {
           setSelectedOpdToken={setSelectedOpdToken}
           handleCreatePrescriptions={handleCreatePrescriptions}
           setOpen={setOpen}
-          setShowDetails={setShowDetails}
+          setShowDetails={setMoreInfoOpen}
           setPagination={setPagination}
           pagination={{
             currentPage: pagination.currentPage,
@@ -117,3 +133,105 @@ export const OpdTokens: FC = React.memo(() => {
     </div>
   );
 });
+
+const MoreInfo: FC<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  selectedOpdToken: OpdToken | undefined;
+}> = ({ open, setOpen, selectedOpdToken }) => {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="w-full sm:max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>OPD token Details</DialogTitle>
+          <DialogDescription>View OPD token information</DialogDescription>
+        </DialogHeader>
+
+        {selectedOpdToken && (
+          <div className="space-y-1 text-sm">
+            <div>
+              <span className="font-medium">Patient:</span>{" "}
+              {selectedOpdToken.patient?.name} ({selectedOpdToken.patient?.nic})
+            </div>
+            <div>
+              <span className="font-medium">Doctor:</span>{" "}
+              {selectedOpdToken?.prescriptions?.[0]?.doctor?.name || "N/A"}
+            </div>
+            <div>
+              <span className="font-medium">Pharmacist:</span>{" "}
+              {selectedOpdToken?.prescriptions?.[0]?.pharmacist?.name || "N/A"}
+            </div>
+            <div>
+              <span className="font-medium">Hospital:</span>{" "}
+              {selectedOpdToken?.opd_date?.hospital?.name || "N/A"}
+            </div>
+            <div>
+              <span className="font-medium">Date:</span>{" "}
+              {selectedOpdToken?.prescriptions?.[0]?.date
+                ? new Date(
+                    selectedOpdToken.prescriptions[0].date,
+                  ).toLocaleDateString()
+                : "N/A"}
+            </div>
+            <div className="capitalize">
+              <span className="font-medium">Prescription Status:</span>{" "}
+              {selectedOpdToken?.prescriptions?.[0]?.status || "N/A"}
+            </div>
+            <div className="capitalize">
+              <span className="font-medium">Token Type:</span>{" "}
+              {selectedOpdToken.type}
+            </div>
+            <div className="w-full">
+              <p className="font-medium">Medicines:</p>{" "}
+              {selectedOpdToken?.prescriptions?.[0]?.medicines &&
+              selectedOpdToken?.prescriptions?.[0]?.medicines.length > 0 ? (
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 w-full">
+                  {selectedOpdToken?.prescriptions?.[0]?.medicines.map(
+                    (med, index) => (
+                      <div key={med.id} className=" border-b py-1">
+                        <p className="font-medium">
+                          {index + 1}.{" "}
+                          {med.is_external
+                            ? `${med.name_of_external_medicine} (External)`
+                            : med.name}
+                        </p>
+                        <div className="ps-3 text-xs">
+                          <p className="">
+                            Dosage: {med.dosage} units, Days Supply:{" "}
+                            {med.days_supply}
+                          </p>
+                          {med.duration && <p>Duration: {med.duration}</p>}
+                          <div>
+                            Frequency:{" "}
+                            <p className="ps-5 italic">
+                              Morning : {med.frequency?.morning ? "Yes" : "No"}
+                            </p>
+                            <p className="ps-5 italic">
+                              Afternoon :{" "}
+                              {med.frequency?.afternoon ? "Yes" : "No"}
+                            </p>
+                            <p className="ps-5 italic">
+                              Night : {med.frequency?.night ? "Yes" : "No"}
+                            </p>
+                            <p className="ps-5 italic">
+                              If Needed :{" "}
+                              {med.frequency?.if_needed ? "Yes" : "No"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ),
+                  )}
+                </div>
+              ) : (
+                <p className="mt-0.5 text-xs text-gray-500">
+                  No medicines added.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};

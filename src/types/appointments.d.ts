@@ -65,13 +65,12 @@ export interface Patient {
 export interface OpdDate {
   id: number;
   date: string;
-  doctor_id: number;
-  doctor?: {
+  hospital_id: number;
+  start_time: string;
+  end_time: string;
+  hospital?: {
     id: number;
-    user?: {
-      id: number;
-      name: string;
-    };
+    name: string;
   };
 }
 
@@ -79,11 +78,59 @@ export interface ClinicDate {
   id: number;
   date: string;
   clinic_id: number;
+  start_time: string;
+  end_time: string;
   clinic?: {
     id: number;
     name: string;
+    hospital_id: number;
+    hospital?: {
+      id: number;
+      name: string;
+    };
   };
 }
+
+export type Prescription = {
+  id: number;
+  patient_id: number;
+  doctor_id: number;
+  pharmacist_id: number;
+  hospital_id: number;
+  date: string;
+  status: "draft" | "prescribed" | "dispensed";
+  token_type: "clinic" | "opd";
+  description: string;
+  clinic_token_id?: number;
+  medicines: {
+    id: number;
+    prescription_id: number;
+    name: string;
+    dosage: string;
+    frequency: {
+      morning: boolean;
+      afternoon: boolean;
+      night: boolean;
+      if_needed: boolean;
+    };
+    days_supply: number;
+    duration?: string;
+    is_external: boolean;
+    name_of_external_medicine?: string;
+  }[];
+  doctor?: {
+    id: number;
+    name: string;
+  };
+  pharmacist?: {
+    id: number;
+    name: string;
+  };
+  hospital?: {
+    id: number;
+    name: string;
+  };
+};
 
 export interface OpdToken {
   id: number;
@@ -92,22 +139,23 @@ export interface OpdToken {
   opd_date_id: number;
   start_time: string;
   end_time: string;
-  type: "regular" | "urgent" | "follow_up";
+  type: "self" | "internal";
   patient?: Patient;
   opd_date?: OpdDate;
+  prescriptions?: Prescription[];
 }
 
 export interface ClinicToken {
   id: number;
-  token_number: string;
-  patient_id: number;
   clinic_id: number;
+  patient_id: number;
+  type: "self" | "internal";
+  token_number: string;
   start_time: string;
   end_time: string;
-  type: "regular" | "urgent" | "follow_up";
   patient?: Patient;
   clinic_date?: ClinicDate;
-  prescriptions?: unknown[];
+  prescriptions?: Prescription[];
 }
 
 export interface FAQ {

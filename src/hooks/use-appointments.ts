@@ -70,6 +70,7 @@ export const useCreateClinicToken = () => {
     mutationFn: clinicTokenServices.createClinicToken,
     onSettled: () => {
       queryClient.refetchQueries({ queryKey: ["clinic-token"] });
+      queryClient.refetchQueries({ queryKey: ["hospital"] });
       queryClient.refetchQueries({ queryKey: ["clinic-available-slots"] });
     },
     onError: (error) => {
@@ -178,6 +179,7 @@ export const useCreateOpdToken = () => {
     mutationFn: opdTokenServices.createOpdToken,
     onSettled: () => {
       queryClient.refetchQueries({ queryKey: ["opd-token"] });
+      queryClient.refetchQueries({ queryKey: ["hospital"] });
       queryClient.refetchQueries({
         queryKey: ["opd-available-slots"],
       });

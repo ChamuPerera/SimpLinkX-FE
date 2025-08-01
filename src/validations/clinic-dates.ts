@@ -6,7 +6,7 @@ export const clinicDateSchema = z
     clinic_id: z.coerce.number().min(1, { message: "Clinic is required" }),
     date: z.coerce
       .date()
-      .refine((date) => new Date(date).getDay() >= new Date().getDay(), {
+      .refine((date) => new Date(date).getDay() <= new Date().getDay(), {
         message: "Date must be today or in the future",
       }),
     start_time: z

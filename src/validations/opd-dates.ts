@@ -8,7 +8,7 @@ export const opdDateSchema = z
       .refine((val) => val > 0, "Please select a hospital"),
     date: z.coerce
       .date()
-      .refine((date) => new Date(date).getDay() >= new Date().getDay(), {
+      .refine((date) => new Date(date).getDay() <= new Date().getDay(), {
         message: "Date must be today or in the future",
       }),
     start_time: z

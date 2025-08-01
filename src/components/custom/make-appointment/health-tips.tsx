@@ -38,7 +38,7 @@ export function HealthTips() {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8">
+    <div className="bg-white rounded-xl shadow-lg px-4 py-8 md:p-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-2">
           Health & Wellness Tip
@@ -106,7 +106,7 @@ export function HealthTips() {
           </button>
 
           {/* Tip Indicators */}
-          <div className="flex space-x-2">
+          <div className="space-x-2 hidden sm:flex">
             {healthTips.map((_, index) => (
               <button
                 key={index}

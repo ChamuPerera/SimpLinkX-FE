@@ -17,7 +17,7 @@ interface AuthContextType {
   login: UseMutationResult<
     User,
     Error,
-    { email: string; password: string; rememberMe: boolean },
+    { email: string; password: string; rememberMe: boolean; navigate?: string },
     unknown
   >;
   register: UseMutationResult<void, Error, RegisterFormValues, unknown>;
@@ -55,7 +55,7 @@ const AuthContext = createContext<AuthContextType>({
   login: {} as UseMutationResult<
     User,
     Error,
-    { email: string; password: string; rememberMe: boolean },
+    { email: string; password: string; rememberMe: boolean; navigate?: string },
     unknown
   >,
   register: {} as UseMutationResult<void, Error, RegisterFormValues, unknown>,
@@ -119,19 +119,20 @@ export const AuthProvider: FC<{
       email: string;
       password: string;
       rememberMe: boolean;
+      navigate?: string;
     }) =>
       authServices.login(
         credential.email,
         credential.password,
         credential.rememberMe,
       ),
-    onSuccess() {
+    onSuccess(_, credential) {
       queryClient
         .invalidateQueries({
           queryKey: ["user"],
         })
         .then(() => {
-          navigate("/dashboard");
+          navigate(credential.navigate || "/dashboard");
         });
     },
   });

@@ -36,7 +36,6 @@ interface PrescriptionTableProps<TData, TValue> {
   data: TData[];
   search: string;
   setSearch: (search: string) => void;
-  setOpen: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
   setShowMedicines: (show: boolean) => void;
   setSelectedPrescription: (prescription: Prescription) => void;
@@ -64,7 +63,6 @@ export function PrescriptionTable<TData, TValue>({
   data,
   search,
   setSearch,
-  setOpen,
   setSelectedPrescription,
   setShowDetails,
   setShowMedicines,
@@ -92,7 +90,6 @@ export function PrescriptionTable<TData, TValue>({
       columnVisibility,
     },
     meta: {
-      setOpen,
       setSelectedPrescription,
       setShowDetails,
       setShowMedicines,

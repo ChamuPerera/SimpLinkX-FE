@@ -101,12 +101,13 @@ export interface ClinicToken {
   id: number;
   token_number: string;
   patient_id: number;
-  clinic_date_id: number;
+  clinic_id: number;
   start_time: string;
   end_time: string;
   type: "regular" | "urgent" | "follow_up";
   patient?: Patient;
   clinic_date?: ClinicDate;
+  prescriptions?: unknown[];
 }
 
 export interface FAQ {

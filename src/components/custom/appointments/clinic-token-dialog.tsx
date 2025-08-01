@@ -143,7 +143,7 @@ export const ClinicTokenDialog: FC<ClinicTokenDialogProps> = React.memo(
       if (token && isEdit) {
         form.reset({
           patient_id: token.patient_id || 0,
-          clinic_date_id: token.clinic_date_id || 0,
+          clinic_date_id: token.clinic_id || 0,
           start_time: token.start_time || "",
           end_time: token.end_time || "",
         });

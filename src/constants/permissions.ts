@@ -22,6 +22,7 @@ export const permissions = {
   updatePrescriptions: "update_prescriptions",
   deletePrescriptions: "delete_prescriptions",
   addMedicines: "add_medicines",
+  releaseMedicines: "release_medicines",
   addReports: "add_reports",
   viewInventories: "view_inventories",
   manageInventories: "manage_inventories",

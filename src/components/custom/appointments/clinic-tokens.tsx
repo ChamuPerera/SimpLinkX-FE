@@ -9,8 +9,10 @@ import {
 import { Button } from "@/components/ui";
 import { permissions } from "@/constants/permissions";
 import { useClinicTokens } from "@/hooks/use-appointments";
+import { useCreatePrescription } from "@/hooks/use-prescriptions";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 export const ClinicTokens: FC = React.memo(() => {
   const [open, setOpen] = useState(false);
@@ -28,6 +30,8 @@ export const ClinicTokens: FC = React.memo(() => {
     pageSize: 20,
   });
 
+  const { mutateAsync: createPrescription } = useCreatePrescription();
+
   // Fetch data
   const { data } = useClinicTokens({
     currentPage: pagination.currentPage,
@@ -36,6 +40,33 @@ export const ClinicTokens: FC = React.memo(() => {
     date: clinicDateFilter,
     type: typeFilter === "default" ? undefined : typeFilter,
   });
+
+  // Add prescriptions function
+  const handleCreatePrescriptions = async (selected: {
+    patient_id: number;
+    clinic_token_id: number;
+  }) => {
+    if (!selected) return;
+
+    const { patient_id, clinic_token_id } = selected;
+
+    const alert = toast.loading("Creating prescription...");
+
+    await createPrescription({
+      patient_id,
+      clinic_token_id,
+    })
+      .then(() => {
+        toast.success("Prescription created", {
+          id: alert,
+        });
+      })
+      .catch(() => {
+        toast.error("Failed to create prescription", {
+          id: alert,
+        });
+      });
+  };
 
   return (
     <div className="flex w-full flex-col">
@@ -50,6 +81,7 @@ export const ClinicTokens: FC = React.memo(() => {
           clinicDateFilter={clinicDateFilter}
           setClinicDateFilter={setClinicDateFilter}
           setSelectedClinicToken={setSelectedClinicToken}
+          handleCreatePrescriptions={handleCreatePrescriptions}
           setOpen={setOpen}
           setShowDetails={setShowDetails}
           setPagination={setPagination}

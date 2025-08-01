@@ -1,4 +1,4 @@
-import type { ClinicToken } from "@/types/appointments";
+import type { Prescription } from "@/types/prescriptions";
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -9,20 +9,11 @@ import type {
 import { Pagination } from "@/components/custom";
 import {
   Button,
-  Calendar,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
   Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Table,
   TableBody,
   TableCell,
@@ -30,7 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui";
-import { cn } from "@/utils";
 import {
   flexRender,
   getCoreRowModel,
@@ -38,26 +28,19 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { format } from "date-fns";
-import { ArrowUpDown, CalendarIcon } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
-interface ClinicTableProps<TData, TValue> {
+interface PrescriptionTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   search: string;
-  typeFilter: string;
-  clinicDateFilter: Date | undefined;
-  setClinicDateFilter: (date: Date | undefined) => void;
-  setTypeFilter: (type: string) => void;
   setSearch: (search: string) => void;
   setOpen: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
-  setSelectedClinicToken: (clinicToken: ClinicToken) => void;
-  handleCreatePrescriptions: (selected: {
-    patient_id: number;
-    clinic_token_id: number;
-  }) => Promise<void>;
+  setShowMedicines: (show: boolean) => void;
+  setSelectedPrescription: (prescription: Prescription) => void;
+  handleDelete: (id: number) => void;
   setPagination: ({
     currentPage,
     pageSize,
@@ -76,23 +59,20 @@ interface ClinicTableProps<TData, TValue> {
   children?: React.ReactNode;
 }
 
-export function ClinicsTable<TData, TValue>({
+export function PrescriptionTable<TData, TValue>({
   columns,
   data,
   search,
-  setOpen,
-  typeFilter,
-  setTypeFilter,
   setSearch,
-  setSelectedClinicToken,
-  handleCreatePrescriptions,
+  setOpen,
+  setSelectedPrescription,
   setShowDetails,
-  clinicDateFilter,
-  setClinicDateFilter,
+  setShowMedicines,
+  handleDelete,
   setPagination,
   pagination,
   children,
-}: ClinicTableProps<TData, TValue>) {
+}: PrescriptionTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -113,74 +93,22 @@ export function ClinicsTable<TData, TValue>({
     },
     meta: {
       setOpen,
-      setSelectedClinicToken,
+      setSelectedPrescription,
       setShowDetails,
-      handleCreatePrescriptions,
+      setShowMedicines,
+      handleDelete,
     },
   });
 
   return (
     <div className="w-full">
       <div className="mb-5 flex flex-col items-center justify-center gap-3 sm:flex-row sm:justify-between">
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:max-w-xl">
-          <Input
-            placeholder="Filter clinic dates..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            className="flex-1 !ring-0"
-          />
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-full sm:w-32">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">All Types</SelectItem>
-              <SelectItem value="self">Self</SelectItem>
-              <SelectItem value="internal">Internal</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full sm:w-48 pl-3 text-left font-normal",
-                  !clinicDateFilter && "text-muted-foreground",
-                )}
-              >
-                {clinicDateFilter ? (
-                  format(clinicDateFilter, "PPP")
-                ) : (
-                  <span>Pick a date</span>
-                )}
-                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                startMonth={clinicDateFilter || new Date()}
-                selected={clinicDateFilter}
-                onSelect={(date) => {
-                  setClinicDateFilter(date);
-                }}
-                captionLayout="dropdown"
-              />
-
-              {/* clear button */}
-              <div className="p-2">
-                <Button
-                  variant="outline"
-                  className="mt-2 w-full"
-                  onClick={() => setClinicDateFilter(undefined)}
-                >
-                  Clear Date
-                </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
+        <Input
+          placeholder="Filter prescriptions..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="w-full sm:max-w-sm !ring-0"
+        />
 
         <div className="flex gap-2 w-full justify-between sm:w-fit">
           {children}

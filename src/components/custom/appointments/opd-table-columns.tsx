@@ -63,8 +63,17 @@ export const opdTableColumns: ColumnDef<OpdToken>[] = [
         setOpen: (open: boolean) => void;
         setSelectedOpdToken: (opdToken: OpdToken) => void;
         setShowDetails: (show: boolean) => void;
+        handleCreatePrescriptions: (selected: {
+          patient_id: number;
+          opd_token_id: number;
+        }) => Promise<void>;
       };
-      const { setOpen, setSelectedOpdToken, setShowDetails } = meta;
+      const {
+        setOpen,
+        setSelectedOpdToken,
+        setShowDetails,
+        handleCreatePrescriptions,
+      } = meta;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -86,6 +95,23 @@ export const opdTableColumns: ColumnDef<OpdToken>[] = [
                 Edit OPD Token
               </DropdownMenuItem>
             </PermissionWrapper>
+            {row.original.prescriptions &&
+              row.original.prescriptions.length === 0 && (
+                <PermissionWrapper
+                  permissions={[permissions.createPrescriptions]}
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      handleCreatePrescriptions({
+                        opd_token_id: row.original.id,
+                        patient_id: row.original.patient_id,
+                      });
+                    }}
+                  >
+                    Create Prescription
+                  </DropdownMenuItem>
+                </PermissionWrapper>
+              )}
             <PermissionWrapper permissions={[permissions.viewAppointments]}>
               <DropdownMenuItem
                 onClick={() => {

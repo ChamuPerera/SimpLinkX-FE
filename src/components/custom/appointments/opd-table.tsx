@@ -54,6 +54,10 @@ interface OpdTableProps<TData, TValue> {
   setOpen: (open: boolean) => void;
   setShowDetails: (show: boolean) => void;
   setSelectedOpdToken: (opdToken: OpdToken) => void;
+  handleCreatePrescriptions: (selected: {
+    patient_id: number;
+    opd_token_id: number;
+  }) => Promise<void>;
   setPagination: ({
     currentPage,
     pageSize,
@@ -81,6 +85,7 @@ export function OpdTable<TData, TValue>({
   setTypeFilter,
   setSearch,
   setSelectedOpdToken,
+  handleCreatePrescriptions,
   setShowDetails,
   opdDateFilter,
   setOpdDateFilter,
@@ -110,6 +115,7 @@ export function OpdTable<TData, TValue>({
       setOpen,
       setSelectedOpdToken,
       setShowDetails,
+      handleCreatePrescriptions,
     },
   });
 

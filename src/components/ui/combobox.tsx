@@ -22,9 +22,19 @@ export const Combobox: React.FC<{
   placeholder: string;
   isLoading: boolean;
   search: string;
+  disabled?: boolean;
   setValue: (value: string) => void;
   onChange: (value: string) => void;
-}> = ({ value, items, placeholder, isLoading, search, setValue, onChange }) => {
+}> = ({
+  value,
+  items,
+  placeholder,
+  isLoading,
+  search,
+  setValue,
+  onChange,
+  disabled = false,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -35,6 +45,7 @@ export const Combobox: React.FC<{
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
+          disabled={disabled}
         >
           {value
             ? items.find((item) => item.value === value)?.label

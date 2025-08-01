@@ -63,8 +63,17 @@ export const clinicTableColumns: ColumnDef<ClinicToken>[] = [
         setOpen: (open: boolean) => void;
         setSelectedClinicToken: (clinicToken: ClinicToken) => void;
         setShowDetails: (show: boolean) => void;
+        handleCreatePrescriptions: (selected: {
+          patient_id: number;
+          clinic_token_id: number;
+        }) => Promise<void>;
       };
-      const { setOpen, setSelectedClinicToken, setShowDetails } = meta;
+      const {
+        setOpen,
+        setSelectedClinicToken,
+        setShowDetails,
+        handleCreatePrescriptions,
+      } = meta;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -86,6 +95,23 @@ export const clinicTableColumns: ColumnDef<ClinicToken>[] = [
                 Edit Clinic Token
               </DropdownMenuItem>
             </PermissionWrapper>
+            {row.original.prescriptions &&
+              row.original.prescriptions.length === 0 && (
+                <PermissionWrapper
+                  permissions={[permissions.createPrescriptions]}
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      handleCreatePrescriptions({
+                        clinic_token_id: row.original.id,
+                        patient_id: row.original.patient_id,
+                      });
+                    }}
+                  >
+                    Create Prescription
+                  </DropdownMenuItem>
+                </PermissionWrapper>
+              )}
             <PermissionWrapper permissions={[permissions.viewAppointments]}>
               <DropdownMenuItem
                 onClick={() => {

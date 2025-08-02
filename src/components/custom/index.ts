@@ -2,6 +2,7 @@ export * from "./appointments";
 export * from "./back-to-top";
 export * from "./brand";
 export * from "./clinic-dates";
+export * from "./clinic-patients";
 export * from "./clinics";
 export * from "./footer";
 export * from "./header";

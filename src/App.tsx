@@ -5,6 +5,7 @@ import {
   AppointmentsPage,
   CalculateNCDRiskPage,
   ClinicDatesPage,
+  ClinicPatientsPage,
   ClinicsPage,
   DashboardPage,
   FindHospitalsPage,
@@ -59,6 +60,7 @@ function App() {
           <Route path="/account" element={<AccountPage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/clinics" element={<ClinicsPage />} />
+          <Route path="/clinic-patients" element={<ClinicPatientsPage />} />
           <Route path="/clinics/dates" element={<ClinicDatesPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/hospitals" element={<HospitalsPage />} />

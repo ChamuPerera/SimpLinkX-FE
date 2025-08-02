@@ -1,21 +1,25 @@
-import type { ClinicTokenSchema, OpdTokenSchema } from "@/validations/appointments";
-
-
+import type {
+  ClinicTokenSchema,
+  OpdTokenSchema,
+} from "@/validations/appointments";
 
 import { Footer, Loader } from "@/components/custom";
 import { Header } from "@/components/custom/header";
-import { ClinicCard, FAQSection, HealthTips } from "@/components/custom/make-appointment";
-import { useCreateClinicToken, useCreateOpdToken } from "@/hooks/use-appointments";
+import {
+  ClinicCard,
+  FAQSection,
+  HealthTips,
+} from "@/components/custom/make-appointment";
+import {
+  useCreateClinicToken,
+  useCreateOpdToken,
+} from "@/hooks/use-appointments";
 import { useAuth } from "@/hooks/use-auth";
 import { useHospitalByIdentifier } from "@/hooks/use-hospitals";
 import { HospitalIcon } from "lucide-react";
 import React, { useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
-
-
-
-
 
 export const MakeAppointmentsPage: React.FC = () => {
   const { user } = useAuth();
@@ -228,7 +232,12 @@ export const MakeAppointmentsPage: React.FC = () => {
                   <div className="" key={index}>
                     {/* clinic name */}
                     <h2 className="font-medium mb-2 text-lg">
-                      Clinic : {clinic.name}
+                      Clinic : {clinic.name} -{" "}
+                      <span
+                        className={`text-xs font-medium ${clinic.access_granted ? "text-green-500" : "text-red-500"}`}
+                      >
+                        {clinic.access_granted ? "Enrolled" : "Not enrolled"}
+                      </span>
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -249,6 +258,7 @@ export const MakeAppointmentsPage: React.FC = () => {
                               patient_id: user?.patient_id || 0,
                             })
                           }
+                          accessGranted={clinic.access_granted}
                         />
                       ))}
                     </div>

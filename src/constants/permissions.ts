@@ -28,4 +28,8 @@ export const permissions = {
   manageInventories: "manage_inventories",
   viewAppointments: "view_appointments",
   manageAppointments: "manage_appointments",
+  viewClinicPatients: "view_clinic_patients",
+  manageClinicPatients: "manage_clinic_patients",
+  viewClinic: "view_clinic",
+  manageClinic: "manage_clinic",
 };

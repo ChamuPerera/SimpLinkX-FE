@@ -238,7 +238,6 @@ export const Prescriptions: FC = React.memo(() => {
             endPage: data?.endPage || 0,
           }}
         >
-          {/* Note: Create/Edit prescription functionality not implemented as requested */}
         </PrescriptionTable>
       </div>
     </div>

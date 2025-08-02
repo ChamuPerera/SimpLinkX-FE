@@ -10,6 +10,7 @@ import {
   Shield,
   UserCheck,
   Users,
+  Users2,
   UserSquare,
 } from "lucide-react";
 import { FaHospitalAlt } from "react-icons/fa";
@@ -111,6 +112,16 @@ export const sidebarData = {
       icon: FaHospitalAlt,
       isActive: false,
       permissions: [permissions.manageHospitals],
+    },
+    {
+      title: "Clinic Patients",
+      url: "/clinic-patients",
+      icon: Users2,
+      isActive: false,
+      permissions: [
+        permissions.viewClinicPatients,
+        permissions.manageClinicPatients,
+      ],
     },
     {
       title: "Clinic Dates",

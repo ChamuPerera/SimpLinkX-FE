@@ -4,6 +4,7 @@ export * from "./account";
 export * from "./appointments";
 export * from "./calculate-ncd-risk";
 export * from "./clinic-dates";
+export * from "./clinic-patients";
 export * from "./clinics";
 export * from "./dashboard";
 export * from "./find-hospitals";

@@ -11,6 +11,7 @@ export type Hospital = HospitalWithoutId & {
     name: string;
     description: string;
     location: string;
+    access_granted : boolean;
     dates: {
       [date: string]: {
         slots: AvailableSlot[];

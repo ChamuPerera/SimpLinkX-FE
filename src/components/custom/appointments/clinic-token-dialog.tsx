@@ -310,6 +310,11 @@ export const ClinicTokenDialog: FC<ClinicTokenDialogProps> = React.memo(
                 ))}
               </div>
 
+              <FormMessage>
+                {errors["message"] &&
+                  (errors["message"] || errors["message"][0])}
+              </FormMessage>
+
               <DialogFooter className="gap-2">
                 <Button
                   type="button"

@@ -134,40 +134,46 @@ export const Prescriptions: FC = React.memo(() => {
                 {selectedPrescription.medicines &&
                 selectedPrescription.medicines.length > 0 ? (
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 w-full">
-                    {selectedPrescription.medicines.map((med, index) => (
-                      <div key={med.id} className=" border-b py-1">
-                        <p className="font-medium">
-                          {index + 1}.{" "}
-                          {med.is_external
-                            ? `${med.name_of_external_medicine} (External)`
-                            : med.name}
-                        </p>
-                        <div className="ps-3 text-xs">
-                          <p className="">
-                            Dosage: {med.dosage} units, Days Supply:{" "}
-                            {med.days_supply}
+                    {selectedPrescription.medicines.map((med, index) => {
+                      const frequency =
+                        typeof med.frequency === "string"
+                          ? JSON.parse(med.frequency)
+                          : med.frequency;
+                      return (
+                        <div key={med.id} className=" border-b py-1">
+                          <p className="font-medium">
+                            {index + 1}.{" "}
+                            {med.is_external
+                              ? `${med.name_of_external_medicine} (External)`
+                              : med.name}
                           </p>
-                          {med.duration && <p>Duration: {med.duration}</p>}
-                          <div>
-                            Frequency:{" "}
-                            <p className="ps-5 italic">
-                              Morning : {med.frequency?.morning ? "Yes" : "No"}
+                          <div className="ps-3 text-xs">
+                            <p className="">
+                              Dosage: {med.dosage} units, Days Supply:{" "}
+                              {med.days_supply}
                             </p>
-                            <p className="ps-5 italic">
-                              Afternoon :{" "}
-                              {med.frequency?.afternoon ? "Yes" : "No"}
-                            </p>
-                            <p className="ps-5 italic">
-                              Night : {med.frequency?.night ? "Yes" : "No"}
-                            </p>
-                            <p className="ps-5 italic">
-                              If Needed :{" "}
-                              {med.frequency?.if_needed ? "Yes" : "No"}
-                            </p>
+                            {med.duration && <p>Duration: {med.duration}</p>}
+                            <div>
+                              Frequency:{" "}
+                              <p className="ps-5 italic">
+                                Morning : {frequency?.morning ? "Yes" : "No"}
+                              </p>
+                              <p className="ps-5 italic">
+                                Afternoon :{" "}
+                                {frequency?.afternoon ? "Yes" : "No"}
+                              </p>
+                              <p className="ps-5 italic">
+                                Night : {frequency?.night ? "Yes" : "No"}
+                              </p>
+                              <p className="ps-5 italic">
+                                If Needed :{" "}
+                                {frequency?.if_needed ? "Yes" : "No"}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ) : (
                   <p className="mt-0.5 text-xs text-gray-500">
@@ -237,8 +243,7 @@ export const Prescriptions: FC = React.memo(() => {
             total: data?.total || 0,
             endPage: data?.endPage || 0,
           }}
-        >
-        </PrescriptionTable>
+        ></PrescriptionTable>
       </div>
     </div>
   );

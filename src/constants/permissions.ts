@@ -32,4 +32,5 @@ export const permissions = {
   manageClinicPatients: "manage_clinic_patients",
   viewClinic: "view_clinic",
   manageClinic: "manage_clinic",
+  managePharmacy: "manage_pharmacy",
 };

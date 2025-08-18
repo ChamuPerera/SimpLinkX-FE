@@ -17,6 +17,7 @@ export * from "./opd-dates";
 export * from "./patients";
 export * from "./pagination";
 export * from "./permissions";
+export * from "./pharmacy";
 export * from "./prescriptions";
 export * from "./roles";
 export * from "./settings";

@@ -19,8 +19,10 @@ import {
   MedicineSearchPage,
   NotFoundPage,
   OpdDatesPage,
+  OsusalaPage,
   PatientsPage,
   PermissionsPage,
+  PharmaciesPage,
   PrescriptionsPage,
   RegisterPage,
   ResetPasswordPage,
@@ -42,6 +44,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/find-hospitals" element={<FindHospitalsPage />} />
+          <Route path="/osusala" element={<OsusalaPage />} />
           <Route path="/ncd-risk" element={<CalculateNCDRiskPage />} />
           <Route
             path="/find-hospitals/:identifier"
@@ -69,6 +72,7 @@ function App() {
           <Route path="/permissions" element={<PermissionsPage />} />
           <Route path="/people" element={<StaffPage />} />
           <Route path="/patients" element={<PatientsPage />} />
+          <Route path="/pharmacies" element={<PharmaciesPage />} />
           <Route path="/prescriptions" element={<PrescriptionsPage />} />
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/settings/hospital" element={<HospitalSettingsPage />} />

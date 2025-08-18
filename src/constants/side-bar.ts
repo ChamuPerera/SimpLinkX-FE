@@ -14,6 +14,7 @@ import {
   UserSquare,
 } from "lucide-react";
 import { FaHospitalAlt } from "react-icons/fa";
+import { RiMedicineBottleFill } from "react-icons/ri";
 
 export const sidebarData = {
   navMain: [
@@ -70,6 +71,13 @@ export const sidebarData = {
       icon: Hospital,
       isActive: false,
       permissions: [permissions.createHospitals, permissions.updateHospitals],
+    },
+    {
+      title: "Pharmacies",
+      url: "/pharmacies",
+      icon: RiMedicineBottleFill,
+      isActive: false,
+      permissions: [permissions.managePharmacy],
     },
     {
       title: "Roles",

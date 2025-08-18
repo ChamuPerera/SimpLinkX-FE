@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import type { Hospital } from "@/services/hospitals";
+import type { Pharmacy } from "@/services/pharmacy";
 import type { FC } from "react";
 import type { z } from "zod";
 
-import { hospitalColumns, HospitalTable } from "@/components/custom/hospitals";
+import { pharmacyColumns, PharmacyTable } from "@/components/custom/pharmacy";
 import {
   Button,
   Dialog,
@@ -28,12 +28,12 @@ import {
 import { districts } from "@/constants/districts";
 import { permissions } from "@/constants/permissions";
 import {
-  useCreateHospital,
-  useHospitals,
-  useUpdateHospital,
-} from "@/hooks/use-hospitals";
+  useCreatePharmacy,
+  usePharmacies,
+  useUpdatePharmacy,
+} from "@/hooks/use-pharmacy";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
-import { hospitalSchema } from "@/validations/hospitals";
+import { pharmacySchema } from "@/validations/pharmacy";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -41,7 +41,7 @@ import { BiError } from "react-icons/bi";
 import { PiSpinnerGapBold } from "react-icons/pi";
 import { toast } from "sonner";
 
-const hospitalDefaultValues: Hospital = {
+const pharmacyDefaultValues: Pharmacy = {
   name: "",
   address: "",
   phone: "",
@@ -50,26 +50,28 @@ const hospitalDefaultValues: Hospital = {
   location_url: "",
 };
 
-export const Hospitals: FC = React.memo(() => {
+export const Pharmacies: FC = React.memo(() => {
   const [open, setOpen] = useState(false);
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [search, setSearch] = useState("");
+  const [district, setDistrict] = useState("");
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 20,
   });
-  const { data } = useHospitals({
+  const { data } = usePharmacies({
     currentPage: pagination.currentPage,
     pageSize: pagination.pageSize,
     search,
+    district,
   });
-  const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(
+  const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacy | null>(
     null,
   );
 
-  // clear selected hospital when dialog closes
+  // clear selected pharmacy when dialog closes
   const closeDialog = () => {
-    setSelectedHospital(null);
+    setSelectedPharmacy(null);
     setOpen(false);
   };
 
@@ -83,24 +85,26 @@ export const Hospitals: FC = React.memo(() => {
 
   return (
     <div className="flex w-full flex-col">
-      <h2 className="text-lg font-semibold">Hospitals</h2>
-      <p className="text-sm text-gray-500">Manage hospitals</p>
+      <h2 className="text-lg font-semibold">Pharmacies</h2>
+      <p className="text-sm text-gray-500">Manage pharmacies</p>
 
-      {/* hospital dialog */}
-      <HospitalDialog
+      {/* pharmacy dialog */}
+      <PharmacyDialog
         open={open}
         onClose={closeDialog}
-        data={selectedHospital}
+        data={selectedPharmacy}
       />
 
-      {/* hospitals list */}
+      {/* pharmacies list */}
       <div className="mt-4 flex w-full justify-center overflow-hidden">
-        <HospitalTable
-          columns={hospitalColumns}
-          data={data?.hospitals || []}
+        <PharmacyTable
+          columns={pharmacyColumns}
+          data={data?.pharmacies || []}
           search={search}
+          district={district}
+          setDistrict={setDistrict}
           setSearch={setSearch}
-          setSelectedHospital={setSelectedHospital}
+          setSelectedPharmacy={setSelectedPharmacy}
           setOpen={setOpen}
           setShowDetails={setShowDetails}
           setPagination={setPagination}
@@ -123,13 +127,13 @@ export const Hospitals: FC = React.memo(() => {
               Add New
             </Button>
           </PermissionWrapper>
-        </HospitalTable>
+        </PharmacyTable>
       </div>
 
       {/* details dialog */}
-      {showDetails && selectedHospital && (
+      {showDetails && selectedPharmacy && (
         <ShowDetails
-          showDetails={selectedHospital}
+          showDetails={selectedPharmacy}
           setShowDetails={setShowDetails}
         />
       )}
@@ -137,26 +141,26 @@ export const Hospitals: FC = React.memo(() => {
   );
 });
 
-const HospitalDialog: FC<{
+const PharmacyDialog: FC<{
   open: boolean;
   onClose: () => void;
-  data?: Hospital | null;
+  data?: Pharmacy | null;
 }> = React.memo(({ open, onClose, data }) => {
   const [errors, setErrors] = useState<{ [key: string]: string[] | string }>(
     {},
   );
-  const { mutateAsync: createHospital, isPending: createPending } =
-    useCreateHospital();
-  const { mutateAsync: updateHospital, isPending: updatePending } =
-    useUpdateHospital();
+  const { mutateAsync: createPharmacy, isPending: createPending } =
+    useCreatePharmacy();
+  const { mutateAsync: updatePharmacy, isPending: updatePending } =
+    useUpdatePharmacy();
 
-  const form = useForm<z.infer<typeof hospitalSchema>>({
-    resolver: zodResolver(hospitalSchema),
-    defaultValues: hospitalDefaultValues,
+  const form = useForm<z.infer<typeof pharmacySchema>>({
+    resolver: zodResolver(pharmacySchema),
+    defaultValues: pharmacyDefaultValues,
   });
 
   // form submit handler
-  const onSubmit = async (values: z.infer<typeof hospitalSchema>) => {
+  const onSubmit = async (values: z.infer<typeof pharmacySchema>) => {
     // clear errors
     setErrors({});
 
@@ -164,9 +168,9 @@ const HospitalDialog: FC<{
     if (data) {
       // append id to values
       const updatedValues = { ...values, id: data.id };
-      await updateHospital(updatedValues)
+      await updatePharmacy(updatedValues)
         .then(() => {
-          toast.success("Hospital updated", {
+          toast.success("Pharmacy updated", {
             description: new Date().toLocaleString(),
           });
           form.reset();
@@ -180,9 +184,9 @@ const HospitalDialog: FC<{
           );
         });
     } else {
-      await createHospital(values)
+      await createPharmacy(values)
         .then(() => {
-          toast.success("Hospital created", {
+          toast.success("Pharmacy created", {
             description: new Date().toLocaleString(),
           });
           form.reset();
@@ -203,7 +207,7 @@ const HospitalDialog: FC<{
     if (data) {
       form.reset(data);
     } else {
-      form.reset(hospitalDefaultValues);
+      form.reset(pharmacyDefaultValues);
     }
   }, [data]);
 
@@ -212,18 +216,18 @@ const HospitalDialog: FC<{
       open={open}
       onOpenChange={() => {
         onClose();
-        form.reset(hospitalDefaultValues);
+        form.reset(pharmacyDefaultValues);
       }}
     >
       <DialogContent className="max-h-[80vh] max-w-xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {data ? "Edit Hospital" : "Create Hospital"}
+            {data ? "Edit Pharmacy" : "Create Pharmacy"}
           </DialogTitle>
           <DialogDescription>
             {data
-              ? "Edit the details of the hospital."
-              : "Fill in the details to create a new hospital."}
+              ? "Edit the details of the pharmacy."
+              : "Fill in the details to create a new pharmacy."}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -369,7 +373,7 @@ const HospitalDialog: FC<{
                 {(createPending || updatePending) && (
                   <PiSpinnerGapBold className="animate-spin" />
                 )}
-                Save Hospital
+                Save Pharmacy
               </Button>
             </div>
           </form>
@@ -380,30 +384,21 @@ const HospitalDialog: FC<{
 });
 
 const ShowDetails: FC<{
-  showDetails: Hospital | null;
+  showDetails: Pharmacy | null;
   setShowDetails: (show: boolean) => void;
 }> = React.memo(({ showDetails, setShowDetails }) => {
   return (
     <Dialog open={!!showDetails} onOpenChange={() => setShowDetails(false)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Hospital Details</DialogTitle>
+          <DialogTitle>Pharmacy Details</DialogTitle>
           <DialogDescription className="sr-only">
-            Here are the details of the hospital you selected.
+            Here are the details of the pharmacy you selected.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-0.5 text-sm">
           <div>
-            <span className="font-medium">Name:</span> {showDetails?.name} (
-            <a
-              href={`/find-hospitals/${showDetails?.identifier}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              Visit
-            </a>
-            )
+            <span className="font-medium">Name:</span> {showDetails?.name}
           </div>
           <div>
             <span className="font-medium">Address:</span> {showDetails?.address}

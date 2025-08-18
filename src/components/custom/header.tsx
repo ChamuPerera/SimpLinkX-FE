@@ -71,6 +71,12 @@ const NavButtons: FC = () => {
         Hospitals
       </Link>
       <Link
+        to="/osusala"
+        className="text-sm font-medium text-gray-700 hover:text-blue-600 "
+      >
+        Osusala
+      </Link>
+      <Link
         to="/about"
         className="text-sm font-medium text-gray-700 hover:text-blue-600 "
       >

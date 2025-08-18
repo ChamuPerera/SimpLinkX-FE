@@ -7,7 +7,7 @@ import { api } from "@/services/api";
 type HospitalWithoutId = z.infer<typeof hospitalSchema>;
 export type Hospital = HospitalWithoutId & {
   id?: number;
-  clinics: {
+  clinics?: {
     name: string;
     description: string;
     location: string;
@@ -19,7 +19,7 @@ export type Hospital = HospitalWithoutId & {
       };
     };
   }[];
-  opd: {
+  opd?: {
     [date: string]: {
       slots: AvailableSlot[];
       date_id: number;

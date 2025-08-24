@@ -74,7 +74,7 @@ const NavButtons: FC = () => {
         to="/osusala"
         className="text-sm font-medium text-gray-700 hover:text-blue-600 "
       >
-        Osusala
+        Rajya Osusala Outlets
       </Link>
       <Link
         to="/about"

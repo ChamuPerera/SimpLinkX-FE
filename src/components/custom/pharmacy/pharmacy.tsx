@@ -85,8 +85,8 @@ export const Pharmacies: FC = React.memo(() => {
 
   return (
     <div className="flex w-full flex-col">
-      <h2 className="text-lg font-semibold">Pharmacies</h2>
-      <p className="text-sm text-gray-500">Manage pharmacies</p>
+      <h2 className="text-lg font-semibold">Rajya Osusala outlets</h2>
+      <p className="text-sm text-gray-500">Manage Rajya Osusala outlets</p>
 
       {/* pharmacy dialog */}
       <PharmacyDialog
@@ -222,12 +222,12 @@ const PharmacyDialog: FC<{
       <DialogContent className="max-h-[80vh] max-w-xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {data ? "Edit Pharmacy" : "Create Pharmacy"}
+            {data ? "Edit Rajya Osusala Outlet" : "Create Rajya Osusala Outlet"}
           </DialogTitle>
           <DialogDescription>
             {data
-              ? "Edit the details of the pharmacy."
-              : "Fill in the details to create a new pharmacy."}
+              ? "Edit the details of the Rajya Osusala Outlet."
+              : "Fill in the details to create a new Rajya Osusala Outlet."}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

@@ -46,7 +46,7 @@ export const Footer: FC = () => {
               </li>
               <li>
                 <a href="#" className="hover:text-white transition-colors">
-                  Doctor Profiles
+                  Rajya Osusala Outlets Locations
                 </a>
               </li>
             </ul>

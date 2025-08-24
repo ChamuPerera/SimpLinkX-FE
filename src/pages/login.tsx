@@ -76,10 +76,12 @@ export const LoginPage = () => {
         <div className="w-full md:w-1/2 p-8 space-y-6">
           {/* Brand: Logo + Name on the same line */}
           <div className="flex items-center justify-center gap-3 mb-6">
-            <img src="/logo.png" alt="logo" className="h-10 w-10" />
-            <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              SimpLinkX
-            </span>
+            <Link to="/" className="flex items-center">
+      <img src="/logo.png" alt="logo" className="h-15 w-15" />
+      <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+        SimpLinkX
+      </span>
+    </Link>
           </div>
 
           <Form {...form}>

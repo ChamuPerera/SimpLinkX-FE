@@ -373,7 +373,7 @@ const PharmacyDialog: FC<{
                 {(createPending || updatePending) && (
                   <PiSpinnerGapBold className="animate-spin" />
                 )}
-                Save Pharmacy
+                Save Osusala Outlet
               </Button>
             </div>
           </form>

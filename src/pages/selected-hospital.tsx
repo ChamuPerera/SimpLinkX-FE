@@ -64,7 +64,7 @@ export const SelectedHospitalPage = () => {
                   href={hospital?.location_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="text-blue-600 hover:underline cursor-pointer"
                 >
                   {hospital?.location_url
                     ? "View on Map"

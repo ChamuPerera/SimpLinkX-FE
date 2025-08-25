@@ -73,7 +73,7 @@ export const sidebarData = {
       permissions: [permissions.createHospitals, permissions.updateHospitals],
     },
     {
-      title: "Pharmacies",
+      title: "Rajya Osusala outlets",
       url: "/pharmacies",
       icon: RiMedicineBottleFill,
       isActive: false,

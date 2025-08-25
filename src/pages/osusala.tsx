@@ -32,7 +32,7 @@ export const OsusalaPage = () => {
             <h1 className="text-xl md:text-3xl font-bold text-gray-900 leading-tight">
               Search
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent block">
-                Nearest Pharmacies
+                Nearest Rajya Osusala Outlets
               </span>
             </h1>
           </div>
@@ -41,7 +41,7 @@ export const OsusalaPage = () => {
           <div className="max-w-2xl mx-auto mt-3 flex gap-2 flex-col sm:flex-row">
             <Input
               type="text"
-              placeholder="Search hospitals..."
+              placeholder="Search Rajya Osusala outlets..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="border-gray-400"
@@ -133,7 +133,7 @@ export const OsusalaPage = () => {
 
             {data?.pharmacies.length === 0 && (
               <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center">
-                <p className="text-gray-500">No pharmacies found.</p>
+                <p className="text-gray-500">No Rajya Osusala Outlet found</p>
               </div>
             )}
           </div>

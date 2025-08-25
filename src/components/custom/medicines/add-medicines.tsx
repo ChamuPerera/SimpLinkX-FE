@@ -229,7 +229,7 @@ export const AddMedicines: FC<AddMedicinesProps> = ({
                         isLoading={isInventoryLoading}
                         items={
                           medicinesData?.inventories?.map((medicine) => ({
-                            label: `${medicine.drug_name} (${medicine.id})`,
+                            label: `${medicine.drug_name} (${medicine.available_quantity})`,
                             value: medicine.drug_name || "",
                           })) || []
                         }

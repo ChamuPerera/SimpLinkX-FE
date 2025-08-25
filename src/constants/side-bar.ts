@@ -5,6 +5,7 @@ import {
   CalendarDays,
   CalendarRange,
   FileText,
+  HomeIcon,
   Hospital,
   Settings,
   Shield,
@@ -151,6 +152,12 @@ export const sidebarData = {
       icon: Settings,
       isActive: false,
       permissions: [permissions.manageHospitals],
+    },
+    {
+      title: "Back to Home",
+      url: "/",
+      icon: HomeIcon,
+      isActive: false,
     },
   ],
 };

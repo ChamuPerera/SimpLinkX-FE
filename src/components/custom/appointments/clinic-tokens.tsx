@@ -16,12 +16,15 @@ import {
 } from "@/components/ui";
 import { permissions } from "@/constants/permissions";
 import { useClinicTokens } from "@/hooks/use-appointments";
+import { useAuth } from "@/hooks/use-auth";
 import { useCreatePrescription } from "@/hooks/use-prescriptions";
 import { PermissionWrapper } from "@/providers/permission-wrapper";
 import React, { useState } from "react";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
 export const ClinicTokens: FC = React.memo(() => {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [moreInfoOpen, setMoreInfoOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -120,6 +123,14 @@ export const ClinicTokens: FC = React.memo(() => {
               Add New
             </Button>
           </PermissionWrapper>
+
+          {user?.role === "patient" && (
+            <Link to={"/find-hospitals"} className="w-32">
+              <Button size={"sm"} variant={"default"} className="w-32">
+                New OPD Visit
+              </Button>
+            </Link>
+          )}
         </ClinicsTable>
       </div>
 

@@ -27,6 +27,7 @@ interface AuthContextType {
     { currentPassword: string; newPassword: string; confirmPassword: string },
     unknown
   >;
+  changeEmail: UseMutationResult<void, Error, { email: string }, unknown>;
   forgotPassword: UseMutationResult<void, Error, { email: string }, unknown>;
   validateResetToken: UseMutationResult<
     { valid: boolean; email: string },
@@ -88,6 +89,7 @@ const AuthContext = createContext<AuthContextType>({
     { currentPassword: string; newPassword: string; confirmPassword: string },
     unknown
   >,
+  changeEmail: {} as UseMutationResult<void, Error, { email: string }, unknown>,
   logout: {} as UseMutationResult<void, Error, void, unknown>,
 });
 
@@ -177,7 +179,18 @@ export const AuthProvider: FC<{
       });
 
       // redirect to login page
-      navigate("/login");
+      navigate("/login", { replace: true });
+    },
+  });
+
+  // change email mutation
+  const changeEmailMutation = useMutation({
+    mutationFn: (data: { email: string }) =>
+      authServices.changeEmail(data.email),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
   });
 
@@ -232,6 +245,7 @@ export const AuthProvider: FC<{
     validateResetToken: validateResetTokenMutation,
     resetPassword: resetPasswordMutation,
     changePassword: changePasswordMutation,
+    changeEmail: changeEmailMutation,
     register: registerMutation,
   };
 

@@ -1,12 +1,17 @@
 import type { ChangeEvent, FormEvent } from "react";
 
 import { Layout, Loader } from "@/components/custom";
+import { Button, Input, Label } from "@/components/ui";
+import { useAuth } from "@/hooks/use-auth";
 import { PrivateRoute } from "@/providers/private-route";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const AccountPage: React.FC = () => {
+  const { user, changePassword, changeEmail } = useAuth();
   const [formData, setFormData] = useState({
-    email: "mandiraperera@gmail.com",
+    email: user?.email || "",
+    currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -16,17 +21,46 @@ export const AccountPage: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmitPassword = (e: FormEvent) => {
     e.preventDefault();
 
     if (formData.newPassword !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
-    alert("Password updated:\n" + JSON.stringify(formData, null, 2));
-    // Send to backend here
+    changePassword
+      .mutateAsync({
+        currentPassword: formData.currentPassword,
+        newPassword: formData.newPassword,
+        confirmPassword: formData.confirmPassword,
+      })
+      .then(() => {
+        toast.success("Password updated successfully");
+      })
+      .catch(() => {
+        toast.error("Failed to update password");
+      });
   };
+
+  const handleSubmitEmail = (e: FormEvent) => {
+    e.preventDefault();
+
+    changeEmail
+      .mutateAsync({ email: formData.email })
+      .then(() => {
+        toast.success("Email updated successfully");
+      })
+      .catch(() => {
+        toast.error("Failed to update email");
+      });
+  };
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({ ...prev, email: user.email }));
+    }
+  }, [user]);
 
   return (
     <PrivateRoute>
@@ -48,62 +82,82 @@ export const AccountPage: React.FC = () => {
               <h1 className="text-3xl font-bold text-blue-800">
                 Account Settings
               </h1>
-              <p className="text-gray-600 text-sm">Change your password</p>
+              <p className="text-gray-600 text-sm">
+                Update your account information
+              </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-9">
-              {/* Email (disabled) */}
+            <form onSubmit={handleSubmitEmail} className="space-y-4 mb-5">
+              {/* Email */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">
+                <Label className="block text-gray-700 font-medium mb-1">
                   Email
-                </label>
-                <input
+                </Label>
+                <Input
                   name="email"
                   type="email"
                   value={formData.email}
-                  disabled
-                  className="w-full border rounded px-3 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              {/* Submit */}
+              <div className="text-center flex justify-end">
+                <Button size={"sm"} type="submit">
+                  {changeEmail.isPending ? "Updating..." : "Update Email"}
+                </Button>
+              </div>
+            </form>
+
+            <form onSubmit={handleSubmitPassword} className="space-y-4">
+              {/* Current Password */}
+              <div>
+                <Label className="block text-gray-700 font-medium mb-1">
+                  Current Password
+                </Label>
+                <Input
+                  name="currentPassword"
+                  type="password"
+                  value={formData.currentPassword}
+                  onChange={handleChange}
+                  placeholder="Enter current password"
                 />
               </div>
 
               {/* New Password */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">
+                <Label className="block text-gray-700 font-medium mb-1">
                   New Password
-                </label>
-                <input
+                </Label>
+                <Input
                   name="newPassword"
                   type="password"
                   value={formData.newPassword}
                   onChange={handleChange}
                   placeholder="Enter new password"
-                  className="w-full border rounded px-3 py-2 focus:outline-blue-500"
                 />
               </div>
 
               {/* Confirm Password */}
               <div>
-                <label className="block text-gray-700 font-medium mb-1">
+                <Label className="block text-gray-700 font-medium mb-1">
                   Confirm New Password
-                </label>
-                <input
+                </Label>
+                <Input
                   name="confirmPassword"
                   type="password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Re-enter new password"
-                  className="w-full border rounded px-3 py-2 focus:outline-blue-500"
                 />
               </div>
 
               {/* Submit */}
-              <div className="text-center mt-4">
-                <button
-                  type="submit"
-                  className="px-6 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition font-medium"
-                >
-                  Update Password
-                </button>
+              <div className="text-center flex justify-end">
+                <Button size={"sm"} type="submit">
+                  {changePassword.isPending ? "Updating..." : "Update Password"}
+                </Button>
               </div>
             </form>
           </div>

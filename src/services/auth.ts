@@ -66,6 +66,19 @@ export const authServices = {
     });
   },
 
+  // The change email method is now async and returns void
+  changeEmail: async (email: string) => {
+    // get auth key from cookie
+    const cookie = Cookies.get("auth_token");
+
+    // check if cookie is present
+    if (!cookie) {
+      throw new Error("No auth token found");
+    }
+
+    await api.put("/user/email", { email });
+  },
+
   // The forgot password method is now async and returns void
   forgotPassword: async (email: string) => {
     // send get request to /srf-cookie

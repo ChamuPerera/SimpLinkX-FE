@@ -1,3 +1,4 @@
+import { Footer, Header } from "@/components/custom";
 import { Button, Input } from "@/components/ui";
 import React, { useState } from "react";
 import ReactSpeedometer from "react-d3-speedometer";
@@ -130,8 +131,10 @@ export const CalculateNCDRiskPage: React.FC = () => {
 
   return (
     <main>
+      {/* Header */}
+      <Header />
       <div className="w-full bg-white p-6 sm:p-10 border border-blue-100 shadow-sm rounded-md">
-        {/* Header */}
+        
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-blue-800 mb-4">
             Calculate NCD Risk
@@ -255,10 +258,8 @@ export const CalculateNCDRiskPage: React.FC = () => {
           </div>
         )}
       </div>
-      <footer className="text-center text-xs text-gray-500 mt-2">
-        &copy; 2025 SimpLinkX. All rights reserved. | A Government of Sri Lanka
-        Initiative
-      </footer>
+      {/* Footer */}
+      <Footer />
     </main>
   );
 };

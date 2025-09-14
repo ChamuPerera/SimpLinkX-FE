@@ -24,6 +24,39 @@ export type Inventory = InventoryWithoutId & {
 type BatchWithoutId = z.infer<typeof batchSchema>;
 export type Batch = BatchWithoutId & { id?: number };
 
+export type InventoryBatch = {
+  batch_id: number;
+  batch_number: string;
+  expiry_date: string;
+  quantity: number;
+  days_to_expiry: number;
+  medicine: {
+    id: number;
+    drug_name: string;
+    brand_name: string;
+    type: string;
+    weight: number;
+  };
+};
+
+export type NearExpiryInventories = {
+  thirty_days: InventoryBatch[];
+  fourteen_days: InventoryBatch[];
+};
+
+export type LowStockInventory = {
+  low_stock_inventories: {
+    id: number;
+    drug_name: string;
+    hospital_id: number;
+    brand_name: string;
+    weight: number;
+    type: string;
+    total_available_quantity: number;
+    batches: Batch[];
+  }[];
+};
+
 export const inventoryServices = {
   // Get inventories with pagination
   getInventories: async (params: {
@@ -92,5 +125,17 @@ export const inventoryServices = {
       prescription_id: prescription,
     });
     return data;
+  },
+
+  // Near expiry inventories
+  getNearExpiryInventories: async () => {
+    const { data } = await api.get("/inventories/near-expiry");
+    return data as NearExpiryInventories;
+  },
+
+  // Get low stock inventories
+  getLowStockInventories: async () => {
+    const { data } = await api.get("/inventories/low-stock");
+    return data as LowStockInventory;
   },
 };

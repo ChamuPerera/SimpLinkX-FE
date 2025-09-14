@@ -147,3 +147,35 @@ export const useReleaseMedicine = () => {
     },
   });
 };
+
+// Near expiry inventories
+export const useNearExpiryInventories = () =>
+  useQuery({
+    queryKey: ["near-expiry-inventories"],
+    queryFn: async () => {
+      try {
+        const inventories = await inventoryServices.getNearExpiryInventories();
+        return inventories;
+      } catch (error) {
+        return null;
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+// Low stock inventories
+export const useLowStockInventories = () =>
+  useQuery({
+    queryKey: ["low-stock-inventories"],
+    queryFn: async () => {
+      try {
+        const inventories = await inventoryServices.getLowStockInventories();
+        return inventories;
+      } catch (error) {
+        return null;
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  });

@@ -27,12 +27,6 @@ jobs:
           VITE_STORAGE_URL: ${{ secrets.VITE_STORAGE_URL }}
         run: bun run build
       
-      - name: Test FTP Connection
-        run: |
-          echo "Testing connection to FTP server..."
-          nc -zv ${{ secrets.FTP_SERVER }} 21 || echo "Port 21 not accessible - Server - ${{ secrets.FTP_SERVER }}"
-          nc -zv ${{ secrets.FTP_SERVER }} 22 || echo "Port 22 (SSH/SFTP) not accessible - Server - ${{ secrets.FTP_SERVER }}"
-
       - name: Upload to FTP server
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:

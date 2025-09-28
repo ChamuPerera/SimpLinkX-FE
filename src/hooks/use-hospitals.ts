@@ -36,7 +36,7 @@ export const useHospitalByIdentifier = (identifier: string) =>
     queryKey: ["hospital", identifier],
     queryFn: async () => {
       try {
-        const hospital =
+        const hospital: Hospital =
           await hospitalsServices.getHospitalByIdentifier(identifier);
         return hospital;
       } catch (error) {

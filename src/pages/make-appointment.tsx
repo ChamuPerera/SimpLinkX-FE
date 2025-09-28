@@ -268,18 +268,18 @@ export const MakeAppointmentsPage: React.FC = () => {
             </div>
           )}
 
-          {activeTab === "opd" && (
+          {activeTab === "opd" && hospital.opd && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Object.keys(hospital.opd)?.map((opd) => {
+              {Object.keys(hospital.opd)?.map((opd, index) => {
                 return (
                   <ClinicCard
-                    key={hospital.opd[opd].date_id}
+                    key={hospital.opd?.[opd].date_id || index}
                     service="OPD"
                     date={{
                       date: opd,
                       location: "OPD",
-                      slots: hospital.opd[opd].slots,
-                      date_id: hospital.opd[opd].date_id,
+                      slots: hospital.opd?.[opd]?.slots || [],
+                      date_id: hospital.opd?.[opd]?.date_id || 0,
                     }}
                     handleBook={(data) =>
                       handleBookOPD({

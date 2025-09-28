@@ -1,0 +1,37 @@
+name: Deploy Admin Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.0.11
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build Next.js app
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_STORAGE_URL: ${{ secrets.VITE_STORAGE_URL }}
+        run: bun run build
+
+      - name: Upload to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist/
+          server-dir: /

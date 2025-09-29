@@ -380,14 +380,14 @@ export const AddMedicines: FC<AddMedicinesProps> = ({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`duration-${index}`}>Duration</Label>
+                    <Label htmlFor={`duration-${index}`}>Special Notes</Label>
                     <Textarea
                       id={`duration-${index}`}
                       value={medicine.duration}
                       onChange={(e) =>
                         updateMedicine(index, "duration", e.target.value)
                       }
-                      placeholder="Enter duration instructions"
+                      placeholder="Enter Special Notes"
                       rows={2}
                     />
                   </div>

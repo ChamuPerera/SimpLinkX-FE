@@ -6,7 +6,12 @@ export const clinicDateSchema = z
     clinic_id: z.coerce.number().min(1, { message: "Clinic is required" }),
     date: z.coerce
       .date()
-      .refine((date) => new Date(date).getDay() >= new Date().getDay(), {
+      .refine((date) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return date >= today;
+      }, {
         message: "Date must be today or in the future",
       }),
     start_time: z
@@ -37,3 +42,4 @@ export const clinicDateSchema = z
       path: ["end_time"],
     },
   );
+
